@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity } from 'reac
 import imagesClass from '../asserts/imagepath';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
-const ChangePass = ({ name, onChangeText, headerText, eye }) => {
+const ChangePass = ({ name, onChangeText, headerText, eye, called }) => {
     const [secure, setSecure] = useState(false);
     const [inputValue, setInputValue] = useState('');
 
@@ -21,12 +21,13 @@ const ChangePass = ({ name, onChangeText, headerText, eye }) => {
             <View style={styles.fillDetails}>
                 <View style={{ flexDirection: 'row', flexWrap: 'wrap', flex: 1 }}>
                     <Image
-                        source={imagesClass.user}
+                        source={called ? imagesClass.telephone : imagesClass.user}
                         style={styles.phnimage}
                         resizeMode="center"
                     />
                     <TextInput
                         secureTextEntry={secure}
+                        keyboardType={called ? 'phone-pad' : null}
                         placeholder={name}
                         style={styles.inputFild}
                         onChangeText={handleTextChange} // Set the onChangeText prop

@@ -8,9 +8,14 @@ import BackgroundSvg from '../asserts/svgs/BgImg.js';
 import BoxeItems from '../Components/BoxeItems';
 import NoticationSvg from '../asserts/svgs/NoticationSvg';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const BoxList = ({ navigation }) => {
+
+  const newclass = async () => {
+    console.log(await AsyncStorage.getItem('here'))
+  }
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -33,6 +38,7 @@ const BoxList = ({ navigation }) => {
 
           <View>
             <TouchableOpacity onPress={() => navigation.navigate("RegisterScreen")} >
+              {/* <TouchableOpacity onPress={() => newclass()} > */}
 
               <Image source={imagesClass.notification} style={styles.imageStyle} resizeMode='contain' />
             </TouchableOpacity>

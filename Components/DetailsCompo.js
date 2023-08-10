@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity, Linking } from 'react-native'
 import React from 'react'
 import imagesClass from '../asserts/imagepath'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -9,8 +9,20 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import TimeComp from './TimeComp';
 import Titels from './Titels';
 import Facilities from './Facilities';
+import { useRoute } from '@react-navigation/native';
 
 const DetailsCompo = ({ navigation }) => {
+    const route = useRoute();
+    const { item } = route.params;
+    const openMaps = () => {
+
+        const latitude = 21.21382748197297; // Replace with the destination latitude
+        const longitude = 72.90829969505918; // Replace with the destination longitude
+        const url = `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`;
+
+        Linking.openURL(url)
+            .catch(error => console.error('Error opening Google Maps', error));
+    }
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.imageContainer}>
@@ -21,40 +33,40 @@ const DetailsCompo = ({ navigation }) => {
                 />
                 <View style={styles.imagesOverlay}>
                     <TouchableOpacity onPress={() => navigation.pop()}>
-
                         <Image
                             source={imagesClass.backbig}
                             style={styles.image1}
                             resizeMode="cover"
                         />
                     </TouchableOpacity>
-                    <TouchableOpacity>
+                    {/* <TouchableOpacity>
 
                         <Image
                             source={imagesClass.share}
                             style={styles.image2}
                             resizeMode="cover"
                         />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
             </View>
-            <Titels text1={"Sports academy"} text2={"$600/hr"} />
+            <Titels text1={item.name} text2={`${parseInt(item.morning_price) + " ₹"}`} />
 
 
 
             <TimeComp img={imagesClass.clock} text={"Open: 24 hours"} />
-            <TimeComp img={imagesClass.bluerike} text={"2 Slot available"} />
+            {/* <TimeComp img={imagesClass.bluerike} text={"2 Slot available"} /> */}
 
             <Titels text1={"Location"} />
-            <Text style={styles.addrestxt}> surat , gujrat</Text>
+            <Text style={styles.addrestxt}>Anthem compound, NR. Harekrishna village Restaurant, simada kenal road</Text>
             <View style={styles.locationview}>
+                <TouchableOpacity onPress={openMaps}>
 
-                <Image
-                    source={imagesClass.location
-                    }
-                    style={styles.mapimage}
-                    resizeMode="contain"
-                />
+                    <Image
+                        source={imagesClass.location}
+                        style={styles.mapimage}
+                        resizeMode="contain"
+                    />
+                </TouchableOpacity>
             </View>
             <View style={{ marginTop: hp(1) }}>
 
@@ -93,9 +105,45 @@ const DetailsCompo = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-    booktxt: { color: '#fff', alignSelf: 'center', textAlignVertical: 'center', flex: 1, fontSize: wp(4) },
-    bookbtn: { backgroundColor: '#027850', height: hp(6), flex: 1, alignSelf: 'center', borderRadius: wp(2), marginTop: hp(4), marginHorizontal: wp(2) },
-    facilityView: { flexDirection: 'row', justifyContent: 'space-around', marginHorizontal: wp(2), marginTop: hp(2) },
+    //   booktxt: {
+    //     color: '#fff',
+    //     alignSelf: 'center',
+    //     textAlignVertical: 'center',
+    //     flex: 1,
+    //     fontSize: wp(4),
+    //   },
+    // bookbtn: {
+    //     backgroundColor: '#027850',
+    //     height: hp(6),
+    //     flex: 1,
+    //     alignSelf: 'center',
+    //     borderRadius: wp(2),
+    //     marginTop: hp(4),
+    //     marginHorizontal: wp(2),
+    // },
+    booktxt: {
+        color: '#fff',
+        fontSize: wp(4),
+    },
+    bookbtn: {
+        backgroundColor: '#027850',
+        position: 'relative',
+        alignSelf: 'center',
+        borderRadius: wp(2),
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingVertical: hp(2)
+        , flex: 1,
+        marginHorizontal: wp(2), marginTop: hp(2)
+    },
+
+
+    facilityView: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        marginHorizontal: wp(2),
+        marginTop: hp(2),
+    },
     addrestxt: { marginLeft: wp(5), marginBottom: hp(1) },
     locationview: {
         width: "90%", backgroundColor: '#fff', alignSelf: 'center', justifyContent: 'center', borderRadius: wp(4), height: hp(18)
@@ -126,7 +174,8 @@ const styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginTop: hp(4)
+        marginTop: hp(4),
+        marginLeft: wp(2)
     },
     image1: {
         width: 40,

@@ -39,7 +39,7 @@ const TabButton = ({ item, onPress, accessibilityState }) => {
         <TouchableOpacity
             onPress={onPress}
             activeOpacity={1}
-            style={[styles.container, { flex: focused ? 1 : 0.50 }]}
+            style={[styles.container, { flex: focused ? 0.85 : 0.50 }]}
         >
             <View>
                 <Animatable.View
@@ -116,25 +116,58 @@ const BottomTab = () => {
         <Tab.Navigator
             screenOptions={{
                 headerShown: false,
-                tabBarStyle: {
-                    height: hp(7),
-                    position: 'absolute',
-                    bottom: wp(7),
-                    right: wp(4),
-                    left: wp(4),
-                    borderRadius: wp(3),
-                    alignSelf: 'center',
-                    // backgroundColor: '#  '
-                },
+                // tabBarStyle: {
+                //     // position: 'absolute',
+                //     // bottom: wp(7),
+                //     // right: wp(4),
+                //     // left: wp(4),
+                //     // borderRadius: wp(3),
+                //     // backgroundColor: 'blue',
+                //     // alignSelf: 'center',
+                //     // alignItems: 'center',
+                //     // // flex: 1,
+                //     // justifyContent: 'center',
+                //     // // paddingVertical: hp(2)
+                // },
+
+                // tabBarStyle: {
+                //     // backgroundColor: 'blue',
+                //     height: Platform.OS === 'ios' ? 70 : 70,
+                //     paddingVertical: hp(2),
+                //     paddingBottom: Platform.OS === 'ios' ? 15 : 15,
+                //     bottom: wp(7),
+                //     right: wp(4),
+                //     left: wp(4),
+                //     borderRadius: wp(3),
+                //     position: 'absolute'
+                // },
             }}
         >
 
             {TabArr.map((item, index) => (
                 <Tab.Screen
+
                     key={index}
                     name={item.route}
                     component={item.component}
                     options={{
+                        tabBarStyle: {
+                            position: 'absolute',
+                            bottom: wp(7),
+                            right: wp(4),
+                            left: wp(4),
+                            borderRadius: wp(3),
+                            // backgroundColor: 'yellow',
+                            alignSelf: 'center',
+                            alignItems: 'center',
+                            // flex: 1,
+                            justifyContent: 'center',
+                            height: hp(7),
+                            paddingBottom: hp(0.1),
+
+                            width: "90%",
+
+                        },
                         tabBarShowLabel: false,
                         tabBarButton: (props) => <TabButton {...props} item={item} />,
                     }}
@@ -147,9 +180,11 @@ const BottomTab = () => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
+        alignSelf: 'center',
+
+        // backgroundColor: '#000',
     },
     btn: {
         flexDirection: 'row',

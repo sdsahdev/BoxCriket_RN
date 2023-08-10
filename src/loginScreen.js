@@ -73,7 +73,8 @@ const loginSceen = ({ navigation }) => {
         </View>
         <ChangePass name={"Password"} headerText={null} />
       </SafeAreaView >
-      <TouchableOpacity style={styles.bookbtn} onPress={() => handleSubmit()}>
+      {/* <TouchableOpacity style={styles.bookbtn} onPress={() => handleSubmit()}> */}
+      <TouchableOpacity style={styles.bookbtn} onPress={() => navigation.navigate("BoxList")}>
         <Text style={styles.booktxt}>
           Login
         </Text>
@@ -86,10 +87,20 @@ const loginSceen = ({ navigation }) => {
 // define your styles
 const styles = StyleSheet.create({
   phnimage: { width: wp(5), height: hp(5), tintColor: '#027850' },
-  booktxt: { color: '#fff', alignSelf: 'center', textAlignVertical: 'center', flex: 1, fontSize: wp(4) },
+  booktxt: {
+    color: '#fff',
+    fontSize: wp(4),
+  },
   bookbtn: {
-    backgroundColor: '#027850', height: hp(6), width: "90%", position: 'absolute', bottom: 0, alignSelf: 'center', marginBottom: hp(5), borderRadius: wp(2)
-
+    backgroundColor: '#027850',
+    width: "90%",
+    position: 'absolute',
+    bottom: hp(5),
+    alignSelf: 'center',
+    borderRadius: wp(2),
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: hp(2)
   },
   container: {
     flex: 1,

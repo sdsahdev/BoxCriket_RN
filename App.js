@@ -27,6 +27,7 @@ import RegisterScreen from './src/RegisterScreen';
 import EditProfile from './src/EditProfile';
 import ContactUs from './src/ContactUs';
 import TornamentBook from './src/TornamentBook';
+import FlashMessage, { showMessage, hideMessage, FlashMessageManager } from "react-native-flash-message";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -37,7 +38,10 @@ const App = () => {
   return (
 
     <NavigationContainer>
+      <FlashMessage position="bottom" />
+
       <Stack.Navigator headerMode="none">
+        <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
         <Stack.Screen name="BoxList" component={BottomTab} />
         <Stack.Screen name="BoxeItems" component={BoxeItems} />
         <Stack.Screen name="Details" component={Details} />
@@ -49,7 +53,6 @@ const App = () => {
         <Stack.Screen name="Otp" component={Otp} />
         <Stack.Screen name="ChangePass" component={ChangePass} />
         <Stack.Screen name="PasswordScreen" component={PasswordScreen} />
-        <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
         <Stack.Screen name="EditProfile" component={EditProfile} />
         <Stack.Screen name="ContactUs" component={ContactUs} />
         <Stack.Screen name="About" component={About} />

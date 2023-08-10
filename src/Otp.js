@@ -65,10 +65,20 @@ const Otp = ({ navigation }) => {
 
 export default Otp;
 const styles = StyleSheet.create({
-    booktxt: { color: '#fff', alignSelf: 'center', textAlignVertical: 'center', flex: 1, fontSize: wp(4) },
+    booktxt: {
+        color: '#fff',
+        fontSize: wp(4),
+    },
     bookbtn: {
-        backgroundColor: '#027850', height: hp(6), width: "90%", position: 'absolute', bottom: 0, alignSelf: 'center', marginBottom: hp(5), borderRadius: wp(2)
-
+        backgroundColor: '#027850',
+        width: "90%",
+        position: 'absolute',
+        bottom: hp(5),
+        alignSelf: 'center',
+        borderRadius: wp(2),
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingVertical: hp(2)
     },
     borderStyleBase: {
         width: 30,
