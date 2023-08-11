@@ -153,20 +153,16 @@ const DateTime = () => {
         <View>
           <TopHeader name={'Book Your Slot'} />
         </View>
-        <View style={styles.sendView}>
-          <SlotTime
-            onStartTimeChange={handleStartTimeChange}
-            onEndTimeChange={handleEndTimeChange}
-            tor={handletor}
-            data={data} />
-        </View>
-
-
 
         {console.log(startTime, "==satrt===")}
         {console.log(endTime, "==end===")}
 
+        <Text style={styles.datess}>select date is required</Text>
+        <View style={styles.thiView}>
+          <CalanderFile datesselect={handleDateSelect} />
+        </View>
         <View>
+
           {Object.keys(caldate).length !== 0 && startTime !== null && (
             <TouchableOpacity style={styles.btn} onPress={() => BookingPro()}>
               <Text style={styles.payment}>
@@ -175,10 +171,12 @@ const DateTime = () => {
             </TouchableOpacity>
           )}
         </View>
-
-        <Text style={styles.datess}>select date is required</Text>
-        <View style={styles.thiView}>
-          <CalanderFile datesselect={handleDateSelect} />
+        <View style={styles.sendView}>
+          <SlotTime
+            onStartTimeChange={handleStartTimeChange}
+            onEndTimeChange={handleEndTimeChange}
+            tor={handletor}
+            data={data} />
         </View>
       </ScrollView>
     </View>
@@ -196,7 +194,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignSelf: 'center',
-    marginTop: hp(4),
+    marginTop: hp(2),
   },
   mainView: { flex: 1, marginBottom: hp(5) },
   btn: { margin: wp(3), height: 40, flex: 1 },

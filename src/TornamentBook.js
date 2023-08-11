@@ -113,18 +113,14 @@ const TornamentBook = () => {
                 <View >
                     <TopHeader name={"Book Your Tornament"} />
                 </View>
-                <View style={styles.sendView}>
-                    {tornament === false ?
-                        <Text Text style={styles.minHoursText}>
-                            Please select  minimum 5 hours
-                        </Text> : null}
-                    <SlotTime onStartTimeChange={handleStartTimeChange} onEndTimeChange={handleEndTimeChange} tor={handletor} data={data} />
+                <Text style={styles.datess}>select date is required</Text>
+
+                <View style={styles.thiView} >
+                    <CalanderFile datesselect={handleDateSelect} />
                 </View>
+
                 <View>
-
                     {Object.keys(caldate).length !== 0 && startTime !== null && tornament === true && (
-
-
                         <TouchableOpacity
                             style={styles.btn}
                             onPress={() => BookingPro()} >
@@ -135,12 +131,14 @@ const TornamentBook = () => {
 
                     )}
                 </View>
-                <Text style={styles.datess}>select date is required</Text>
 
-                <View style={styles.thiView} >
-                    <CalanderFile datesselect={handleDateSelect} />
+                <View style={styles.sendView}>
+                    {tornament === false ?
+                        <Text Text style={styles.minHoursText}>
+                            Please select  minimum 5 hours
+                        </Text> : null}
+                    <SlotTime onStartTimeChange={handleStartTimeChange} onEndTimeChange={handleEndTimeChange} tor={handletor} data={data} />
                 </View>
-
 
             </ScrollView>
         </View>
@@ -160,7 +158,7 @@ const styles = StyleSheet.create({
         color: 'red',
     },
     thiView: { marginHorizontal: wp(10), },
-    sendView: { flexWrap: 'wrap', flex: 1, justifyContent: 'center', alignSelf: 'center', marginTop: hp(4) },
+    sendView: { flexWrap: 'wrap', flex: 1, justifyContent: 'center', alignSelf: 'center', marginTop: hp(2) },
     mainView: { flex: 1, marginBottom: hp(5), },
     btn: { margin: wp(3), height: 40, flex: 1 },
     payment: { color: '#fff', backgroundColor: '#027850', flex: 1, textAlign: 'center', textAlignVertical: 'center', fontSize: wp(5), borderRadius: wp(2), },

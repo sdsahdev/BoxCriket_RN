@@ -50,7 +50,7 @@ const ProfileScreen = ({ navigation }) => {
                 </View> */}
                 <View style={{ marginTop: hp(10) }}>
 
-                    <Menu icon={imagesClass.pen1} name={"Edit Profile"} onpress={() => hEdit()} />
+                    <Menu icon={imagesClass.pen} name={"Edit Profile"} onpress={() => hEdit()} />
                     <Menu icon={imagesClass.password} name={"Change Password"} onpress={() => hpassword()} />
                     <Menu icon={imagesClass.call} name={"Contact Us"} onpress={() => hcontact()} />
                     <Menu icon={imagesClass.about} name={"About Us"} onpress={() => habout()} />

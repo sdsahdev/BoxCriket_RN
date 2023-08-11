@@ -29,18 +29,16 @@ const imagesClass = {
   telephone: require('./Images/telephone.png'),
   Arrow: require('./Images/Group.png'),
   Profile: require('./Images/profile.png'),
-  // pen: require('./Images/pen.png'),
-  pen: require('./Images/pen1.png'),
-  pen1: require('./Images/pen3.png'),
+  pen: require('./Images/pen.png'),
+  // pen: require('./Images/pen1.png'),
+  // pen1: require('./Images/pen3.png'),
   arrowdown: require('./Images/arrowdown.png'),
 
   password: require('./Images/password.png'),
   logout: require('./Images/logout.png'),
   call: require('./Images/call.png'),
   about: require('./Images/about.png'),
-
   view: require('./Images/view.png'),
-
   hide: require('./Images/hide.png'),
   backScreen: require('./Images/backScreen.png'),
 };

@@ -8,7 +8,7 @@ import {
   SafeAreaView,
   Image,
   TextInput,
-  TouchableOpacity, StatusBar, Alert
+  TouchableOpacity, StatusBar, Alert, ActivityIndicator
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -21,15 +21,16 @@ import Frame from '../asserts/svgs/Frame.svg';
 import imagesClass from '../asserts/imagepath';
 import TopHeader from '../Components/TopHeader';
 import ChangePass from '../Components/ChangePass';
+import FlashMessage, { showMessage, hideMessage, FlashMessageManager } from "react-native-flash-message";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 // create a component
 const loginSceen = ({ navigation }) => {
-  const [value, setValue] = useState("");
-  const [formattedValue, setFormattedValue] = useState("");
-  const [valid, setValid] = useState(false);
-  const [showMessage, setShowMessage] = useState(false);
+
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [Password, setpassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   // const phoneInput = useRef < PhoneInput > (null);
   const handlePhoneNumberChange = (input) => {
@@ -41,16 +42,74 @@ const loginSceen = ({ navigation }) => {
   };
 
   // Function to handle form submission
-  const handleSubmit = () => {
-    navigation.navigate("PasswordScreen");
+  const handleSubmit = async () => {
+    try {
+      setIsLoading(true);
+      const url = 'https://boxclub.in/Joker/Admin/index.php?what=userLogin';
+      const fcmToken = await AsyncStorage.getItem('fcmToken');
+      console.log(fcmToken, "==storae");
+      console.log(phoneNumber);
+      console.log(Password);
+      console.log(fcmToken);
+      const requestBody = {
+        email: phoneNumber,
+        password: Password,
+        fcm: fcmToken,
+      };
 
-    if (isValidPhoneNumber(phoneNumber)) {
-      // Perform your action or validation success logic here
-      Alert.alert('Success', 'Valid phone number!');
-    } else {
-      Alert.alert('Error', 'Invalid phone number!');
+      const response = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(requestBody),
+      });
+      console.log(response.status);
+      if (!response.ok) {
+        setIsLoading(false);
+        throw new Error('Network response was not ok');
+
+      }
+      if (response.ok) {
+        setIsLoading(false);
+        const data = await response.json();
+        if (data.success) {
+          showMessage({
+            message: data.message,
+            type: "Success",
+            backgroundColor: "green", // background color
+            color: "#fff", // text color
+            onHide: () => {
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'BoxList' }],
+              });
+            }
+          });
+          console.log(data.token);
+          AsyncStorage.setItem("token", data.token);
+          AsyncStorage.setItem("user", "admin");
+          setpassword('')
+          setPhoneNumber('')
+
+        } else {
+          console.log(data.message);
+          showMessage({
+            message: data.message,
+            type: "Danger",
+            backgroundColor: "red", // background color
+            color: "#fff", // text color
+          });
+        }
+      }
+    } catch (error) {
+      setIsLoading(false);
+      showMessage({
+        message: error.message,
+        type: "Danger",
+        backgroundColor: "red", // background color
+        color: "#fff", // text color
+      });
+      console.log('Error:', error.message);
     }
-  };
+  }
 
   // Function to validate the phone number using regex
   const isValidPhoneNumber = (input) => {
@@ -58,7 +117,12 @@ const loginSceen = ({ navigation }) => {
     const phoneNumberPattern = /^\d{10}$/;
     return input.length === 10;
   };
-
+  const handlepass = (input) => {
+    setpassword(input)
+  }
+  const handlePhn = (input) => {
+    setPhoneNumber(input)
+  }
   return (
     <View style={styles.container}>
       <SafeAreaView>
@@ -69,16 +133,18 @@ const loginSceen = ({ navigation }) => {
         </Text>
         <View style={{ marginTop: hp(4) }}>
 
-          <ChangePass name={"User Name"} headerText={null} />
+          <ChangePass name={"Whatsapp Number"} headerText={null} onChangeText={handlePhn} />
         </View>
-        <ChangePass name={"Password"} headerText={null} />
+        <ChangePass name={"Password"} headerText={null} onChangeText={handlepass} eye={true} />
       </SafeAreaView >
-      {/* <TouchableOpacity style={styles.bookbtn} onPress={() => handleSubmit()}> */}
-      <TouchableOpacity style={styles.bookbtn} onPress={() => navigation.navigate("BoxList")}>
+      <TouchableOpacity style={styles.bookbtn} onPress={() => handleSubmit()}>
+        {/* <TouchableOpacity style={styles.bookbtn} onPress={() => navigation.navigate("BoxList")}> */}
         <Text style={styles.booktxt}>
           Login
         </Text>
       </TouchableOpacity>
+      {isLoading && (
+        <ActivityIndicator size="large" color="#0000ff" style={{ position: 'absolute', justifyContent: 'center', alignSelf: 'center', height: '100%' }} />)}
 
     </View >
   );

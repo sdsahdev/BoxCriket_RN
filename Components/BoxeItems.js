@@ -36,7 +36,6 @@ const BoxeItems = ({ navigation }) => {
                 setIsLoading(false);
                 console.log("not ok");
                 throw new Error('Network response was not ok');
-
             }
             const jsonData = await response.json();
             console.log(jsonData[0].images[0].url, "==== datas");

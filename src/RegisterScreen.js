@@ -45,11 +45,16 @@ const RegisterScreen = ({ navigation }) => {
         setIsLoading(true)
         const token = await AsyncStorage.getItem("token")
         console.log(token, "-----");
-        const apiUrl = 'https://boxclub.in/Joker/Admin/index.php?what=addThirdParty';
+        const apiUrl = 'https://boxclub.in/Joker/Admin/index.php?what=userRegistration';
+
+        console.log(username);
+        console.log(email);
+        console.log(phoneNumber);
+        console.log(password);
         const data = {
             name: username,
             email: email,
-            phno: phoneNumber,
+            phone: phoneNumber,
             password: password,
             type: 'insert'
         };
@@ -79,7 +84,7 @@ const RegisterScreen = ({ navigation }) => {
                     backgroundColor: "green", // background color
                     color: "#fff", // text color
                     onHide: () => {
-                        navigation.pop();
+                        navigation.navigate("Otp");
                     }
                 });
 
@@ -125,7 +130,7 @@ const RegisterScreen = ({ navigation }) => {
                 <TopHeader />
                 <Text style={styles.titelText}>
                     Hi~{'\n'}
-                    Add new Admin
+                    Welcome
                 </Text>
 
                 <ChangePass name={"User Name"} headerText={null} onChangeText={handleuserChange} />
