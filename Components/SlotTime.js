@@ -43,7 +43,6 @@ const SlotTime = ({ onStartTimeChange, onEndTimeChange, tor, data }) => {
         }
         setSelectedStartTimeData(data.find(item => item.time === selectedStartTime));
         setSelectedEndTimeData(data.find(item => item.time === selectedEndTime));
-
     };
 
     const handleItemPress = id => {
@@ -65,7 +64,7 @@ const SlotTime = ({ onStartTimeChange, onEndTimeChange, tor, data }) => {
         });
     };
 
-    const renderItem = ({ item }) => {
+    const renderItem = ({ item, index }) => {
         const isSelected =
             (selectedStartTime &&
                 selectedEndTime &&
@@ -75,18 +74,21 @@ const SlotTime = ({ onStartTimeChange, onEndTimeChange, tor, data }) => {
             (selectedEndTime && item.time === selectedEndTime);
 
         return (
-            <TouchableOpacity
-                disabled={!item.status}
-                onPress={() => {
-                    handleTimePress(item.time, data);
-                    handleItemPress(item.id);
-                }}>
-                <View style={[styles.timeSlot, isSelected && styles.selectedTimeSlot, !item.status ? styles.notAvaable : null]}>
-                    <Text style={[styles.timeText, isSelected && styles.selectedtext]}>
-                        {item.time}
-                    </Text>
-                </View>
-            </TouchableOpacity>
+            <>
+                {item.start_time &&
+                    <TouchableOpacity
+                        disabled={!item.available}
+                        onPress={() => {
+                            handleTimePress(item.time, data);
+                            handleItemPress(index + 1);
+                        }}>
+                        <View style={[styles.timeSlot, isSelected && styles.selectedTimeSlot, !item.available ? styles.notAvaable : null]}>
+                            <Text style={[styles.timeText, isSelected && styles.selectedtext]}>
+                                {item.time2}
+                            </Text>
+                        </View>
+                    </TouchableOpacity>}
+            </>
         );
     };
     const calculateTotalDuration = () => {
@@ -96,6 +98,11 @@ const SlotTime = ({ onStartTimeChange, onEndTimeChange, tor, data }) => {
             const endMoment = moment(selectedEndTime, 'hh:mm a');
             const totalDuration = endMoment.diff(startMoment, 'hours');
 
+            // { console.log(selectedStartTime, '===sat time ==='); }
+            // { console.log(selectedEndTime, '===end time ==='); }
+            // { console.log(startMoment, '===startMoment ==='); }
+            // { console.log(endMoment, '===eendMoment ==='); }
+            // { console.log(totalDuration, '===totalDuration ==='); }
             return totalDuration;
         }
 
@@ -110,10 +117,8 @@ const SlotTime = ({ onStartTimeChange, onEndTimeChange, tor, data }) => {
         return (
             <View>
                 {totalDuration > 3 ? tor(true) : (
-
                     <>
                         {tor(false)}
-
                     </>
                 )}
             </View>
@@ -126,12 +131,13 @@ const SlotTime = ({ onStartTimeChange, onEndTimeChange, tor, data }) => {
             {console.log(selectedEndTime, "===End time==")} */}
 
             {renderSelectedItemsText()}
+
             <FlatList
                 style={{ flex: 1, alignSelf: 'center' }} // Set flex: 1 to occupy the remaining space
                 data={data}
                 numColumns={numColumns}
                 renderItem={renderItem}
-                keyExtractor={item => item.id}
+                keyExtractor={(item, index) => index.toString()}
             />
 
             <View

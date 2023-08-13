@@ -87,12 +87,12 @@ const DetailsCompo = ({ navigation }) => {
             </SafeAreaView>
             <View style={{ flexDirection: 'row' }}>
 
-                <TouchableOpacity style={styles.bookbtn} onPress={() => navigation.navigate("TornamentBook")}>
+                <TouchableOpacity style={styles.bookbtn} onPress={() => navigation.navigate("TornamentBook", { item: item })}>
                     <Text style={styles.booktxt}>
                         Tounament Booking
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.bookbtn} onPress={() => navigation.navigate("DateTime")}>
+                <TouchableOpacity style={styles.bookbtn} onPress={() => navigation.navigate("DateTime", { item: item })}>
                     <Text style={styles.booktxt}>
                         Slot Booking
                     </Text>

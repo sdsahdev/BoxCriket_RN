@@ -1,4 +1,3 @@
-
 //import liraries
 import React, { Component, useState, useRef, useEffect } from 'react';
 import {
@@ -8,7 +7,10 @@ import {
     SafeAreaView,
     Image,
     TextInput,
-    TouchableOpacity, StatusBar, Alert, ActivityIndicator
+    TouchableOpacity,
+    StatusBar,
+    Alert,
+    ActivityIndicator,
 } from 'react-native';
 import {
     widthPercentageToDP as wp,
@@ -17,7 +19,12 @@ import {
 import TopHeader from '../Components/TopHeader';
 import ChangePass from '../Components/ChangePass';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import FlashMessage, { showMessage, hideMessage, FlashMessageManager } from "react-native-flash-message";
+import FlashMessage, {
+    showMessage,
+    hideMessage,
+    FlashMessageManager,
+} from 'react-native-flash-message';
+import imagesClass from '../asserts/imagepath';
 
 // create a component
 const RegisterScreen = ({ navigation }) => {
@@ -28,102 +35,77 @@ const RegisterScreen = ({ navigation }) => {
     const [email, setemail] = useState('');
     const [username, setusername] = useState('');
     const [password, setpassword] = useState('');
+
+
     // const phoneInput = useRef < PhoneInput > (null);
-    const handlepassword = (input) => {
-        setpassword(input)
+    const handlepassword = input => {
+        setpassword(input);
     };
-    const handleuserChange = (input) => {
-        setusername(input)
-    }
-    const handleEmail = (input) => {
-        setemail(input)
-    }
-    const callApi = async () => {
-        console.log(username)
-        console.log(phoneNumber)
-        console.log(password)
-        setIsLoading(true)
-        const token = await AsyncStorage.getItem("token")
-        console.log(token, "-----");
-        const apiUrl = 'https://boxclub.in/Joker/Admin/index.php?what=userRegistration';
-
-        console.log(username);
-        console.log(email);
-        console.log(phoneNumber);
-        console.log(password);
-        const data = {
-            name: username,
-            email: email,
-            phone: phoneNumber,
-            password: password,
-            type: 'insert'
-        };
-
-        const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: {
-                token: token,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        });
-
-        if (!response.ok) {
-            setIsLoading(false)
-
-            throw new Error('Network response was not ok');
-        }
-        if (response.ok) {
-            const data = await response.json();
-            setIsLoading(false)
-
-            if (data.success) {
-                showMessage({
-                    message: data.message,
-                    type: "Success",
-                    backgroundColor: "green", // background color
-                    color: "#fff", // text color
-                    onHide: () => {
-                        navigation.navigate("Otp");
-                    }
-                });
-
-                console.log(data, " logg");
-            } else {
-                console.log(data.message, "jj");
-                showMessage({
-                    message: data.message,
-                    type: "Danger",
-                    duration: 3000,
-                    backgroundColor: "red", // background color
-                    color: "#fff", // text color
-                });
-            }
-        } else {
-            setIsLoading(false)
-
-            showMessage({
-                message: "data. s",
-                type: "Danger",
-                backgroundColor: "red", // background color
-                color: "#fff", // text color
-                duration: 3000
-            });
-        }
+    const handleuserChange = input => {
+        setusername(input);
+    };
+    const handleEmail = input => {
+        setemail(input);
+    };
+    const generateOTP = () => {
+        return Math.floor(1000 + Math.random() * 9000).toString();
     };
 
 
-    const isValidPhoneNumber = (input) => {
+
+    const isValidPhoneNumber = input => {
         const formattedPhoneNumber = input.replace(/\D/g, '');
         const limitedPhoneNumber = formattedPhoneNumber.slice(0, 10);
         setPhoneNumber(limitedPhoneNumber);
         const phoneNumberPattern = /^\d{10}$/;
         return phoneNumberPattern;
     };
+    const msgapi = () => {
+        const randomOTP = generateOTP();
+        const apiUrl = 'http://msg.msgclub.net/rest/services/sendSMS/sendGroupSms';
+        const apiKey = '9dfa547decef19a15b780121a80cfa0'; // Replace with your actual auth key
+
+        const smsData = {
+            smsContent: `Your OTP for Box Critet Booking App registration is: *${randomOTP}*. 
+Please enter this OTP to complete your registration process.`,
+            routeId: '21',
+            mobileNumbers: phoneNumber,
+            senderId: '6359238603',
+            signature: 'signature',
+            smsContentType: 'english',
+        };
+
+        fetch(`${apiUrl}?AUTH_KEY=${apiKey}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(smsData),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('SMS sent successfully:', data.responseCode);
+                if (data.responseCode === '3001') {
+                    navigation.navigate("Otp", {
+                        randomOTP: randomOTP,
+                        phoneNumber: phoneNumber,
+                        username: username,
+                        password: password,
+                    })
+
+                }
+
+                //hey llopa sayne  yution shere uis 
+                // Handle success or display a message to the user
+            })
+            .catch(error => {
+                console.error('Error sending SMS:', error);
+                // Handle error or display an error message to the user
+            });
+    };
 
     return (
         <View style={styles.container}>
-
             <FlashMessage />
 
             <SafeAreaView>
@@ -133,25 +115,49 @@ const RegisterScreen = ({ navigation }) => {
                     Welcome
                 </Text>
 
-                <ChangePass name={"User Name"} headerText={null} onChangeText={handleuserChange} />
+                <ChangePass
+                    name={'User Name'}
+                    headerText={null}
+                    onChangeText={handleuserChange}
+                />
 
-                <ChangePass name={"Email"} headerText={null} onChangeText={handleEmail} />
-                <ChangePass name={"Phone Number"} headerText={null} onChangeText={isValidPhoneNumber} called={true} />
+                {/* <ChangePass name={"Email"} headerText={null} onChangeText={handleEmail} /> */}
+                <ChangePass
+                    name={'Whatsapp Number'}
+                    headerText={null}
+                    onChangeText={isValidPhoneNumber}
+                    called={true}
+                    im={imagesClass.telephone}
+                />
 
-                <ChangePass name={"Password"} headerText={null} onChangeText={handlepassword} />
-            </SafeAreaView >
+                <ChangePass
+                    name={'Password'}
+                    headerText={null}
+                    onChangeText={handlepassword}
+                    eye={true}
+                    im={imagesClass.padlock}
+                />
+            </SafeAreaView>
             <FlashMessage position="bottom" />
 
             {/* <TouchableOpacity style={styles.bookbtn} onPress={() => callApi()}> */}
-            <TouchableOpacity style={styles.bookbtn} onPress={() => navigation.navigate("Otp")}>
-                <Text style={styles.booktxt}>
-                    Register
-                </Text>
+            {/* <TouchableOpacity style={styles.bookbtn} onPress={() => navigation.navigate("Otp")}> */}
+            <TouchableOpacity style={styles.bookbtn} onPress={() => msgapi()}>
+                <Text style={styles.booktxt}>Register</Text>
             </TouchableOpacity>
             {isLoading && (
-                <ActivityIndicator size="large" color="#0000ff" style={{ position: 'absolute', justifyContent: 'center', alignSelf: 'center', height: '100%' }} />)}
-
-        </View >
+                <ActivityIndicator
+                    size="large"
+                    color="#0000ff"
+                    style={{
+                        position: 'absolute',
+                        justifyContent: 'center',
+                        alignSelf: 'center',
+                        height: '100%',
+                    }}
+                />
+            )}
+        </View>
     );
 };
 
@@ -164,14 +170,14 @@ const styles = StyleSheet.create({
     },
     bookbtn: {
         backgroundColor: '#027850',
-        width: "90%",
+        width: '90%',
         position: 'absolute',
         bottom: hp(5),
         alignSelf: 'center',
         borderRadius: wp(2),
         justifyContent: 'center',
         alignItems: 'center',
-        paddingVertical: hp(2)
+        paddingVertical: hp(2),
     },
     container: {
         flex: 1,
@@ -188,7 +194,8 @@ const styles = StyleSheet.create({
     fillDetails: {
         backgroundColor: '#fff',
         margin: wp(2),
-        marginHorizontal: wp(5), padding: wp(3),
+        marginHorizontal: wp(5),
+        padding: wp(3),
         borderRadius: wp(2),
         color: ' #4b92b4',
         flexDirection: 'row',
@@ -196,10 +203,12 @@ const styles = StyleSheet.create({
         borderBottomWidth: 2,
     },
     inputFild: {
-        height: hp(5), width: wp(50), color: 'black', paddingLeft: wp(4),
+        height: hp(5),
+        width: wp(50),
+        color: 'black',
+        paddingLeft: wp(4),
     },
 });
 
 //make this component available to the app
 export default RegisterScreen;
-

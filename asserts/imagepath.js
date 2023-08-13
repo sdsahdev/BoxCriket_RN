@@ -26,9 +26,10 @@ const imagesClass = {
   box3: require('./Images/box3.jpg'),
   box4: require('./Images/box4.jpg'),
 
-  telephone: require('./Images/telephone.png'),
+  telephone: require('./Images/whatsapp.png'),
   Arrow: require('./Images/Group.png'),
   Profile: require('./Images/profile.png'),
+  padlock: require('./Images/padlock.png'),
   pen: require('./Images/pen.png'),
   // pen: require('./Images/pen1.png'),
   // pen1: require('./Images/pen3.png'),

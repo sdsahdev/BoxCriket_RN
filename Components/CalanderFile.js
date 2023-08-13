@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import imagesClass from '../asserts/imagepath'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Back from '../asserts/svgs/Back';
@@ -11,8 +11,8 @@ import moment from 'moment';
 import PaymentBtn from './PaymentBtn';
 
 const CalanderFile = ({ datesselect }) => {
+    const [current, setCurrent] = useState('2023-08-13');
 
-    const [selectedDates, setSelectedDates] = useState({});
     const [calendarTheme, setCalendarTheme] = useState({
         calendarBackground: 'white',
         textSectionTitleColor: 'white',
@@ -24,9 +24,23 @@ const CalanderFile = ({ datesselect }) => {
         textDisabledColor: 'tranferant'
 
     });
+    const [selectedDates, setSelectedDates] = useState({});
+    // setSelectedDates(new Date)
+    // const isInitialMount = useRef(true); // Add this ref
+
     useEffect(() => {
+        // if (isInitialMount.current) {
+        //     isInitialMount.current = false;
+        //     return;
+        // }
+
+        // const today = moment().format('YYYY-MM-DD');
+        // const updatedDates = { ...selectedDates, [today]: { selected: true } };
+        // setSelectedDates(today);
+        // datesselect(updatedDates);
         // console.log(selectedDates, "==dates==");
     }, [selectedDates]);
+
 
     const onDayPress = (day) => {
         const selectedDate = day.dateString;
@@ -64,6 +78,9 @@ const CalanderFile = ({ datesselect }) => {
                     borderColor: 'gray',
                     backgroundColor: 'white',
                 }}
+
+                // current={current}
+                // key={current}
                 markedDates={markedDates}
                 onDayPress={onDayPress}
                 minDate={Date()} // Disable past dates

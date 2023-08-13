@@ -133,12 +133,17 @@ const loginSceen = ({ navigation }) => {
         </Text>
         <View style={{ marginTop: hp(4) }}>
 
-          <ChangePass name={"Whatsapp Number"} headerText={null} onChangeText={handlePhn} />
+          <ChangePass name={"Whatsapp Number"} headerText={null} onChangeText={handlePhn} called={true} im={imagesClass.telephone} />
         </View>
-        <ChangePass name={"Password"} headerText={null} onChangeText={handlepass} eye={true} />
+        <ChangePass name={"Password"} headerText={null} onChangeText={handlepass} eye={true} im={imagesClass.padlock} />
+        <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')}>
+          <Text style={{ color: '#027850', textAlign: 'center', marginTop: hp(2), fontSize: wp(4) }}>
+            Register Your Profile
+          </Text>
+        </TouchableOpacity>
       </SafeAreaView >
-      <TouchableOpacity style={styles.bookbtn} onPress={() => handleSubmit()}>
-        {/* <TouchableOpacity style={styles.bookbtn} onPress={() => navigation.navigate("BoxList")}> */}
+      {/* <TouchableOpacity style={styles.bookbtn} onPress={() => handleSubmit()}> */}
+      <TouchableOpacity style={styles.bookbtn} onPress={() => navigation.navigate("BoxList")}>
         <Text style={styles.booktxt}>
           Login
         </Text>

@@ -23,9 +23,7 @@ const BoxList = ({ navigation }) => {
           <BackgroundSvg />
         </View>
 
-        <View style={styles.botttombg}>
-          <BackgroundSvg />
-        </View>
+
         <View style={styles.topTexts}>
 
           <View style={styles.toptxt}>
@@ -51,6 +49,9 @@ const BoxList = ({ navigation }) => {
 
         <BoxeItems navigation={navigation} />
 
+        {/* <View style={styles.botttombg}>
+          <BackgroundSvg />
+        </View> */}
       </ScrollView>
     </SafeAreaView>
   );
@@ -59,7 +60,7 @@ const BoxList = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1, height: '100%'
   },
   backgroundContainer: {
     ...StyleSheet.absoluteFillObject,
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center', marginTop: wp(2), marginRight: wp(3), color: 'yellow'
 
   }, botttombg: {
-    bottom: 0, position: 'absolute', transform: [{ rotate: '180deg' }],
+    bottom: 0, position: 'absolute', transform: [{ rotate: '180deg' }], flex: 1,
 
   },
   toptxt: { width: "85%" }, maintxt: { fontWeight: 'bold', color: '#000', fontSize: wp(6), marginBottom: wp(5), fontSize: wp(5) },

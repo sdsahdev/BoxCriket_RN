@@ -54,14 +54,14 @@ const BoxeItems = ({ navigation }) => {
                 onPress={() => navigation.navigate("Details", { item })}
             >
                 {console.log(item)}
-                <Image
+                {item.images[0] && <Image
                     source={{ uri: item.images[0].url }}
                     style={styles.image}
                     resizeMode="cover"
-                />
+                />}
                 <View style={styles.textContainer}>
-                    <Text style={styles.textLeft}>{item.name}</Text>
-                    <Text style={styles.textRight}>{parseInt(item.morning_price)} ₹</Text>
+                    {item.name && <Text style={styles.textLeft}>{item.name}</Text>}
+                    {item.morning_price && <Text style={styles.textRight}>{parseInt(item.morning_price)} ₹</Text>}
                 </View>
             </TouchableOpacity>
 

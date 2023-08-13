@@ -21,17 +21,116 @@ import imagesClass from '../asserts/imagepath';
 import TopHeader from '../Components/TopHeader';
 import ChangePass from '../Components/ChangePass';
 
+import FlashMessage, {
+    showMessage,
+    hideMessage,
+    FlashMessageManager,
+} from 'react-native-flash-message';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
-const Otp = ({ navigation }) => {
+const Otp = ({ navigation, route }) => {
+    const { randomOTP, phoneNumber, username, password } = route.params;
+
     const [otp, setOtp] = useState('');
     const MAX_CODE = 4;
+    const callApi = async () => {
+        console.log(username);
+        console.log(phoneNumber);
+        console.log(password);
+        setIsLoading(true);
+        const token = await AsyncStorage.getItem('token');
+        console.log(token, '-----');
+        const apiUrl =
+            'https://boxclub.in/Joker/Admin/index.php?what=userRegistration';
+
+        console.log(username);
+        console.log(email);
+        console.log(phoneNumber);
+        console.log(password);
+        const data = {
+            name: username,
+            email: email,
+            phone: phoneNumber,
+            password: password,
+            type: 'insert',
+        };
+
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                token: token,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+            setIsLoading(false);
+
+            throw new Error('Network response was not ok');
+        }
+        if (response.ok) {
+            const data = await response.json();
+            setIsLoading(false);
+
+            if (data.success) {
+                showMessage({
+                    message: data.message,
+                    type: 'Success',
+                    backgroundColor: 'green', // background color
+                    color: '#fff', // text color
+                    onHide: () => {
+                        navigation.navigate('BoxList');
+                    },
+                });
+
+                console.log(data, ' logg');
+            } else {
+                console.log(data.message, 'jj');
+                showMessage({
+                    message: data.message,
+                    type: 'Danger',
+                    duration: 3000,
+                    backgroundColor: 'red', // background color
+                    color: '#fff', // text color
+                });
+            }
+        } else {
+            setIsLoading(false);
+
+            showMessage({
+                message: 'data. s',
+                type: 'Danger',
+                backgroundColor: 'red', // background color
+                color: '#fff', // text color
+                duration: 3000,
+            });
+        }
+    };
 
     const handleOtpChange = (otp) => {
         setOtp(otp);
         // Your additional logic here, if needed
     };
     const handleSubmit = () => {
-        navigation.navigate("loginSceen");
+        console.log(randomOTP, "==otp scere")
+        if (randomOTP === otp) {
+            navigation.navigate("loginSceen");
+
+        } else {
+            showMessage({
+                message: "please enter valid otp",
+                type: 'Danger',
+                backgroundColor: 'red', // background color
+                color: '#fff', // text color
+                onHide: () => {
+                    callApi();
+                },
+            });
+
+        }
+        // console.log(navigation.getParam('randomOTP'), "==otp scere")
+        // const datt = navigation.navigate('Register', { phoneNumber: navigation.getParam('phoneNumber') });
+        // console.log(datt, '++++++')
     }
     return (
         <View style={{ flex: 1, }}>
