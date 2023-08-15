@@ -19,6 +19,13 @@ import { encode } from 'base-64';
 import { base64 } from 'react-native-base64';
 
 import { useRoute } from '@react-navigation/native';
+import FlashMessage, {
+  showMessage,
+  hideMessage,
+  FlashMessageManager,
+} from 'react-native-flash-message';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const DateTime = () => {
 
   const route = useRoute();
@@ -327,12 +334,11 @@ const DateTime = () => {
     console.log('Total Amount:', totalAmount);
     setamo(totalAmount)
     // console.log('Total Amount:', Object.keys(caldate).length);
-
     var options = {
       description: 'Credits towards ',
       image: 'https://i.imgur.com/3g7nmJC.jpg',
       currency: 'INR',
-      key: 'rzp_test_3XuGHeboPYRExS',
+      key: 'rzp_test_lFrGZBU3t0pDQ3',
       amount: totalAmount * 100,
       name: 'Acme Corp',
 
@@ -348,12 +354,30 @@ const DateTime = () => {
     }
     RazorpayCheckout.open(options).then((data) => {
       // handle success
-      alert(`Success: ${data.razorpay_payment_id}`);
+      // alert(`Success: ${data.razorpay_payment_id}`);
+      showMessage({
+        message: `Success Your Payment, Payment id : ${data.razorpay_payment_id}`,
+        type: "Success",
+        backgroundColor: "green", // background color
+        color: "#fff", // text color
+        duration: 2000,
+        onHide: () => {
+          bookm(data.razorpay_payment_id, totalAmount);
+        }
+      });
     }).catch((error) => {
       // handle failure
-      alert(`Error: ${error.code} | ${error.description}`);
+      // alert(`Error: ${error.code} | ${error.description}`);
+      showMessage({
+        message: error.error.description,
+        type: "Danger",
+        backgroundColor: "red", // background color
+        duration: 5000,
+        color: "#fff", // text color
+      });
     });
   };
+
   const handleStartTimeChange = time => {
     if (!time) {
       return;
@@ -385,16 +409,17 @@ const DateTime = () => {
     // console.log(time, "++++end Times++++++++");
   };
   const csapi = () => {
-    const apiUrl = 'https://boxclub.in/Joker/Admin/index.php?what=checkSlot';
+    const apiUrl = 'https://boxclub.in/Joker/Admin/index.php?what=checkMultipleSlot';
 
     const requestData = {
       start_time: startTime,
       end_time: endTime,
       box_id: item.id,
       dates: apidate,
+      type: 'multi'
     };
     console.log(requestData, "===res");
-
+    //  {"amount": 10000, "box_id": "1", "dates": ["2023-08-15", "2023-08-16"], "end_time": 1691946000, "payment_id": "pay_MQH7xrcsaGSSe4", "start_time": 1691928000, "type": "tournament"} ===res
     fetch(`${apiUrl}`, {
       method: 'POST',
       headers: {
@@ -405,6 +430,74 @@ const DateTime = () => {
       .then(response => response.json())
       .then(data => {
         console.log('API response:', data);
+        if (data.success) {
+          BookingPro();
+        } else {
+          showMessage({
+            message: data.message,
+            type: "Danger",
+            duration: 10000,
+            backgroundColor: "red", // background color
+            color: "#fff", // text color
+            onHide: () => {
+            }
+          });
+        }
+        // Handle the API response data here
+      })
+      .catch(error => {
+        console.error('Error calling API:', error);
+        // Handle the error here
+      });
+  }
+
+  const bookm = async (paymentid, amounts) => {
+    const Token = await AsyncStorage.getItem('token');
+
+    const apiUrl = 'https://boxclub.in/Joker/Admin/index.php?what=bookMultipleSlot';
+
+    const requestData = {
+      start_time: startTime,
+      end_time: endTime,
+      box_id: item.id,
+      dates: apidate,
+      type: "multi",
+      payment_id: paymentid,
+      amount: amounts
+    };
+    console.log(requestData, "===res");
+
+    fetch(`${apiUrl}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      headers: {
+        token: Token
+
+      },
+      body: JSON.stringify(requestData),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('API response:', data);
+        if (data.success) {
+          showMessage({
+            message: `Your booking is successfull`,
+            type: "Success",
+            backgroundColor: "green", // background color
+            color: "#fff", // text color
+            onHide: () => {
+            }
+          });
+        } else {
+          showMessage({
+            message: data.message,
+            type: "Danger",
+            backgroundColor: "red", // background color
+            color: "#fff", // text color
+          });
+        }
         // Handle the API response data here
       })
       .catch(error => {

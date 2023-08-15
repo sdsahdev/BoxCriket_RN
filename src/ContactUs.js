@@ -41,12 +41,19 @@ const ContactUs = ({ navigation }) => {
 
 
                 <Text style={styles.txt2}>Customer Support:</Text>
-
+                {/* 
                 <Text style={styles.cont} >
-                    Phone: [Phone Number]{'\n'}{'\n'}
-                    Email: [Email Address]{'\n'}{'\n'}
-                    Location: [Address]{'\n'}{'\n'}
+                    Phone: 8520020093{'\n'}{'\n'}
+                    Email: jokerbox0099@gmail.com{'\n'}{'\n'}
+                    Location: Anthem compound, NR. Harekrishna village Restaurant, simada kenal road{'\n'}{'\n'}
+                </Text> */}
+                {/* <View style={styles.container}> */}
+                <Text style={styles.contactText}>
+                    {'\n'}   <Text style={styles.label}>Phone:{'\n'}</Text> <Text style={styles.info}>8520020093</Text>{'\n'}
+                    <Text style={styles.label}>Email:{'\n'}</Text> <Text style={styles.info}>jokerbox0099@gmail.com</Text>{'\n'}
+                    <Text style={styles.label}>Location:{'\n'}</Text> <Text style={styles.info}>Anthem compound, NR. Harekrishna village Restaurant, simada kenal road</Text>{'\n'}
                 </Text>
+                {/* </View> */}
 
                 <Text style={styles.txt}>
                     Our customer support team is available during working hours to assist you with any inquiries or issues
@@ -87,7 +94,27 @@ const styles = StyleSheet.create({
         marginTop: wp(10),
         marginLeft: wp(10),
     },
-    container: { flex: 1, position: 'relative' },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
+        backgroundColor: '#f8f8f8',
+    },
+    contactText: {
+        fontSize: 16,
+        lineHeight: 24,
+        textAlign: 'center',
+        color: '#333',
+        fontFamily: 'Helvetica', // You can use your preferred font here
+    },
+    label: {
+        fontWeight: 'bold',
+        color: '#027850', // Custom label color
+    },
+    info: {
+        color: '#147EFB', // Custom info color
+    },
     backgroundContainer: {
         ...StyleSheet.absoluteFillObject,
     },

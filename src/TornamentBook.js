@@ -1,5 +1,7 @@
+
+
 import { StyleSheet, Text, View } from 'react-native';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import About from './About';
 import CalanderFile from '../Components/CalanderFile';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
@@ -12,16 +14,28 @@ import BackgroundSvg from '../asserts/svgs/BgImg';
 import TopHeader from '../Components/TopHeader';
 import TimeComp from '../Components/TimeComp';
 import SlotTime from '../Components/SlotTime';
+import RazorpayCheckout from 'react-native-razorpay';
+import { encode } from 'base-64';
+import { base64 } from 'react-native-base64';
 
+import { useRoute } from '@react-navigation/native';
+import FlashMessage, {
+    showMessage,
+    hideMessage,
+    FlashMessageManager,
+} from 'react-native-flash-message';
 const TornamentBook = () => {
+
+    const route = useRoute();
+    const { item } = route.params;
     const [startTime, setStartTime] = useState(null);
     const [endTime, setEndTime] = useState(null);
     const [caldate, setcalldat] = useState({});
     const [startTimeData, setStartTimeData] = useState(null);
     const [endTimeData, setEndTimeData] = useState(null);
-
-    const [tornament, settornament] = useState(false);
-    const scrollViewRef = useRef(null);
+    const [data, setdatea6] = useState([])
+    const [amo, setamo] = useState(0);
+    const [apidate, setapidate] = useState([]);
     const data6 = {
         "success": true,
         "0": {
@@ -213,221 +227,153 @@ const TornamentBook = () => {
             "price": 1000
         }
     }
-    const data = [
-        {
-            id: '1',
-            time: '01-02 am',
-            price: 100,
-            status: true,
-            stime: '01:00',
-            etime: '02:00',
-        },
-        {
-            id: '2',
-            time: '02-03 am',
-            price: 100,
-            status: true,
-            stime: '02:00',
-            etime: '03:00',
-        },
-        {
-            id: '3',
-            time: '03-04 am',
-            price: 100,
-            status: true,
-            stime: '03:00',
-            etime: '04:00',
-        },
-        {
-            id: '4',
-            time: '04-05 am',
-            price: 100,
-            status: true,
-            stime: '04:00',
-            etime: '05:00',
-        },
-        {
-            id: '5',
-            time: '05-06 am',
-            price: 100,
-            status: true,
-            stime: '05:00',
-            etime: '06:00',
-        },
-        {
-            id: '6',
-            time: '06-07 am',
-            price: 100,
-            status: true,
-            stime: '06:00',
-            etime: '07:00',
-        },
-        {
-            id: '7',
-            time: '07-08 am',
-            price: 100,
-            status: true,
-            stime: '07:00',
-            etime: '08:00',
-        },
-        {
-            id: '8',
-            time: '08-09 am',
-            price: 100,
-            status: true,
-            stime: '08:00',
-            etime: '09:00',
-        },
-        {
-            id: '9',
-            time: '09-10 am',
-            price: 100,
-            status: true,
-            stime: '09:00',
-            etime: '10:00',
-        },
-        {
-            id: '10',
-            time: '10-11 am',
-            price: 100,
-            status: true,
-            stime: '10:00',
-            etime: '11:00',
-        },
-        {
-            id: '11',
-            time: '11-12 am',
-            price: 100,
-            status: true,
-            stime: '11:00',
-            etime: '12:00',
-        },
-        {
-            id: '12',
-            time: '12-13 am',
-            price: 100,
-            status: true,
-            stime: '12:00',
-            etime: '13:00',
-        },
-        {
-            id: '13',
-            time: '13-14 pm',
-            price: 100,
-            status: true,
-            stime: '13:00',
-            etime: '14:00',
-        },
-        {
-            id: '14',
-            time: '14-15 pm',
-            price: 100,
-            status: true,
-            stime: '14:00',
-            etime: '15:00',
-        },
-        {
-            id: '15',
-            time: '15-16 pm',
-            price: 100,
-            status: true,
-            stime: '15:00',
-            etime: '16:00',
-        },
-        {
-            id: '16',
-            time: '16-17 pm',
-            price: 100,
-            status: true,
-            stime: '16:00',
-            etime: '17:00',
-        },
-        {
-            id: '17',
-            time: '17-18 pm',
-            price: 100,
-            status: true,
-            stime: '17:00',
-            etime: '18:00',
-        },
-        {
-            id: '18',
-            time: '18-19 pm',
-            price: 100,
-            status: true,
-            stime: '18:00',
-            etime: '19:00',
-        },
-        {
-            id: '19',
-            time: '19-20 pm',
-            price: 100,
-            status: true,
-            stime: '19:00',
-            etime: '20:00',
-        },
-        {
-            id: '20',
-            time: '20-21 pm',
-            price: 100,
-            status: true,
-            stime: '20:00',
-            etime: '21:00',
-        },
-        {
-            id: '21',
-            time: '21-22 pm',
-            price: 100,
-            status: true,
-            stime: '21:00',
-            etime: '22:00',
-        },
-        {
-            id: '22',
-            time: '22-23 pm',
-            price: 100,
-            status: true,
-            stime: '22:00',
-            etime: '23:00',
-        },
-        {
-            id: '23',
-            time: '23-24 pm',
-            price: 100,
-            status: true,
-            stime: '23:00',
-            etime: '24:00',
-        },
-        {
-            id: '24',
-            time: '24-01 pm',
-            price: 100,
-            status: true,
-            stime: '24:00',
-            etime: '01:00',
-        },
-    ];
+    // const data = [
+    //   { id: '1', time: '01-02 am', price: 100, status: true, stime: '01:00', etime: '02:00' },
+    //   { id: '2', time: '02-03 am', price: 100, status: true, stime: '02:00', etime: '03:00' },
+    //   { id: '3', time: '03-04 am', price: 100, status: true, stime: '03:00', etime: '04:00' },
+    //   { id: '4', time: '04-05 am', price: 100, status: true, stime: '04:00', etime: '05:00' },
+    //   { id: '5', time: '05-06 am', price: 100, status: true, stime: '05:00', etime: '06:00' },
+    //   { id: '6', time: '06-07 am', price: 100, status: true, stime: '06:00', etime: '07:00' },
+    //   { id: '7', time: '07-08 am', price: 100, status: true, stime: '07:00', etime: '08:00' },
+    //   { id: '8', time: '08-09 am', price: 100, status: true, stime: '08:00', etime: '09:00' },
+    //   { id: '9', time: '09-10 am', price: 100, status: true, stime: '09:00', etime: '10:00' },
+    //   { id: '10', time: '10-11 am', price: 100, status: false, stime: '10:00', etime: '11:00' },
+    //   { id: '11', time: '11-12 am', price: 100, status: false, stime: '11:00', etime: '12:00' },
+    //   { id: '12', time: '12-13 am', price: 100, status: false, stime: '12:00', etime: '13:00' },
+    //   { id: '13', time: '13-14 pm', price: 100, status: false, stime: '13:00', etime: '14:00' },
+    //   { id: '14', time: '14-15 pm', price: 100, status: false, stime: '14:00', etime: '15:00' },
+    //   { id: '15', time: '15-16 pm', price: 100, status: false, stime: '15:00', etime: '16:00' },
+    //   { id: '16', time: '16-17 pm', price: 100, status: false, stime: '16:00', etime: '17:00' },
+    //   { id: '17', time: '17-18 pm', price: 100, status: false, stime: '17:00', etime: '18:00' },
+    //   { id: '18', time: '18-19 pm', price: 100, status: false, stime: '18:00', etime: '19:00' },
+    //   { id: '19', time: '19-20 pm', price: 100, status: false, stime: '19:00', etime: '20:00' },
+    //   { id: '20', time: '20-21 pm', price: 100, status: false, stime: '20:00', etime: '21:00' },
+    //   { id: '21', time: '21-22 pm', price: 100, status: false, stime: '21:00', etime: '22:00' },
+    //   { id: '22', time: '22-23 pm', price: 100, status: false, stime: '22:00', etime: '23:00' },
+    //   { id: '23', time: '23-24 pm', price: 100, status: false, stime: '23:00', etime: '24:00' },
+    //   { id: '24', time: '24-01 pm', price: 100, status: false, stime: '24:00', etime: '01:00' },
+    // ];
 
     useEffect(() => {
+        setdatea6(Object.values(data6))
+        // slotapi()
         if (startTimeData) {
             setStartTime(startTimeData.start_time);
             if (!endTimeData) {
                 // If endTimeData is not set, set it to startTimeData.etime initially
                 setEndTime(startTimeData.end_time);
             }
+            // booked
+            // can
+            // canreq
+            // ref
         }
         if (endTimeData) {
             setEndTime(endTimeData.end_time);
         }
     }, [startTimeData, endTimeData]);
 
+
+    slotapi = (date) => {
+        fetch('https://boxclub.in/Joker/Admin/index.php?what=getAllSlots', {
+            method: 'POST', // Assuming you want to use POST method
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                data: date,
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                setdatea6(Object.values(data))
+
+                // Handle the response data here
+                console.log(data);
+            })
+            .catch(error => {
+                // Handle any errors here
+                console.error('Error:', error);
+            });
+    }
+
+
     const handleDateSelect = date => {
+        console.log(date, "****data");
         // Reset startTime and endTime to null when the date is removed
         setcalldat(date);
+
+        const selectedDates = Object.keys(date).filter(key => date[key].selected);
+        setapidate(selectedDates)
+        console.log(selectedDates, '---');
+        if (selectedDates.length === 1) {
+            const firstSelectedDate = selectedDates[0];
+            console.log("First selected date:", firstSelectedDate);
+            // slotapi(firstSelectedDate);
+            // Do something with the first selected date
+        }
     };
 
     const BookingPro = () => {
-        console.log('preess');
+
+        const startIndex = data.findIndex(item => item.start_time === startTime);
+        const endIndex = data.findIndex(item => item.end_time === endTime);
+        console.log(startIndex, 'start index');
+        console.log(endIndex, "end index");
+        let totalAmount = 0;
+
+        if (startIndex !== -1 && endIndex !== -1) {
+            for (let i = startIndex; i <= endIndex; i++) {
+                totalAmount += data[i].price;
+            }
+            totalAmount = totalAmount * Object.keys(caldate).length;
+
+        }
+        console.log('Total Amount:', totalAmount);
+        setamo(totalAmount)
+        // console.log('Total Amount:', Object.keys(caldate).length);
+        var options = {
+            description: 'Credits towards ',
+            image: 'https://i.imgur.com/3g7nmJC.jpg',
+            currency: 'INR',
+            key: 'rzp_test_lFrGZBU3t0pDQ3',
+            amount: totalAmount * 100,
+            name: 'Acme Corp',
+
+            order_id: '',//Replace this with an order_id created using Orders API.
+            prefill: {
+                email: 'gaurav.kumar@example.com',
+                contact: '9191919191',
+                name: 'Gaurav Kumar'
+            },
+            theme: {
+                color: '#027850',
+            }
+        }
+        RazorpayCheckout.open(options).then((data) => {
+            // handle success
+            // alert(`Success: ${data.razorpay_payment_id}`);
+            showMessage({
+                message: `Success Your Payment, Payment id : ${data.razorpay_payment_id}`,
+                type: "Success",
+                backgroundColor: "green", // background color
+                color: "#fff", // text color
+                duration: 2000,
+                onHide: () => {
+                    bookm(data.razorpay_payment_id, totalAmount);
+                }
+            });
+        }).catch((error) => {
+            // handle failure
+            // alert(`Error: ${error.code} | ${error.description}`);
+            showMessage({
+                message: error.error.description,
+                type: "Danger",
+                backgroundColor: "red", // background color
+                duration: 5000,
+                color: "#fff", // text color
+            });
+        });
     };
 
     const handleStartTimeChange = time => {
@@ -435,33 +381,126 @@ const TornamentBook = () => {
             return;
         }
 
-        const selectedStartTimeData = Object.values(data6).find(item => item.time === time);
+        const selectedStartTimeData = data.find(item => item.time === time);
 
-        console.log(selectedStartTimeData.start_time, "====== sss time========")
         if (selectedStartTimeData) {
             setStartTimeData(selectedStartTimeData);
         }
     };
 
     const handleEndTimeChange = time => {
-
         if (!time) {
             console.error('endTime is not valid:', time);
-            setEndTimeData(null);
+            setEndTimeData(null)
             return;
         }
 
-        const selectedEndTimeData = Object.values(data6).find(item => item.time === time);
-        console.log(selectedEndTimeData.end_time, "====== endd time========")
+        const selectedEndTimeData = data.find(item => item.time === time);
         if (selectedEndTimeData) {
             setEndTimeData(selectedEndTimeData);
         }
     };
 
-    const handletor = event => {
-        settornament(event);
-        // console.log(event, '++++event++++++++');
+
+    const handletor = time => {
+        // setEndTime(time);
+        // console.log(time, "++++end Times++++++++");
     };
+    const csapi = () => {
+        const apiUrl = 'https://boxclub.in/Joker/Admin/index.php?what=checkMultipleSlot';
+
+        const requestData = {
+            start_time: startTime,
+            end_time: endTime,
+            box_id: item.id,
+            dates: apidate,
+            type: 'tournament'
+        };
+        console.log(requestData, "===res");
+
+        fetch(`${apiUrl}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestData),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('API response:', data);
+                if (data.success) {
+                    BookingPro();
+                } else {
+                    showMessage({
+                        message: data.message,
+                        type: "Danger",
+                        duration: 10000,
+                        backgroundColor: "red", // background color
+                        color: "#fff", // text color
+                        onHide: () => {
+                        }
+                    });
+                }
+                // Handle the API response data here
+            })
+            .catch(error => {
+                console.error('Error calling API:', error);
+                // Handle the error here
+            });
+    }
+
+    const bookm = (paymentid, amounts) => {
+        const apiUrl = 'https://boxclub.in/Joker/Admin/index.php?what=bookMultipleSlot';
+
+        const requestData = {
+            start_time: startTime,
+            end_time: endTime,
+            box_id: item.id,
+            dates: apidate,
+            type: "tournament",
+            payment_id: paymentid,
+            amount: amounts
+        };
+        console.log(requestData, "===res");
+
+        fetch(`${apiUrl}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            headers: {
+                token: "eyJhbGdvIjoiQUhTNjUyIiwidHlwZSI6IkpXVCJ9$eyJpZCI6IjIiLCJwaG5vIjoiNjM1OTIzODYwMyIsImZjbSI6ImZjbSIsInJvbGUiOiJhZG1pbiJ9$NmNjN2JiOTFjYTc5NWE3ODUyODJkNzdmNWNlMDY5ODU4ZTBhZGQ1MWM2M2Y0NTM1ZTQxNzE2MDU5YzhjMTY5NA=="
+
+            },
+            body: JSON.stringify(requestData),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('API response:', data);
+                if (data.success) {
+                    showMessage({
+                        message: `Your booking is successfull`,
+                        type: "Success",
+                        backgroundColor: "green", // background color
+                        color: "#fff", // text color
+                        onHide: () => {
+                        }
+                    });
+                } else {
+                    showMessage({
+                        message: data.message,
+                        type: "Danger",
+                        backgroundColor: "red", // background color
+                        color: "#fff", // text color
+                    });
+                }
+                // Handle the API response data here
+            })
+            .catch(error => {
+                console.error('Error calling API:', error);
+                // Handle the error here
+            });
+    }
 
     return (
         <View style={styles.mainView}>
@@ -469,54 +508,43 @@ const TornamentBook = () => {
                 <View>
                     <TopHeader name={'Book Your Tornament'} />
                 </View>
-                <Text style={styles.datess}>select date is required</Text>
 
+                {/* {console.log(startTime, "==satrt===")}
+        {console.log(endTime, "==end===")} */}
+
+                <Text style={styles.datess}>select date is required</Text>
                 <View style={styles.thiView}>
                     <CalanderFile datesselect={handleDateSelect} />
                 </View>
-
                 <View>
-                    {Object.keys(caldate).length !== 0 &&
-                        startTime !== null &&
-                        tornament === true && (
-                            <TouchableOpacity style={styles.btn} onPress={() => BookingPro()}>
-                                <Text style={styles.payment}>
-                                    {startTime} to {endTime}
-                                </Text>
-                            </TouchableOpacity>
-                        )}
-                </View>
 
+                    {Object.keys(caldate).length !== 0 && startTime !== null && (
+                        // <TouchableOpacity style={styles.btn} onPress={() => BookingPro()}>
+                        <TouchableOpacity style={styles.btn} onPress={() => csapi()}>
+                            <Text style={styles.payment}>
+                                Book Now
+                            </Text>
+                        </TouchableOpacity>
+                    )}
+                </View>
                 <View style={styles.sendView}>
-                    {tornament === false ? (
-                        <Text Text style={styles.minHoursText}>
-                            Please select minimum 5 hours
-                        </Text>
-                    ) : null}
-                    {/* <SlotTime onStartTimeChange={handleStartTimeChange} onEndTimeChange={handleEndTimeChange} tor={handletor} data={data} /> */}
                     <SlotTime
                         onStartTimeChange={handleStartTimeChange}
                         onEndTimeChange={handleEndTimeChange}
                         tor={handletor}
-                        data={Object.values(data6)}
-                    />
+                        data={data} />
                 </View>
             </ScrollView>
         </View>
     );
-};
-
+}
 export default TornamentBook;
 
 const styles = StyleSheet.create({
     datess: { alignSelf: 'center', color: '#f97272', marginVertical: hp(1) },
 
-    minHoursText: {
-        textAlign: 'center',
-        fontSize: wp(4),
-        color: 'red',
-    },
-    thiView: { marginHorizontal: wp(10) },
+    sold: { color: '#000' },
+    thiView: { marginHorizontal: wp(10), },
     sendView: {
         flexWrap: 'wrap',
         flex: 1,

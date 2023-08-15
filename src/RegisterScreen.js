@@ -36,7 +36,6 @@ const RegisterScreen = ({ navigation }) => {
     const [username, setusername] = useState('');
     const [password, setpassword] = useState('');
 
-
     // const phoneInput = useRef < PhoneInput > (null);
     const handlepassword = input => {
         setpassword(input);
@@ -92,7 +91,19 @@ Please enter this OTP to complete your registration process.`,
                         username: username,
                         password: password,
                     })
-
+                } else {
+                    showMessage({
+                        message: "Try Again after some time",
+                        type: "Success",
+                        backgroundColor: "green", // background color
+                        color: "#fff", // text color
+                        onHide: () => {
+                            navigation.reset({
+                                index: 0,
+                                routes: [{ name: 'BoxList' }],
+                            });
+                        }
+                    });
                 }
 
                 //hey llopa sayne  yution shere uis 

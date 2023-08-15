@@ -30,7 +30,7 @@ const BoxList = ({ navigation }) => {
             <Text>
               Hey, Jolly </Text>
             <Text style={styles.maintxt}>
-              Here is best criket box nearby you
+              Here is best cricket box nearby you
             </Text>
           </View>
 

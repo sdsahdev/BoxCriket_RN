@@ -13,9 +13,15 @@ import {
     TouchableOpacity,
     Image,
 } from 'react-native';
+import FlashMessage, {
+    showMessage,
+    hideMessage,
+    FlashMessageManager,
+} from 'react-native-flash-message';
 import imagesClass from '../asserts/imagepath';
 import { ScrollView } from 'react-native-gesture-handler';
-const Cancel = () => {
+const Cancel = ({ route }) => {
+    const { ids } = route.params;
     const Refunds = [
         {
             id: '1',
@@ -59,6 +65,40 @@ const Cancel = () => {
             rule: 'In case of any dispute regarding refunds, users can contact our customer support team to resolve the issue.',
         },
     ];
+    const canapi = async (id) => {
+        console.log(id)
+        fetch('https://boxclub.in/Joker/Admin/index.php?what=makeACancelRequest', {
+            method: 'POST', // Assuming you want to use POST method
+            body: JSON.stringify({
+                booking_id: id
+            }),
+
+        })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response data here
+                if (data.success) {
+                    showMessage({
+                        message: data.message,
+                        type: "Success",
+                        backgroundColor: "green", // background color
+                        color: "#fff", // text color
+
+                    });
+                } else {
+                    showMessage({
+                        message: data.message ? data.message : "Request failed",
+                        type: "Danger",
+                        backgroundColor: "red", // background color
+                        color: "#fff", // text color
+                    });
+                }
+            })
+            .catch(error => {
+                // Handle any errors here
+                console.error('Error:', error);
+            });
+    }
     const renderItem = ({ item }) => (
         <View style={styles.timeSlot}>
             <Image
@@ -75,7 +115,7 @@ const Cancel = () => {
             <View style={{ position: 'relative' }}>
                 <ScrollView>
                     <View>
-                        <TopHeader name={'Cencle And Refund Policiy'} />
+                        <TopHeader name={'Cancellation and refund policy'} />
                     </View>
 
                     <View>
@@ -89,8 +129,8 @@ const Cancel = () => {
 
                         <TouchableOpacity
                             style={styles.btn}
-                            onPress={() => 'Fcancle reqest'}>
-                            <Text style={styles.payment}>cancle You slot</Text>
+                            onPress={() => canapi(ids)}>
+                            <Text style={styles.payment}>Apply For Cancel Your slot</Text>
                         </TouchableOpacity>
                     </View>
                 </ScrollView>

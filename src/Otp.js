@@ -7,7 +7,7 @@ import {
     SafeAreaView,
     Image,
     TextInput,
-    TouchableOpacity, StatusBar, Alert, Pressable
+    TouchableOpacity, StatusBar, Alert, Pressable, ActivityIndicator
 } from 'react-native';
 import {
     widthPercentageToDP as wp,
@@ -27,8 +27,11 @@ import FlashMessage, {
     FlashMessageManager,
 } from 'react-native-flash-message';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const Otp = ({ navigation, route }) => {
     const { randomOTP, phoneNumber, username, password } = route.params;
+    const [isLoading, setIsLoading] = useState(false);
 
     const [otp, setOtp] = useState('');
     const MAX_CODE = 4;
@@ -43,12 +46,12 @@ const Otp = ({ navigation, route }) => {
             'https://boxclub.in/Joker/Admin/index.php?what=userRegistration';
 
         console.log(username);
-        console.log(email);
+        // console.log(email);
         console.log(phoneNumber);
         console.log(password);
         const data = {
             name: username,
-            email: email,
+            email: 'testing@gmail.com',
             phone: phoneNumber,
             password: password,
             type: 'insert',
@@ -79,7 +82,7 @@ const Otp = ({ navigation, route }) => {
                     backgroundColor: 'green', // background color
                     color: '#fff', // text color
                     onHide: () => {
-                        navigation.navigate('BoxList');
+                        navigation.navigate('loginSceen');
                     },
                 });
 
@@ -114,7 +117,8 @@ const Otp = ({ navigation, route }) => {
     const handleSubmit = () => {
         console.log(randomOTP, "==otp scere")
         if (randomOTP === otp) {
-            navigation.navigate("loginSceen");
+            callApi();
+
 
         } else {
             showMessage({
@@ -122,9 +126,7 @@ const Otp = ({ navigation, route }) => {
                 type: 'Danger',
                 backgroundColor: 'red', // background color
                 color: '#fff', // text color
-                onHide: () => {
-                    callApi();
-                },
+
             });
 
         }
@@ -158,6 +160,9 @@ const Otp = ({ navigation, route }) => {
                     Verify Otp
                 </Text>
             </TouchableOpacity>
+            {isLoading && (
+                <ActivityIndicator size="large" color="#0000ff" style={{ position: 'absolute', justifyContent: 'center', alignSelf: 'center', height: '100%' }} />)}
+
         </View>
     );
 };

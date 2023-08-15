@@ -122,7 +122,7 @@ const Rules = () => {
                                 fontSize: wp(6),
                                 marginHorizontal: wp(5),
                             }}>
-                            Genral Rules
+                            General Rules
                         </Text>
                     </View>
                     <View style={{ marginRight: wp(9) }}>
@@ -142,7 +142,7 @@ const Rules = () => {
                                 marginHorizontal: wp(5),
                                 marginTop: hp(4),
                             }}>
-                            Refund and cancetion Rules
+                            Cancellation and refund policy
                         </Text>
                         <FlatList
                             style={{ marginTop: hp(3) }}

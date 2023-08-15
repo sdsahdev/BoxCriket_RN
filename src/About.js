@@ -36,7 +36,7 @@ const About = ({ navigation }) => {
                 </View>
                 <View style={{ marginTop: hp(15) }}>
                     <Text style={styles.txt}>
-                        Welcome to the [App Name], your go-to destination for booking cricket turf slots with ease and
+                        Welcome to the Joker The Box cricket, your go-to destination for booking cricket turf slots with ease and
                         convenience. We strive to provide cricket enthusiasts like you with a seamless and hassle-free
                         experience for reserving turf facilities for practice sessions, matches, and more.
 
@@ -48,12 +48,12 @@ const About = ({ navigation }) => {
                         {'\n'}{'\n'}
 
 
-                        At [App Name], we understand the passion for cricket and the importance of having access to wellmaintained turf facilities. We have partnered with reputable turf owners and facilities to offer you a wide
+                        At Joker The Box cricket, we understand the passion for cricket and the importance of having access to wellmaintained turf facilities. We have partnered with reputable turf owners and facilities to offer you a wide
                         range of options to suit your preferences and requirements.
                         {'\n'}{'\n'}
                         {'\n'}
 
-                        Why Choose [App Name]?
+                        Why Choose Joker The Box cricket
                         {'\n'}{'\n'}
                         {'\n'}
                         User-Friendly Interface: Our user-friendly app interface makes it easy for you to browse available turf
@@ -81,12 +81,12 @@ const About = ({ navigation }) => {
                         an even better cricket turf booking experience.
                         {'\n'}{'\n'}
 
-                        Join the growing community of cricket enthusiasts who trust [App Name] for their turf booking needs.
+                        Join the growing community of cricket enthusiasts who trust Joker The Box cricket  for their turf booking needs.
                         Start exploring available slots, book your preferred time, and get ready for an exciting game of cricket!
 
                         {'\n'}{'\n'}
 
-                        Thank you for choosing [App Name]. We look forward to serving you and being a part of your cricket
+                        Thank you for choosing Joker The Box cricket. We look forward to serving you and being a part of your cricket
                         journey.
 
                     </Text>
