@@ -51,7 +51,7 @@ const ProfileScreen = ({ navigation }) => {
                 <View style={{ marginTop: hp(10) }}>
 
                     {/* <Menu icon={imagesClass.pen} name={"Edit Profile"} onpress={() => hEdit()} /> */}
-                    <Menu icon={imagesClass.password} name={"Change Password"} onpress={() => hpassword()} />
+                    {/* <Menu icon={imagesClass.password} name={"Change Password"} onpress={() => hpassword()} /> */}
                     <Menu icon={imagesClass.call} name={"Contact Us"} onpress={() => hcontact()} />
                     <Menu icon={imagesClass.about} name={"About Us"} onpress={() => habout()} />
                     <Menu icon={imagesClass.logout} name={"Logout"} onpress={() => hlogout()} />

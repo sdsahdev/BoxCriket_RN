@@ -24,6 +24,8 @@ import FlashMessage, {
     hideMessage,
     FlashMessageManager,
 } from 'react-native-flash-message';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const TornamentBook = () => {
 
     const route = useRoute();
@@ -36,6 +38,7 @@ const TornamentBook = () => {
     const [data, setdatea6] = useState([])
     const [amo, setamo] = useState(0);
     const [apidate, setapidate] = useState([]);
+
     const data6 = {
         "success": true,
         "0": {
@@ -203,30 +206,38 @@ const TornamentBook = () => {
             "price": 1000
         },
         "21": {
-            "time2": "09-10 pm", time: '22-23 pm',
-
+            "time2": "09-12 pm", time: '22-01 pm',
             "start_time": 1691960400,
             "end_time": 1691964000,
             "available": true,
             "price": 1000
         },
-        "22": {
-            "time2": "10-11 pm", time: '23-24 pm',
-
-            "start_time": 1691964000,
-            "end_time": 1691967600,
-            "available": true,
-            "price": 1000
-        },
-        "23": {
-            "time2": "11-12 am", time: '24-01 pm',
-
-            "start_time": 1691967600,
-            "end_time": 1691971200,
-            "available": true,
-            "price": 1000
-        }
     }
+
+    /*  "21": {
+        "time2": "09-10 pm", time: '22-23 pm',
+        "start_time": 1691960400,
+        "end_time": 1691964000,
+        "available": true,
+        "price": 1000
+      },
+      "22": {
+        "time2": "10-11 pm", time: '23-24 pm',
+  
+        "start_time": 1691964000,
+        "end_time": 1691967600,
+        "available": true,
+        "price": 1000
+      },
+      "23": {
+        "time2": "11-12 am", time: '24-01 pm',
+        "start_time": 1691967600,
+        "end_time": 1691971200,
+        "available": true,
+        "price": 1000
+      }
+      
+      */
     // const data = [
     //   { id: '1', time: '01-02 am', price: 100, status: true, stime: '01:00', etime: '02:00' },
     //   { id: '2', time: '02-03 am', price: 100, status: true, stime: '02:00', etime: '03:00' },
@@ -253,10 +264,14 @@ const TornamentBook = () => {
     //   { id: '23', time: '23-24 pm', price: 100, status: false, stime: '23:00', etime: '24:00' },
     //   { id: '24', time: '24-01 pm', price: 100, status: false, stime: '24:00', etime: '01:00' },
     // ];
+    const [hasLoaded, setHasLoaded] = useState(false);
 
     useEffect(() => {
-        setdatea6(Object.values(data6))
-        // slotapi()
+        // setdatea6(Object.values(data6))
+        if (!hasLoaded) {
+            slotapi();
+            setHasLoaded(true);
+        }
         if (startTimeData) {
             setStartTime(startTimeData.start_time);
             if (!endTimeData) {
@@ -274,22 +289,58 @@ const TornamentBook = () => {
     }, [startTimeData, endTimeData]);
 
 
-    slotapi = (date) => {
+    const slotapi = (date) => {
         fetch('https://boxclub.in/Joker/Admin/index.php?what=getAllSlots', {
             method: 'POST', // Assuming you want to use POST method
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                data: date,
+                box_id: item.id,
+                date: date,
             }),
         })
             .then(response => response.json())
-            .then(data => {
-                setdatea6(Object.values(data))
+            .then((data, index) => {
+                function convertTimeFormat(time, index) {
+                    console.log(Object.values(data).length);
+                    if (index === 0) {
+                        return '01-02 am'
+                    }
+                    if (data.length === 23) {
+                        return '22-01 pm'
+                    }
+                    const [hourMinute, ampm] = time.split(' ');
+                    const [shour, ehour] = hourMinute.split('-');
+                    const newsHour = String(parseInt(shour, 10) + 1).padStart(2, '0');
+                    const neweHour = String(parseInt(ehour, 10) + 1).padStart(2, '0');
+
+                    return `${newsHour}-${neweHour} ${ampm}`;
+                }
+                const customTimeArray = [
+                    "12:00 am", "01:00 am", "02:00 am", "03:00 am", "04:00 am",
+                    "05:00 am", "06:00 am", "07:00 am", "08:00 am", "09:00 am",
+                    "10:00 am", "11:00 am", "12:00 pm", "01:00 pm", "02:00 pm",
+                    "03:00 pm", "04:00 pm", "05:00 pm", "06:00 pm", "07:00 pm",
+                    "08:00 pm", "09:00 pm", "10:00 pm", "11:00 pm"
+                ];
+
+                // Create a new array of modified response objects
+                const modifiedResponse = Object.values(data).map((slot, index) => {
+                    if (typeof slot === 'object' && slot.time) {
+                        return {
+                            ...slot,
+                            time: convertTimeFormat(slot.time, index)
+                        };
+                    }
+                    return slot;
+                });
+
+                console.log(modifiedResponse);
+                setdatea6(Object.values(modifiedResponse))
 
                 // Handle the response data here
-                console.log(data);
+                // console.log(data);
             })
             .catch(error => {
                 // Handle any errors here
@@ -308,6 +359,8 @@ const TornamentBook = () => {
         console.log(selectedDates, '---');
         if (selectedDates.length === 1) {
             const firstSelectedDate = selectedDates[0];
+
+            slotapi(firstSelectedDate)
             console.log("First selected date:", firstSelectedDate);
             // slotapi(firstSelectedDate);
             // Do something with the first selected date
@@ -316,28 +369,28 @@ const TornamentBook = () => {
 
     const BookingPro = () => {
 
-        const startIndex = data.findIndex(item => item.start_time === startTime);
-        const endIndex = data.findIndex(item => item.end_time === endTime);
-        console.log(startIndex, 'start index');
-        console.log(endIndex, "end index");
-        let totalAmount = 0;
+        // const startIndex = data.findIndex(item => item.start_time === startTime);
+        // const endIndex = data.findIndex(item => item.end_time === endTime);
+        // console.log(startIndex, 'start index');
+        // console.log(endIndex, "end index");
+        // let totalAmount = 0;
 
-        if (startIndex !== -1 && endIndex !== -1) {
-            for (let i = startIndex; i <= endIndex; i++) {
-                totalAmount += data[i].price;
-            }
-            totalAmount = totalAmount * Object.keys(caldate).length;
+        // if (startIndex !== -1 && endIndex !== -1) {
+        //   for (let i = startIndex; i <= endIndex; i++) {
+        //     totalAmount += data[i].price;
+        //   }
+        //   totalAmount = totalAmount * Object.keys(caldate).length;
 
-        }
-        console.log('Total Amount:', totalAmount);
-        setamo(totalAmount)
+        // }
+        // console.log('Total Amount:', totalAmount);
+        // setamo(totalAmount)
         // console.log('Total Amount:', Object.keys(caldate).length);
         var options = {
             description: 'Credits towards ',
             image: 'https://i.imgur.com/3g7nmJC.jpg',
             currency: 'INR',
             key: 'rzp_test_lFrGZBU3t0pDQ3',
-            amount: totalAmount * 100,
+            amount: 24000 * 100,
             name: 'Acme Corp',
 
             order_id: '',//Replace this with an order_id created using Orders API.
@@ -406,6 +459,7 @@ const TornamentBook = () => {
         // setEndTime(time);
         // console.log(time, "++++end Times++++++++");
     };
+
     const csapi = () => {
         const apiUrl = 'https://boxclub.in/Joker/Admin/index.php?what=checkMultipleSlot';
 
@@ -417,7 +471,7 @@ const TornamentBook = () => {
             type: 'tournament'
         };
         console.log(requestData, "===res");
-
+        //  {"amount": 10000, "box_id": "1", "dates": ["2023-08-15", "2023-08-16"], "end_time": 1691946000, "payment_id": "pay_MQH7xrcsaGSSe4", "start_time": 1691928000, "type": "tournament"} ===res
         fetch(`${apiUrl}`, {
             method: 'POST',
             headers: {
@@ -449,7 +503,9 @@ const TornamentBook = () => {
             });
     }
 
-    const bookm = (paymentid, amounts) => {
+    const bookm = async (paymentid, amounts) => {
+        const Token = await AsyncStorage.getItem('token');
+
         const apiUrl = 'https://boxclub.in/Joker/Admin/index.php?what=bookMultipleSlot';
 
         const requestData = {
@@ -469,7 +525,7 @@ const TornamentBook = () => {
                 'Content-Type': 'application/json',
             },
             headers: {
-                token: "eyJhbGdvIjoiQUhTNjUyIiwidHlwZSI6IkpXVCJ9$eyJpZCI6IjIiLCJwaG5vIjoiNjM1OTIzODYwMyIsImZjbSI6ImZjbSIsInJvbGUiOiJhZG1pbiJ9$NmNjN2JiOTFjYTc5NWE3ODUyODJkNzdmNWNlMDY5ODU4ZTBhZGQ1MWM2M2Y0NTM1ZTQxNzE2MDU5YzhjMTY5NA=="
+                token: Token
 
             },
             body: JSON.stringify(requestData),
@@ -506,7 +562,7 @@ const TornamentBook = () => {
         <View style={styles.mainView}>
             <ScrollView>
                 <View>
-                    <TopHeader name={'Book Your Tornament'} />
+                    <TopHeader name={'Book Your Slot'} />
                 </View>
 
                 {/* {console.log(startTime, "==satrt===")}

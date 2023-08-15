@@ -1,5 +1,5 @@
 //import liraries
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
     View,
     Text,
@@ -30,11 +30,18 @@ import OTPInputView from '@twotalltotems/react-native-otp-input';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Otp = ({ navigation, route }) => {
-    const { randomOTP, phoneNumber, username, password } = route.params;
+    const { phoneNumber, username, password } = route.params;
     const [isLoading, setIsLoading] = useState(false);
+    const [randomOTP, setrandomOTP] = useState(0)
 
     const [otp, setOtp] = useState('');
     const MAX_CODE = 4;
+
+    useEffect(() => {
+        return () => {
+            wpmsg();
+        };
+    }, [])
     const callApi = async () => {
         console.log(username);
         console.log(phoneNumber);
@@ -94,7 +101,10 @@ const Otp = ({ navigation, route }) => {
                     type: 'Danger',
                     duration: 3000,
                     backgroundColor: 'red', // background color
-                    color: '#fff', // text color
+                    color: '#fff',
+                    onHide: () => {
+                        navigation.pop();
+                    }, // text color
                 });
             }
         } else {
@@ -106,6 +116,9 @@ const Otp = ({ navigation, route }) => {
                 backgroundColor: 'red', // background color
                 color: '#fff', // text color
                 duration: 3000,
+                onHide: () => {
+                    navigation.pop();
+                },
             });
         }
     };
@@ -114,6 +127,63 @@ const Otp = ({ navigation, route }) => {
         setOtp(otp);
         // Your additional logic here, if needed
     };
+
+    const generateOTP = () => {
+        return Math.floor(1000 + Math.random() * 9000).toString();
+    };
+    const wpmsg = () => {
+        const randomOTP2 = generateOTP();
+        setrandomOTP(randomOTP2)
+        const apiUrl = 'http://msg.msgclub.net/rest/services/sendSMS/sendGroupSms';
+        const apiKey = '9dfa547decef19a15b780121a80cfa0'; // Replace with your actual auth key
+
+        const smsData = {
+            smsContent: `Your OTP for Box Critet Booking App registration is: *${randomOTP2}*. 
+Please enter this OTP to complete your registration process.`,
+            routeId: '21',
+            mobileNumbers: phoneNumber,
+            senderId: '6359238603',
+            signature: 'signature',
+            smsContentType: 'english',
+        };
+
+        fetch(`${apiUrl}?AUTH_KEY=${apiKey}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(smsData),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('SMS sent successfully:', data.responseCode);
+                if (data.responseCode === '3001') {
+
+                } else {
+                    showMessage({
+                        message: "Try Again after some time",
+                        type: "Success",
+                        backgroundColor: "green", // background color
+                        color: "#fff", // text color
+                        onHide: () => {
+                            navigation.reset({
+                                index: 0,
+                                routes: [{ name: 'BoxList' }],
+                            });
+                        }
+                    });
+                }
+
+                //hey llopa sayne  yution shere uis 
+                // Handle success or display a message to the user
+            })
+            .catch(error => {
+                console.error('Error sending SMS:', error);
+                // Handle error or display an error message to the user
+            });
+    }
+
+
     const handleSubmit = () => {
         console.log(randomOTP, "==otp scere")
         if (randomOTP === otp) {
@@ -151,9 +221,12 @@ const Otp = ({ navigation, route }) => {
                     // Change the border color of the focused input
                     inputBorderRadius={10} // Change the border radius to 10 or any other value you prefer
                 />
-                <Text style={{ alignSelf: 'center' }}>
-                    Resend OTP
-                </Text>
+                <TouchableOpacity onPress={() => wpmsg()}>
+
+                    <Text style={{ alignSelf: 'center' }}>
+                        Resend OTP
+                    </Text>
+                </TouchableOpacity>
             </View>
             <TouchableOpacity style={styles.bookbtn} onPress={() => handleSubmit()}>
                 <Text style={styles.booktxt}>

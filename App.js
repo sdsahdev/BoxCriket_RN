@@ -28,6 +28,7 @@ import EditProfile from './src/EditProfile';
 import ContactUs from './src/ContactUs';
 import TornamentBook from './src/TornamentBook';
 import FlashMessage, { showMessage, hideMessage, FlashMessageManager } from "react-native-flash-message";
+import TimeSlotScreen from './TimeSlotScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -42,8 +43,9 @@ const App = () => {
 
       <Stack.Navigator headerMode="none">
         <Stack.Screen name="loginSceen" component={loginSceen} />
-        <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
         <Stack.Screen name="DateTime" component={DateTime} />
+        <Stack.Screen name="TimeSlotScreen" component={TimeSlotScreen} />
+        <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
         <Stack.Screen name="TornamentBook" component={TornamentBook} />
         <Stack.Screen name="BoxList" component={BottomTab} />
         <Stack.Screen name="BoxeItems" component={BoxeItems} />
@@ -57,6 +59,7 @@ const App = () => {
         <Stack.Screen name="EditProfile" component={EditProfile} />
         <Stack.Screen name="ContactUs" component={ContactUs} />
         <Stack.Screen name="About" component={About} />
+
       </Stack.Navigator>
     </NavigationContainer>
 
