@@ -46,9 +46,7 @@ const RegisterScreen = ({ navigation }) => {
     const handleEmail = input => {
         setemail(input);
     };
-    const generateOTP = () => {
-        return Math.floor(1000 + Math.random() * 9000).toString();
-    };
+
 
 
 
@@ -60,59 +58,13 @@ const RegisterScreen = ({ navigation }) => {
         return phoneNumberPattern;
     };
     const msgapi = () => {
-        const randomOTP = generateOTP();
-        const apiUrl = 'http://msg.msgclub.net/rest/services/sendSMS/sendGroupSms';
-        const apiKey = '9dfa547decef19a15b780121a80cfa0'; // Replace with your actual auth key
-
-        const smsData = {
-            smsContent: `Your OTP for Box Critet Booking App registration is: *${randomOTP}*. 
-Please enter this OTP to complete your registration process.`,
-            routeId: '21',
-            mobileNumbers: phoneNumber,
-            senderId: '6359238603',
-            signature: 'signature',
-            smsContentType: 'english',
-        };
-
-        fetch(`${apiUrl}?AUTH_KEY=${apiKey}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(smsData),
+        navigation.navigate("Otp", {
+            phoneNumber: phoneNumber,
+            username: username,
+            password: password,
         })
-            .then(response => response.json())
-            .then(data => {
-                console.log('SMS sent successfully:', data.responseCode);
-                if (data.responseCode === '3001') {
-                    navigation.navigate("Otp", {
-                        randomOTP: randomOTP,
-                        phoneNumber: phoneNumber,
-                        username: username,
-                        password: password,
-                    })
-                } else {
-                    showMessage({
-                        message: "Try Again after some time",
-                        type: "Success",
-                        backgroundColor: "green", // background color
-                        color: "#fff", // text color
-                        onHide: () => {
-                            navigation.reset({
-                                index: 0,
-                                routes: [{ name: 'BoxList' }],
-                            });
-                        }
-                    });
-                }
 
-                //hey llopa sayne  yution shere uis 
-                // Handle success or display a message to the user
-            })
-            .catch(error => {
-                console.error('Error sending SMS:', error);
-                // Handle error or display an error message to the user
-            });
+
     };
 
     return (

@@ -47,7 +47,10 @@ const BoxeItems = ({ navigation }) => {
     };
 
     // const navigation = useNavigation();
-
+    const filteredData = Object.keys(data).filter(key => key !== 'keys').reduce((obj, key) => {
+        obj[key] = data[key];
+        return obj;
+    }, {});
     const renderItem = ({ item }) => (
         <View style={styles.container}>
             <TouchableOpacity
@@ -73,7 +76,7 @@ const BoxeItems = ({ navigation }) => {
                 <ActivityIndicator size="large" color="#0000ff" style={{ position: 'absolute', justifyContent: 'center', alignSelf: 'center', height: '100%' }} />)}
             <FlatList
                 style={{ marginBottom: wp(19) }}
-                data={data}
+                data={Object.values(filteredData)}
                 showsVerticalScrollIndicator={false}
                 keyExtractor={item => item.id}
                 renderItem={renderItem}

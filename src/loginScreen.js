@@ -1,6 +1,6 @@
 
 //import liraries
-import React, { Component, useState, useRef } from 'react';
+import React, { Component, useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -32,6 +32,35 @@ const loginSceen = ({ navigation }) => {
   const [Password, setpassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    // Call the API when the component mounts
+    console.log("+++++++");
+    fetchBoxData();
+  }, []);
+
+  const fetchBoxData = async () => {
+    console.log("-----------");
+    try {
+      const response = await fetch('https://boxclub.in/Joker/Admin/index.php?what=getBox');
+      if (!response.ok) {
+        console.log("not ok");
+        throw new Error('Network response was not ok');
+      }
+      const jsonData = await response.json();
+      console.log(jsonData.keys.rkey, "==== datas");
+      AsyncStorage.setItem('msgkey', jsonData.keys.msgkey)
+      AsyncStorage.setItem('phn', jsonData.keys.phn)
+      AsyncStorage.setItem('rkey', jsonData.keys.rkey)
+      AsyncStorage.setItem('rskey', jsonData.keys.rskey)
+
+      // setData(jsonData);
+    } catch (error) {
+      console.log('Error:', error);
+    }
+  };
+
   // const phoneInput = useRef < PhoneInput > (null);
   const handlePhoneNumberChange = (input) => {
     // Remove any non-digit characters from the input
@@ -44,15 +73,17 @@ const loginSceen = ({ navigation }) => {
   // Function to handle form submission
   const handleSubmit = async () => {
     try {
+
       setIsLoading(true);
       const url = 'https://boxclub.in/Joker/Admin/index.php?what=userLogin';
       const fcmToken = await AsyncStorage.getItem('fcmToken');
-      console.log(fcmToken, "==storae");
-      console.log(phoneNumber);
-      console.log(Password);
-      console.log(fcmToken);
+      // console.log(fcmToken, "==storae");
+      // console.log(phoneNumber);
+      // console.log(Password);
+      // console.log(fcmToken);
       const requestBody = {
-        email: phoneNumber,
+        // phone: '1234567111',
+        phone: phoneNumber,
         password: Password,
         fcm: fcmToken,
       };
@@ -90,6 +121,8 @@ const loginSceen = ({ navigation }) => {
           setPhoneNumber('')
 
         } else {
+          setIsLoading(false);
+
           console.log(data.message);
           showMessage({
             message: data.message,

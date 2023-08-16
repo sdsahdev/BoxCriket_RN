@@ -13,9 +13,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const BoxList = ({ navigation }) => {
 
-  const newclass = async () => {
-    console.log(await AsyncStorage.getItem('here'))
-  }
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -28,21 +25,12 @@ const BoxList = ({ navigation }) => {
 
           <View style={styles.toptxt}>
             <Text>
-              Hey, Jolly </Text>
+              Hey, </Text>
             <Text style={styles.maintxt}>
               Here is best cricket box nearby you
             </Text>
           </View>
-
-          <View>
-            <TouchableOpacity onPress={() => navigation.navigate("RegisterScreen")} >
-              {/* <TouchableOpacity onPress={() => newclass()} > */}
-
-              <Image source={imagesClass.notification} style={styles.imageStyle} resizeMode='contain' />
-            </TouchableOpacity>
-          </View>
         </View>
-
         <View style={styles.swipest}>
           <SwipList />
         </View>

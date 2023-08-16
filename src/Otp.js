@@ -33,7 +33,6 @@ const Otp = ({ navigation, route }) => {
     const { phoneNumber, username, password } = route.params;
     const [isLoading, setIsLoading] = useState(false);
     const [randomOTP, setrandomOTP] = useState(0)
-
     const [otp, setOtp] = useState('');
     const MAX_CODE = 4;
 
@@ -131,18 +130,20 @@ const Otp = ({ navigation, route }) => {
     const generateOTP = () => {
         return Math.floor(1000 + Math.random() * 9000).toString();
     };
-    const wpmsg = () => {
+    const wpmsg = async () => {
+        const mkey = await AsyncStorage.getItem('msgkey')
+        const phone = await AsyncStorage.getItem('phn')
         const randomOTP2 = generateOTP();
         setrandomOTP(randomOTP2)
         const apiUrl = 'http://msg.msgclub.net/rest/services/sendSMS/sendGroupSms';
-        const apiKey = '9dfa547decef19a15b780121a80cfa0'; // Replace with your actual auth key
+        const apiKey = mkey; // Replace with your actual auth key
 
         const smsData = {
             smsContent: `Your OTP for Box Critet Booking App registration is: *${randomOTP2}*. 
 Please enter this OTP to complete your registration process.`,
             routeId: '21',
             mobileNumbers: phoneNumber,
-            senderId: '6359238603',
+            senderId: phone,
             signature: 'signature',
             smsContentType: 'english',
         };
