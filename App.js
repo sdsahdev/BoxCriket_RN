@@ -29,6 +29,7 @@ import ContactUs from './src/ContactUs';
 import TornamentBook from './src/TornamentBook';
 import FlashMessage, { showMessage, hideMessage, FlashMessageManager } from "react-native-flash-message";
 import TimeSlotScreen from './TimeSlotScreen';
+import GeneralStatusBarColor from './statusbar/GeneralStatusBarColor';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -40,7 +41,8 @@ const App = () => {
 
     <NavigationContainer>
       <FlashMessage position="bottom" />
-
+      <GeneralStatusBarColor backgroundColor="#027850"
+        barStyle="light-content" />
       <Stack.Navigator headerMode="none">
         <Stack.Screen name="loginSceen" component={loginSceen} />
         <Stack.Screen name="DateTime" component={DateTime} />

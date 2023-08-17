@@ -166,7 +166,7 @@ const loginSceen = ({ navigation }) => {
         </Text>
         <View style={{ marginTop: hp(4) }}>
 
-          <ChangePass name={"Whatsapp Number"} headerText={null} onChangeText={handlePhn} im={imagesClass.telephone} />
+          <ChangePass name={"Whatsapp Number"} headerText={null} onChangeText={handlePhn} im={imagesClass.telephone} called={true} />
         </View>
         <ChangePass name={"Password"} headerText={null} onChangeText={handlepass} eye={true} im={imagesClass.padlock} />
         <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')}>

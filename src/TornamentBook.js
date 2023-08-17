@@ -1,6 +1,6 @@
 
 
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import About from './About';
 import CalanderFile from '../Components/CalanderFile';
@@ -28,6 +28,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const TornamentBook = () => {
 
+    const [isLoading, setIsLoading] = useState(false);
     const route = useRoute();
     const { item } = route.params;
     const [startTime, setStartTime] = useState(null);
@@ -44,7 +45,7 @@ const TornamentBook = () => {
     useEffect(() => {
         // setdatea6(Object.values(data6))
         if (!hasLoaded) {
-            slotapi();
+            // slotapi();
             setHasLoaded(true);
         }
         if (startTimeData) {
@@ -62,6 +63,7 @@ const TornamentBook = () => {
 
 
     const slotapi = (date) => {
+        setIsLoading(true)
         fetch('https://boxclub.in/Joker/Admin/index.php?what=getAllSlots', {
             method: 'POST', // Assuming you want to use POST method
             headers: {
@@ -74,6 +76,8 @@ const TornamentBook = () => {
         })
             .then(response => response.json())
             .then((data, index) => {
+                setIsLoading(false)
+
                 function convertTimeFormat(time, index) {
                     console.log(Object.values(data).length);
                     if (index === 0) {
@@ -115,6 +119,8 @@ const TornamentBook = () => {
                 // console.log(data);
             })
             .catch(error => {
+                setIsLoading(false)
+
                 // Handle any errors here
                 console.error('Error:', error);
             });
@@ -140,6 +146,8 @@ const TornamentBook = () => {
     };
 
     const BookingPro = async (amounts) => {
+        setIsLoading(true)
+
         const keys = await AsyncStorage.getItem('rkey')
         var options = {
             description: 'Credits towards ',
@@ -216,6 +224,8 @@ const TornamentBook = () => {
     };
 
     const csapi = () => {
+        setIsLoading(true)
+
         const apiUrl = 'https://boxclub.in/Joker/Admin/index.php?what=checkMultipleSlot';
 
         const requestData = {
@@ -235,6 +245,8 @@ const TornamentBook = () => {
         })
             .then(response => response.json())
             .then(data => {
+                setIsLoading(false)
+
                 console.log('API response:', data);
                 if (data.success) {
                     BookingPro(data.price);
@@ -252,12 +264,16 @@ const TornamentBook = () => {
                 // Handle the API response data here
             })
             .catch(error => {
+                setIsLoading(false)
+
                 console.error('Error calling API:', error);
                 // Handle the error here
             });
     }
 
     const bookm = async (paymentid, amounts) => {
+        setIsLoading(true)
+
         const Token = await AsyncStorage.getItem('token');
 
         const apiUrl = 'https://boxclub.in/Joker/Admin/index.php?what=bookMultipleSlot';
@@ -286,6 +302,8 @@ const TornamentBook = () => {
         })
             .then(response => response.json())
             .then(data => {
+                setIsLoading(false)
+
                 console.log('API response:', data);
                 if (data.success) {
                     slotapi()
@@ -298,6 +316,7 @@ const TornamentBook = () => {
                         }
                     });
                 } else {
+
                     showMessage({
                         message: data.message,
                         type: "Danger",
@@ -308,6 +327,8 @@ const TornamentBook = () => {
                 // Handle the API response data here
             })
             .catch(error => {
+                setIsLoading(false)
+
                 console.error('Error calling API:', error);
                 // Handle the error here
             });
@@ -343,6 +364,14 @@ const TornamentBook = () => {
                         data={data} />
                 </View>
             </ScrollView>
+            {isLoading && (
+                <View style={{ height: '100%', position: 'absolute', width: '100%', justifyContent: 'center', }}>
+                    <View style={{ height: hp(10), width: wp(10), backgroundColor: '#fff', position: 'absolute', justifyContent: 'center', alignSelf: 'center' }}>
+                        <ActivityIndicator size="large" color="#0000ff" style={{ position: 'absolute', justifyContent: 'center', alignSelf: 'center', height: '100%' }} />
+                    </View>
+                </View>
+            )}
+
         </View>
     );
 }
@@ -361,7 +390,7 @@ const styles = StyleSheet.create({
         marginTop: hp(2),
     },
     mainView: { flex: 1, marginBottom: hp(5) },
-    btn: { margin: wp(3), height: 40, flex: 1 },
+    btn: { marginHorizontal: wp(4), marginTop: hp(2), height: wp(12), flex: 1, width: '80%', alignSelf: 'center' },
     payment: {
         color: '#fff',
         backgroundColor: '#027850',

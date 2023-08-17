@@ -45,7 +45,7 @@ const DateTime = () => {
   useEffect(() => {
     // setdatea6(Object.values(data6))
     if (!hasLoaded) {
-      slotapi();
+      // slotapi();
       setHasLoaded(true);
     }
     if (startTimeData) {
@@ -54,10 +54,7 @@ const DateTime = () => {
         // If endTimeData is not set, set it to startTimeData.etime initially
         setEndTime(startTimeData.end_time);
       }
-      // booked
-      // can
-      // canreq
-      // ref
+
     }
     if (endTimeData) {
       setEndTime(endTimeData.end_time);
@@ -376,7 +373,7 @@ const styles = StyleSheet.create({
     marginTop: hp(2),
   },
   mainView: { flex: 1, marginBottom: hp(5) },
-  btn: { margin: wp(3), height: 40, flex: 1 },
+  btn: { marginHorizontal: wp(4), marginTop: hp(2), height: wp(12), flex: 1, width: '80%', alignSelf: 'center' },
   payment: {
     color: '#fff',
     backgroundColor: '#027850',

@@ -40,7 +40,7 @@ const DetailsCompo = ({ navigation }) => {
                         />
                     </TouchableOpacity>
                     {/* <TouchableOpacity>
-
+​
                         <Image
                             source={imagesClass.share}
                             style={styles.image2}
@@ -64,7 +64,7 @@ const DetailsCompo = ({ navigation }) => {
                     <Image
                         source={imagesClass.location}
                         style={styles.mapimage}
-                        resizeMode="contain"
+                        resizeMode="cover"
                     />
                 </TouchableOpacity>
             </View>
@@ -158,14 +158,15 @@ const styles = StyleSheet.create({
     imageContainer: {
         position: 'relative',
         width: '100%',
-        height: 200,
+        height: hp(30),
     },
     image: {
         top: 0,
         left: 0,
         width: '100%',
         height: '100%',
-        borderRadius: 8,
+        borderBottomLeftRadius: 8,
+        borderBottomRightRadius: 8,
     },
     imagesOverlay: {
         position: 'absolute',
@@ -214,4 +215,3 @@ const styles = StyleSheet.create({
 });
 
 export default DetailsCompo;
-
