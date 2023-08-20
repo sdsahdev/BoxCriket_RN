@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import imagesClass from '../asserts/imagepath';
-import { View, Text, StyleSheet, FlatList, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Image, ScrollView, Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import SwipList from '../Components/SwipList';
@@ -12,7 +12,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const BoxList = ({ navigation }) => {
+  const openMaps = () => {
 
+    const latitude = 21.21382748197297; // Replace with the destination latitude
+    const longitude = 72.90829969505918; // Replace with the destination longitude
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`;
+
+    Linking.openURL(url)
+      .catch(error => console.error('Error opening Google Maps', error));
+  }
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -29,6 +37,15 @@ const BoxList = ({ navigation }) => {
             <Text style={styles.maintxt}>
               Here is best cricket box nearby you
             </Text>
+          </View>
+
+          <View>
+            <TouchableOpacity onPress={() => openMaps()} >
+              {/* <TouchableOpacity onPress={() => newclass()} > */}
+
+              <Image source={imagesClass.locationIcon} style={styles.imageStyle} resizeMode='contain' />
+            </TouchableOpacity>
+
           </View>
         </View>
         <View style={styles.swipest}>
@@ -59,7 +76,8 @@ const styles = StyleSheet.create({
     width: wp(8),
     height: hp(4),
     justifyContent: 'center',
-    alignSelf: 'center', marginTop: wp(2), marginRight: wp(3), color: 'yellow'
+    alignSelf: 'center', marginTop: wp(2), marginRight: wp(3), color: 'yellow',
+    tintColor: '#027850'
 
   }, botttombg: {
     bottom: 0, position: 'absolute', transform: [{ rotate: '180deg' }], flex: 1,

@@ -366,9 +366,7 @@ const TornamentBook = () => {
             </ScrollView>
             {isLoading && (
                 <View style={{ height: '100%', position: 'absolute', width: '100%', justifyContent: 'center', }}>
-                    <View style={{ height: hp(10), width: wp(10), backgroundColor: '#fff', position: 'absolute', justifyContent: 'center', alignSelf: 'center' }}>
-                        <ActivityIndicator size="large" color="#0000ff" style={{ position: 'absolute', justifyContent: 'center', alignSelf: 'center', height: '100%' }} />
-                    </View>
+                    <ActivityIndicator size="large" color="#0000ff" style={{ position: 'absolute', justifyContent: 'center', alignSelf: 'center', height: '100%' }} />
                 </View>
             )}
 

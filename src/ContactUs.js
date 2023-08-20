@@ -28,7 +28,7 @@ import ChangePass from '../Components/ChangePass';
 const ContactUs = ({ navigation }) => {
     return (
         <View>
-            <View style={{ position: 'absolute' }}>
+            <View style={{ position: 'absolute', width: '100%' }}>
                 <TopHeader name={'Contact Us'} back={true} navigation={navigation} />
             </View>
             <View style={{ marginTop: hp(15) }}>

@@ -56,12 +56,20 @@ const BoxeItems = ({ navigation }) => {
             <TouchableOpacity
                 onPress={() => navigation.navigate("Details", { item })}
             >
-                {console.log(item)}
-                {item.images[0] && <Image
-                    source={{ uri: item.images[0].url }}
-                    style={styles.image}
-                    resizeMode="cover"
-                />}
+                <View style={{ flexDirection: 'row' }}>
+
+                    {console.log(item)}
+                    {item.images[0] && <Image
+                        source={{ uri: item.images[0].url }}
+                        style={styles.image}
+                        resizeMode="stretch"
+                    />}
+                    {item.images[1] && <Image
+                        source={{ uri: item.images[0].url }}
+                        style={styles.image2}
+                        resizeMode="cover"
+                    />}
+                </View>
                 <View style={styles.textContainer}>
                     {item.name && <Text style={styles.textLeft}>{item.name}</Text>}
                     {item.morning_price && <Text style={styles.textRight}>{parseInt(item.morning_price)} ₹</Text>}
@@ -93,9 +101,16 @@ const styles = StyleSheet.create({
 
     },
     image: {
-        width: "100%",
+        width: "70%",
         height: 200,
-        borderRadius: wp(2),
+        borderTopLeftRadius: wp(2),
+        borderBottomLeftRadius: wp(2),
+    },
+    image2: {
+        width: "30%",
+        height: 200,
+        borderTopRightRadius: wp(2),
+        borderBottomRightRadius: wp(2),
     },
     textContainer: {
         bottom: 0,

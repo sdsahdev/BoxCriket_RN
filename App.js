@@ -30,12 +30,12 @@ import TornamentBook from './src/TornamentBook';
 import FlashMessage, { showMessage, hideMessage, FlashMessageManager } from "react-native-flash-message";
 import TimeSlotScreen from './TimeSlotScreen';
 import GeneralStatusBarColor from './statusbar/GeneralStatusBarColor';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 const App = () => {
-
 
   return (
 

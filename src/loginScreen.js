@@ -40,6 +40,25 @@ const loginSceen = ({ navigation }) => {
     fetchBoxData();
   }, []);
 
+  useEffect(() => {
+    checkAuthStatus();
+  }, []);
+
+  const checkAuthStatus = async () => {
+    try {
+      const userToken = await AsyncStorage.getItem('token');
+      console.log(userToken, '====token');
+      if (userToken) {
+        // User is authenticated, navigate to DateTime or other screen
+        navigation.navigate('BoxList'); // Adjust this based on your navigation structure
+      }
+    } catch (error) {
+      // Handle error
+    }
+  };
+
+
+
   const fetchBoxData = async () => {
     console.log("-----------");
     try {

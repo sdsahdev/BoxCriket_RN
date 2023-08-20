@@ -28,117 +28,155 @@ import FlashMessage, {
 } from 'react-native-flash-message';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from "@react-navigation/native";
+// import { err } from 'react-native-svg/lib/typescript/xml';
+import axios from 'axios';
 
 const Otp = ({ navigation, route }) => {
     const { phoneNumber, username, password } = route.params;
     const [isLoading, setIsLoading] = useState(false);
     const [randomOTP, setrandomOTP] = useState(0)
     const [otp, setOtp] = useState('');
+    const [dares, setdares] = useState('');
     const MAX_CODE = 4;
+    const isFocused = useIsFocused();
+    const otpInputRef = useRef(null);
+
+    const otpInputRefs = Array.from({ length: 4 }, () => useRef(null));
 
     useEffect(() => {
-        return () => {
-            wpmsg();
-        };
-    }, [])
-    const callApi = async () => {
+        wpmsg();
+
+    }, []);
+    const callApi = () => {
         console.log(username);
         console.log(phoneNumber);
         console.log(password);
         setIsLoading(true);
-        const token = await AsyncStorage.getItem('token');
-        console.log(token, '-----');
-        const apiUrl =
-            'https://boxclub.in/Joker/Admin/index.php?what=userRegistration';
 
-        console.log(username);
-        // console.log(email);
-        console.log(phoneNumber);
-        console.log(password);
-        const data = {
-            name: username,
-            email: 'testing@gmail.com',
-            phone: phoneNumber,
-            password: password,
-            type: 'insert',
-        };
+        AsyncStorage.getItem('token')
+            .then(token => {
+                console.log(token, '-----');
+                const apiUrl = 'https://boxclub.in/Joker/Admin/index.php?what=userRegistration';
 
-        const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: {
-                token: token,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        });
+                console.log(username);
+                console.log(phoneNumber);
+                console.log(password);
 
-        if (!response.ok) {
-            setIsLoading(false);
+                const data = {
+                    name: username,
+                    phone: phoneNumber,
+                    password: password,
+                    type: 'insert',
+                };
 
-            throw new Error('Network response was not ok');
-        }
-        if (response.ok) {
-            const data = await response.json();
-            setIsLoading(false);
-
-            if (data.success) {
-                showMessage({
-                    message: data.message,
-                    type: 'Success',
-                    backgroundColor: 'green', // background color
-                    color: '#fff', // text color
-                    onHide: () => {
-                        navigation.navigate('loginSceen');
+                fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        token: token,
+                        'Content-Type': 'application/json',
                     },
-                });
+                    body: JSON.stringify(data),
+                })
+                    .then(response => {
+                        setIsLoading(false);
 
-                console.log(data, ' logg');
-            } else {
-                console.log(data.message, 'jj');
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            showMessage({
+                                message: data.message,
+                                type: 'Success',
+                                backgroundColor: 'green',
+                                color: '#fff',
+                                onHide: () => {
+                                    navigation.navigate('loginSceen');
+                                },
+                            });
+                            console.log(data, ' logg');
+                        } else {
+                            console.log(data.message, 'jj');
+                            showMessage({
+                                message: data.message,
+                                type: 'Danger',
+                                duration: 3000,
+                                backgroundColor: 'red',
+                                color: '#fff',
+                                onHide: () => {
+                                    navigation.pop();
+                                },
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        setIsLoading(false);
+                        console.error(error);
+                        showMessage({
+                            message: 'Network error',
+                            type: 'Danger',
+                            backgroundColor: 'red',
+                            color: '#fff',
+                            duration: 3000,
+                        });
+                    });
+            })
+            .catch(error => {
+                setIsLoading(false);
+                console.error(error);
                 showMessage({
-                    message: data.message,
+                    message: 'Error fetching token',
                     type: 'Danger',
-                    duration: 3000,
-                    backgroundColor: 'red', // background color
+                    backgroundColor: 'red',
                     color: '#fff',
-                    onHide: () => {
-                        navigation.pop();
-                    }, // text color
+                    duration: 3000,
                 });
-            }
-        } else {
-            setIsLoading(false);
-
-            showMessage({
-                message: 'data. s',
-                type: 'Danger',
-                backgroundColor: 'red', // background color
-                color: '#fff', // text color
-                duration: 3000,
-                onHide: () => {
-                    navigation.pop();
-                },
             });
-        }
     };
 
-    const handleOtpChange = (otp) => {
-        setOtp(otp);
-        // Your additional logic here, if needed
+
+    const handleOtpChange = (index, text) => {
+        const sanitizedText = text.replace(/[^0-9]/g, '').slice(0, 1);
+        setOtp(prevOtp => {
+            const newOtp = prevOtp.split('');
+            newOtp[index] = sanitizedText;
+            return newOtp.join('');
+        });
+
+        // Move to the previous input if the current input is empty
+        if (text === '' && index > 0) {
+            otpInputRefs[index - 1].current.focus();
+        }
+
+        // Move to the next input if available
+        if (text !== '' && index < otpInputRefs.length - 1) {
+            otpInputRefs[index + 1].current.focus();
+        }
     };
 
     const generateOTP = () => {
         return Math.floor(1000 + Math.random() * 9000).toString();
     };
+
     const wpmsg = async () => {
+
+
         const mkey = await AsyncStorage.getItem('msgkey')
         const phone = await AsyncStorage.getItem('phn')
         const randomOTP2 = generateOTP();
+        console.log("otpss" + randomOTP2);
         setrandomOTP(randomOTP2)
-        const apiUrl = 'http://msg.msgclub.net/rest/services/sendSMS/sendGroupSms';
+
+
+        const apiUrl = `http://msg.msgclub.net/rest/services/sendSMS/sendGroupSms?AUTH_KEY=${mkey}`;
         const apiKey = mkey; // Replace with your actual auth key
 
-        const smsData = {
+
+        const requestBody = {
             smsContent: `Your OTP for Box Critet Booking App registration is: *${randomOTP2}*. 
 Please enter this OTP to complete your registration process.`,
             routeId: '21',
@@ -148,49 +186,54 @@ Please enter this OTP to complete your registration process.`,
             smsContentType: 'english',
         };
 
-        fetch(`${apiUrl}?AUTH_KEY=${apiKey}`, {
-            method: 'POST',
+        axios.post(apiUrl, requestBody, {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(smsData),
         })
-            .then(response => response.json())
-            .then(data => {
-                console.log('SMS sent successfully:', data.responseCode);
-                if (data.responseCode === '3001') {
-
-                } else {
+            .then(response => {
+                console.log('API response:', response.data);
+                // Handle the API response here
+                setdares(response.data.responseCode)
+                if (response.data.responseCode === '3001') {
                     showMessage({
-                        message: "Try Again after some time",
+                        message: `message send successfully ${phone}`,
                         type: "Success",
                         backgroundColor: "green", // background color
                         color: "#fff", // text color
-                        onHide: () => {
-                            navigation.reset({
-                                index: 0,
-                                routes: [{ name: 'BoxList' }],
-                            });
-                        }
+
+                    });
+                } else {
+                    showMessage({
+                        message: 'Please cheack the Whatsapp Number or try again',
+                        type: "Danager",
+                        backgroundColor: "red", // background color
+                        color: "#fff", // text color
+
                     });
                 }
 
-                //hey llopa sayne  yution shere uis 
-                // Handle success or display a message to the user
             })
             .catch(error => {
+                // console.error('API error:', error);
                 console.error('Error sending SMS:', error);
-                // Handle error or display an error message to the user
+                showMessage({
+                    message: `fail` + error,
+                    type: "Success",
+                    backgroundColor: "red", // background color
+                    color: "#fff", // text color
+
+                });
+                // Handle the API error here
             });
-    }
+    };
+
 
 
     const handleSubmit = () => {
-        console.log(randomOTP, "==otp scere")
+        console.log(otp, "==otp scere")
         if (randomOTP === otp) {
             callApi();
-
-
         } else {
             showMessage({
                 message: "please enter valid otp",
@@ -201,30 +244,32 @@ Please enter this OTP to complete your registration process.`,
             });
 
         }
-        // console.log(navigation.getParam('randomOTP'), "==otp scere")
-        // const datt = navigation.navigate('Register', { phoneNumber: navigation.getParam('phoneNumber') });
-        // console.log(datt, '++++++')
+
     }
     return (
-        <View style={{ flex: 1, }}>
-            <View style={{ position: 'absolute', }}>
-                <TopHeader name={'Otp Screen'} />
+        <View style={{ flex: 1 }}>
+            <View style={{ position: 'absolute', width: '100%' }}>
+                <TopHeader name={"Otp"} />
             </View>
             <View style={{ borderRadius: wp(10), justifyContent: 'center', flex: 1, }}>
-                <OTPInputView
-                    style={{ marginHorizontal: wp(11), height: hp(14) }} // Adjust the style as per your requirement
-                    pinCount={MAX_CODE}
-                    code={otp}
-                    autoFocusOnLoad={false}
-                    onCodeChanged={handleOtpChange}
-                    codeInputFieldStyle={{ color: '#000', borderColor: '#027850', borderRadius: 7, borderWidth: 2, width: wp(14), height: hp(7) }} // Change the text and border color to red
-                    codeInputHighlightStyle={{}}
-                    // Change the border color of the focused input
-                    inputBorderRadius={10} // Change the border radius to 10 or any other value you prefer
-                />
+
+                <View style={styles.otpContainer}>
+                    {Array.from({ length: 4 }).map((_, index) => (
+                        <TextInput
+                            key={index}
+                            ref={otpInputRefs[index]}
+                            style={[styles.input, otp.length === index ? styles.inputFocus : null]}
+                            keyboardType="numeric"
+                            maxLength={1}
+                            value={otp[index] || ''}
+                            onChangeText={text => handleOtpChange(index, text)}
+                        />
+                    ))}
+                </View>
+
                 <TouchableOpacity onPress={() => wpmsg()}>
 
-                    <Text style={{ alignSelf: 'center' }}>
+                    <Text style={{ alignSelf: 'center', marginTop: hp(2) }}>
                         Resend OTP
                     </Text>
                 </TouchableOpacity>
@@ -276,5 +321,27 @@ const styles = StyleSheet.create({
 
     underlineStyleHighLighted: {
         borderColor: "#000",
+    },
+    otpContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center'
+
+    },
+    input: {
+        width: wp(15),
+        height: hp(8),
+        borderColor: '#027850',
+        borderWidth: 1,
+        marginHorizontal: 5,
+        borderRadius: 8,
+        alignItems: 'center',
+        fontSize: wp(8),
+        textAlign: 'center'
+
+
+    },
+    inputFocus: {
+        borderColor: 'blue',
+        borderWidth: 2// Highlight the input in focus
     },
 })

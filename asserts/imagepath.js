@@ -12,6 +12,7 @@ const imagesClass = {
   share: require('./Images/share.png'),
   clock: require('./Images/clock.png'),
   location: require('./Images/Location.png'),
+  locationIcon: require('./Images/locationIcon.png'),
 
   bat: require('./Images/bat.png'),
   waiting: require('./Images/waiting.png'),

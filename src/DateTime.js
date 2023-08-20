@@ -1,6 +1,6 @@
 
 
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator, Modal } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import About from './About';
 import CalanderFile from '../Components/CalanderFile';
@@ -17,7 +17,7 @@ import SlotTime from '../Components/SlotTime';
 import RazorpayCheckout from 'react-native-razorpay';
 import { encode } from 'base-64';
 import { base64 } from 'react-native-base64';
-
+import CheckBox from '@react-native-community/checkbox';
 import { useRoute } from '@react-navigation/native';
 import FlashMessage, {
   showMessage,
@@ -27,7 +27,7 @@ import FlashMessage, {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const DateTime = () => {
-
+  const [isLoading, setIsLoading] = useState(false);
   const route = useRoute();
   const { item } = route.params;
   const [startTime, setStartTime] = useState(null);
@@ -38,6 +38,8 @@ const DateTime = () => {
   const [data, setdatea6] = useState([])
   const [amo, setamo] = useState(0);
   const [apidate, setapidate] = useState([]);
+  const [showWarning, setShowWarning] = useState(true);
+  const [isChecked, setIsChecked] = useState(false); // State for checkbox
 
 
   const [hasLoaded, setHasLoaded] = useState(false);
@@ -63,6 +65,7 @@ const DateTime = () => {
 
 
   const slotapi = (date) => {
+    setIsLoading(true)
     fetch('https://boxclub.in/Joker/Admin/index.php?what=getAllSlots', {
       method: 'POST', // Assuming you want to use POST method
       headers: {
@@ -75,6 +78,8 @@ const DateTime = () => {
     })
       .then(response => response.json())
       .then((data, index) => {
+        setIsLoading(false)
+
         function convertTimeFormat(time, index) {
           console.log(Object.values(data).length);
           if (index === 0) {
@@ -116,7 +121,15 @@ const DateTime = () => {
         // console.log(data);
       })
       .catch(error => {
+        setIsLoading(false)
         // Handle any errors here
+        showMessage({
+          message: error,
+          type: "Danger",
+          backgroundColor: "red", // background color
+          duration: 5000,
+          color: "#fff", // text color
+        });
         console.error('Error:', error);
       });
   }
@@ -223,6 +236,7 @@ const DateTime = () => {
   };
 
   const csapi = () => {
+    setIsLoading(true)
     const apiUrl = 'https://boxclub.in/Joker/Admin/index.php?what=checkMultipleSlot';
 
     const requestData = {
@@ -243,6 +257,7 @@ const DateTime = () => {
     })
       .then(response => response.json())
       .then(data => {
+        setIsLoading(false)
         console.log('API response:', data);
         if (data.success) {
           BookingPro(data.price);
@@ -260,14 +275,27 @@ const DateTime = () => {
         // Handle the API response data here
       })
       .catch(error => {
+        setIsLoading(false)
+        showMessage({
+          message: error,
+          type: "Danger",
+          duration: 10000,
+          backgroundColor: "red", // background color
+          color: "#fff", // text color
+          onHide: () => {
+          }
+        });
         console.error('Error calling API:', error);
         // Handle the error here
       });
   }
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked);
+  };
 
   const bookm = async (paymentid, amounts) => {
     const Token = await AsyncStorage.getItem('token');
-
+    setIsLoading(true)
     const apiUrl = 'https://boxclub.in/Joker/Admin/index.php?what=bookMultipleSlot';
 
     const requestData = {
@@ -294,6 +322,7 @@ const DateTime = () => {
     })
       .then(response => response.json())
       .then(data => {
+        setIsLoading(false)
         console.log('API response:', data);
         if (data.success) {
           slotapi()
@@ -317,6 +346,16 @@ const DateTime = () => {
         // Handle the API response data here
       })
       .catch(error => {
+        setIsLoading(false)
+        showMessage({
+          message: error,
+          type: "Danger",
+          duration: 10000,
+          backgroundColor: "red", // background color
+          color: "#fff", // text color
+          onHide: () => {
+          }
+        });
         console.error('Error calling API:', error);
         // Handle the error here
       });
@@ -355,12 +394,64 @@ const DateTime = () => {
             data={data} />
         </View>
       </ScrollView>
-    </View>
+      <View style={styles.modalContainer}>
+        <Modal
+          visible={showWarning}
+          transparent={true}
+          animationType="slide">
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>
+              Warning: Only 48 hours left before the slot time. Refund amount will be cut by 20% if canceled.
+            </Text>
+            <View style={{ flexDirection: 'row' }}>
+              <CheckBox
+                value={isChecked}
+                onValueChange={() => handleCheckboxChange}
+
+              />
+              <Text>I agree to the terms and conditions</Text>
+            </View>
+            <TouchableOpacity onPress={() => setShowWarning(false)}>
+              <Text>Confirm Booking</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
+      </View>
+
+      {
+        isLoading && (
+          <View style={{ height: '100%', position: 'absolute', width: '100%', justifyContent: 'center', }}>
+            <ActivityIndicator size="large" color="#0000ff" style={{ position: 'absolute', justifyContent: 'center', alignSelf: 'center', height: '100%' }} />
+
+          </View>
+        )
+      }
+    </View >
   );
 }
 export default DateTime;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 8,
+    alignItems: 'center',
+    elevation: 5,
+    position: 'absolute',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    top: '40%',
+    width: '80%'
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+
   datess: { alignSelf: 'center', color: '#f97272', marginVertical: hp(1) },
 
   sold: { color: '#000' },

@@ -31,7 +31,7 @@ const About = ({ navigation }) => {
         <View>
             <ScrollView style={{}}>
 
-                <View style={{ position: 'absolute' }}>
+                <View style={{ position: 'absolute', width: '100%' }}>
                     <TopHeader name={'About Us'} back={true} navigation={navigation} />
                 </View>
                 <View style={{ marginTop: hp(15) }}>
