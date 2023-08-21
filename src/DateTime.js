@@ -38,7 +38,7 @@ const DateTime = () => {
   const [data, setdatea6] = useState([])
   const [amo, setamo] = useState(0);
   const [apidate, setapidate] = useState([]);
-  const [showWarning, setShowWarning] = useState(true);
+  const [showWarning, setShowWarning] = useState(false);
   const [isChecked, setIsChecked] = useState(false); // State for checkbox
 
 
@@ -361,6 +361,10 @@ const DateTime = () => {
       });
   }
 
+  const closedi = () => {
+    setShowWarning(false)
+    csapi()
+  }
   return (
     <View style={styles.mainView}>
       <ScrollView>
@@ -379,7 +383,7 @@ const DateTime = () => {
 
           {Object.keys(caldate).length !== 0 && startTime !== null && (
             // <TouchableOpacity style={styles.btn} onPress={() => BookingPro()}>
-            <TouchableOpacity style={styles.btn} onPress={() => csapi()}>
+            <TouchableOpacity style={styles.btn} onPress={() => setShowWarning(true)}>
               <Text style={styles.payment}>
                 Book Now
               </Text>
@@ -400,20 +404,35 @@ const DateTime = () => {
           transparent={true}
           animationType="slide">
           <View style={styles.modalContent}>
-            <Text style={styles.modalText}>
-              Warning: Only 48 hours left before the slot time. Refund amount will be cut by 20% if canceled.
-            </Text>
-            <View style={{ flexDirection: 'row' }}>
+
+            <View style={{ flexDirection: 'column', marginLeft: wp(8) }}>
+              {/* <CheckBox
+                value={isChecked}
+                onValueChange={() => handleCheckboxChange()}
+              /> */}
+              <Text style={styles.modalText}>
+                The slot will not be canceled if 48 hours are left of the selected slot time.
+              </Text>
+              <Text style={styles.modalText}>
+                48 canceled before 48 hours will be refunded after deducting 20 percent.
+              </Text>
+            </View>
+
+            <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'center', }}>
               <CheckBox
                 value={isChecked}
-                onValueChange={() => handleCheckboxChange}
-
+                onValueChange={() => handleCheckboxChange()}
               />
-              <Text>I agree to the terms and conditions</Text>
+              <Text style={styles.modalText2}>
+                I agree to the terms and conditions</Text>
             </View>
-            <TouchableOpacity onPress={() => setShowWarning(false)}>
-              <Text>Confirm Booking</Text>
-            </TouchableOpacity>
+
+
+            <View style={{ backgroundColor: isChecked ? '#027850' : '#c0e8a1', paddingVertical: hp(1), borderRadius: 8 }}>
+              <TouchableOpacity disabled={false} style={{ alignSelf: 'center' }} onPress={() => closedi()} >
+                <Text style={{ color: '#fff' }}>Confirm Booking</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </Modal>
       </View>
@@ -436,20 +455,24 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   modalContent: {
-    backgroundColor: '#fff',
+    backgroundColor: '#ecf9e8',
     padding: 20,
     borderRadius: 8,
-    alignItems: 'center',
     elevation: 5,
     position: 'absolute',
     alignSelf: 'center',
-    justifyContent: 'center',
     top: '40%',
     width: '80%'
   },
   modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
+    marginBottom: hp(2),
+    color: 'red',
+    flex: 1,
+    fontSize: 15
+  },
+  modalText2: {
+    color: 'red',
+    flex: 1,
   },
 
   datess: { alignSelf: 'center', color: '#f97272', marginVertical: hp(1) },
