@@ -1,10 +1,9 @@
 
 
-import { StyleSheet, Text, View, ActivityIndicator, Modal } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator, Modal, ScrollView, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import About from './About';
 import CalanderFile from '../Components/CalanderFile';
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -427,12 +426,15 @@ const DateTime = () => {
                 I agree to the terms and conditions</Text>
             </View>
 
+            {
+              isChecked &&
 
-            <View style={{ backgroundColor: isChecked ? '#027850' : '#c0e8a1', paddingVertical: hp(1), borderRadius: 8 }}>
-              <TouchableOpacity disabled={false} style={{ alignSelf: 'center' }} onPress={() => closedi()} >
-                <Text style={{ color: '#fff' }}>Confirm Booking</Text>
+              <TouchableOpacity style={{ alignSelf: 'center' }} onPress={console.log("suuws")} >
+                <View style={{ backgroundColor: isChecked ? '#027850' : '#c0e8a1', paddingVertical: hp(1), borderRadius: 8 }}>
+                  {/* <Text style={{ color: '#fff', backgroundColor: '#000' }}>Confirm Booking</Text> */}
+                </View>
               </TouchableOpacity>
-            </View>
+            }
           </View>
         </Modal>
       </View>
@@ -441,7 +443,6 @@ const DateTime = () => {
         isLoading && (
           <View style={{ height: '100%', position: 'absolute', width: '100%', justifyContent: 'center', }}>
             <ActivityIndicator size="large" color="#0000ff" style={{ position: 'absolute', justifyContent: 'center', alignSelf: 'center', height: '100%' }} />
-
           </View>
         )
       }

@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
         fontSize: wp(7),
         marginLeft: wp(4),
     },
-    container: { flex: 1, width: '100%' },
+    container: { width: '100%' },
     backgroundContainer: {
         ...StyleSheet.absoluteFillObject,
     },
