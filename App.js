@@ -31,7 +31,8 @@ import FlashMessage, { showMessage, hideMessage, FlashMessageManager } from "rea
 import TimeSlotScreen from './TimeSlotScreen';
 import GeneralStatusBarColor from './statusbar/GeneralStatusBarColor';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import Fotp from './src/Fotp';
+import ForgotP from './src/ForgotP';
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -61,7 +62,8 @@ const App = () => {
         <Stack.Screen name="EditProfile" component={EditProfile} />
         <Stack.Screen name="ContactUs" component={ContactUs} />
         <Stack.Screen name="About" component={About} />
-
+        <Stack.Screen name="Fotp" component={Fotp} />
+        <Stack.Screen name="ForgotP" component={ForgotP} />
       </Stack.Navigator>
     </NavigationContainer>
 

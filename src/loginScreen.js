@@ -170,7 +170,7 @@ const loginSceen = ({ navigation }) => {
     return input.length === 10;
   };
   const handlepass = (input) => {
-    setpassword(input)
+    setpassword(input.trim())
   }
   const handlePhn = (input) => {
     setPhoneNumber(input)
@@ -178,7 +178,10 @@ const loginSceen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <SafeAreaView>
-        <TopHeader />
+        <View style={{ position: 'absolute', width: '100%' }}>
+
+          <TopHeader />
+        </View>
         <Text style={styles.titelText}>
           Hi~{'\n'}
           Welcome Back!
@@ -188,6 +191,11 @@ const loginSceen = ({ navigation }) => {
           <ChangePass name={"Whatsapp Number"} headerText={null} onChangeText={handlePhn} im={imagesClass.telephone} called={true} />
         </View>
         <ChangePass name={"Password"} headerText={null} onChangeText={handlepass} eye={true} im={imagesClass.padlock} />
+        <TouchableOpacity onPress={() => navigation.navigate('ForgotP')}>
+          <Text style={{ color: '#027850', textAlign: 'center', marginTop: hp(2), fontSize: wp(4) }}>
+            Forgot password
+          </Text>
+        </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')}>
           <Text style={{ color: '#027850', textAlign: 'center', marginTop: hp(2), fontSize: wp(4) }}>
             Register Your Profile

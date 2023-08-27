@@ -7,6 +7,8 @@ import BackgroundSvg from '../asserts/svgs/BgImg';
 import imagesClass from '../asserts/imagepath';
 import Menu from '../Components/Menu';
 import { ScrollView } from 'react-native-gesture-handler';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const ProfileScreen = ({ navigation }) => {
 
@@ -24,10 +26,14 @@ const ProfileScreen = ({ navigation }) => {
 
         console.log("About");
     }
-    const hlogout = () => {
+    const hlogout = async () => {
         console.log("Logout");
-        navigation.navigate("loginSceen");
 
+        await AsyncStorage.clear()
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'loginSceen' }],
+        });
     }
     const hpassword = () => {
         console.log("Edit Profile pressed!");
@@ -37,7 +43,7 @@ const ProfileScreen = ({ navigation }) => {
     return (
         <View style={{ position: 'relative', backgroundColor: '#eeeeee', height: '100%' }}>
             <ScrollView style={{ marginBottom: hp(10) }}>
-                <View >
+                <View style={{ position: 'absolute', width: '100%' }}>
                     <TopHeader name={"My Profile"} />
                 </View>
                 {/* <View style={{ alignItems: 'center', marginTop: hp(4) }}>

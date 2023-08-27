@@ -26,7 +26,7 @@ const EditProfile = ({ navigation }) => {
     return (
         <View style={{ position: 'relative', flex: 1, }}>
 
-            <View style={{ position: 'absolute' }}>
+            <View style={{ position: 'absolute', width: '100%' }}>
                 <TopHeader name={"Edit Profile"} back={true} navigation={navigation} />
             </View>
             <View style={{ marginTop: hp(15) }}>

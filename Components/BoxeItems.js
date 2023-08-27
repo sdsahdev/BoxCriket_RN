@@ -52,23 +52,25 @@ const BoxeItems = ({ navigation }) => {
         return obj;
     }, {});
     const renderItem = ({ item }) => (
+
         <View style={styles.container}>
             <TouchableOpacity
                 onPress={() => navigation.navigate("Details", { item })}
             >
                 <View style={{ flexDirection: 'row' }}>
 
-                    {console.log(item)}
+                    {console.log(item.images[0])}
+                    {console.log(item.images[1])}
                     {item.images[0] && <Image
                         source={{ uri: item.images[0].url }}
-                        style={styles.image}
+                        style={[item.images[1] ? [styles.image] : [item.images[1], { width: '100%', height: '100%' }]]}
                         resizeMode="stretch"
                     />}
-                    {item.images[1] && <Image
-                        source={{ uri: item.images[0].url }}
+                    <Image
+                        source={{ uri: item.images[1] ? item.images[1].url : item.images[0].url }}
                         style={styles.image2}
-                        resizeMode="cover"
-                    />}
+                        resizeMode="stretch"
+                    />
                 </View>
                 <View style={styles.textContainer}>
                     {item.name && <Text style={styles.textLeft}>{item.name}</Text>}

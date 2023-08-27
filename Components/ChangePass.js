@@ -8,14 +8,14 @@ const ChangePass = ({ name, onChangeText, headerText, eye, called, im }) => {
     const [inputValue, setInputValue] = useState('');
 
     const handleTextChange = (text) => {
-        setInputValue(text);
-        onChangeText(text); // Call the prop function to update the parent state
+        setInputValue(text.trim());
+        onChangeText(text.trim()); // Call the prop function to update the parent state
     };
 
     return (
         <View style={{ marginVertical: hp(0.8), }}>
             {headerText === null ? null : <Text style={{ marginTop: 10, marginHorizontal: wp(5) }}>
-                {headerText}h
+                {headerText}
             </Text>
             }
             <View style={styles.fillDetails}>

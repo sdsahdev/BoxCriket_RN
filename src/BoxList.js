@@ -9,6 +9,7 @@ import BoxeItems from '../Components/BoxeItems';
 import NoticationSvg from '../asserts/svgs/NoticationSvg';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import TopHeader from '../Components/TopHeader';
 
 
 const BoxList = ({ navigation }) => {
@@ -24,8 +25,8 @@ const BoxList = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        <View style={styles.backgroundContainer}>
-          <BackgroundSvg />
+        <View style={{ position: 'absolute', width: '100%' }}>
+          <TopHeader />
         </View>
 
 

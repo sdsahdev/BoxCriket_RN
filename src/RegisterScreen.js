@@ -84,7 +84,10 @@ const RegisterScreen = ({ navigation }) => {
             <FlashMessage />
 
             <SafeAreaView>
-                <TopHeader />
+                <View style={{ position: 'absolute', width: '100%' }}>
+
+                    <TopHeader />
+                </View>
                 <Text style={styles.titelText}>
                     Hi~{'\n'}
                     Welcome

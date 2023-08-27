@@ -110,7 +110,7 @@ const Rules = () => {
         <SafeAreaView style={{ position: 'relative', marginBottom: hp(12) }}>
             <View style={{ position: 'relative' }}>
                 <ScrollView>
-                    <View>
+                    <View style={{ position: 'absolute', width: '100%' }}>
                         <TopHeader name={'Rules'} />
                     </View>
 

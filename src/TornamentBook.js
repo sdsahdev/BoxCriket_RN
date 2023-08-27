@@ -1,10 +1,9 @@
 
 
-import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator, Modal, ScrollView, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import About from './About';
 import CalanderFile from '../Components/CalanderFile';
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
@@ -17,7 +16,7 @@ import SlotTime from '../Components/SlotTime';
 import RazorpayCheckout from 'react-native-razorpay';
 import { encode } from 'base-64';
 import { base64 } from 'react-native-base64';
-
+import CheckBox from '@react-native-community/checkbox';
 import { useRoute } from '@react-navigation/native';
 import FlashMessage, {
     showMessage,
@@ -39,7 +38,8 @@ const TornamentBook = () => {
     const [data, setdatea6] = useState([])
     const [amo, setamo] = useState(0);
     const [apidate, setapidate] = useState([]);
-
+    const [showWarning, setShowWarning] = useState(false);
+    const [isChecked, setIsChecked] = useState(false); // State for checkbox
     const [hasLoaded, setHasLoaded] = useState(false);
 
     useEffect(() => {
@@ -147,10 +147,11 @@ const TornamentBook = () => {
 
     const BookingPro = async (amounts) => {
         setIsLoading(true)
+        const phn = await AsyncStorage.getItem('phn')
 
         const keys = await AsyncStorage.getItem('rkey')
         var options = {
-            description: 'Credits towards ',
+            description: `user number ${phn}`,
             image: 'https://i.imgur.com/3g7nmJC.jpg',
             currency: 'INR',
             key: keys,
@@ -168,6 +169,8 @@ const TornamentBook = () => {
             }
         }
         RazorpayCheckout.open(options).then((data) => {
+            setIsLoading(false)
+
             // handle success
             // alert(`Success: ${data.razorpay_payment_id}`);
             showMessage({
@@ -182,9 +185,11 @@ const TornamentBook = () => {
             });
         }).catch((error) => {
             // handle failure
+            setIsLoading(false)
+
             // alert(`Error: ${error.code} | ${error.description}`);
             showMessage({
-                message: error.error.description,
+                message: error.error.description ? error.error.description : error.description,
                 type: "Danger",
                 backgroundColor: "red", // background color
                 duration: 5000,
@@ -333,11 +338,17 @@ const TornamentBook = () => {
                 // Handle the error here
             });
     }
-
+    const handleCheckboxChange = () => {
+        setIsChecked(!isChecked);
+    };
+    const closedi = () => {
+        setShowWarning(false)
+        csapi()
+    }
     return (
         <View style={styles.mainView}>
             <ScrollView>
-                <View>
+                <View style={{ width: '100%' }}>
                     <TopHeader name={'Book Your Slot'} />
                 </View>
 
@@ -349,7 +360,7 @@ const TornamentBook = () => {
 
                     {Object.keys(caldate).length !== 0 && startTime !== null && (
                         // <TouchableOpacity style={styles.btn} onPress={() => BookingPro()}>
-                        <TouchableOpacity style={styles.btn} onPress={() => csapi()}>
+                        <TouchableOpacity style={styles.btn} onPress={() => setShowWarning(true)}>
                             <Text style={styles.payment}>
                                 Book Now
                             </Text>
@@ -364,18 +375,96 @@ const TornamentBook = () => {
                         data={data} />
                 </View>
             </ScrollView>
-            {isLoading && (
-                <View style={{ height: '100%', position: 'absolute', width: '100%', justifyContent: 'center', }}>
-                    <ActivityIndicator size="large" color="#0000ff" style={{ position: 'absolute', justifyContent: 'center', alignSelf: 'center', height: '100%' }} />
-                </View>
-            )}
+            <View style={styles.modalContainer}>
+                <Modal
+                    visible={showWarning}
+                    transparent={true}
+                    animationType="slide">
+                    <TouchableWithoutFeedback onPress={() => setShowWarning(false)}>
 
-        </View>
+                        <View style={styles.modalContent}>
+                            <View style={{
+                                paddingVertical: hp(1), borderRadius: 8, backgroundColor: '#fff',
+                                padding: 20,
+                                borderRadius: 8,
+                                elevation: 5,
+                                position: 'absolute',
+                                alignSelf: 'center',
+                                top: '40%',
+                                width: '80%'
+                            }}>
+                                <View style={{ flexDirection: 'column', marginLeft: wp(8) }}>
+                                    {/* <CheckBox
+                value={isChecked}
+                onValueChange={() => handleCheckboxChange()}
+              /> */}
+                                    {/* <Text style={{ textAlign: 'center', color: 'red', fontSize: wp(7) }}>Alert</Text> */}
+                                    <Text style={styles.modalText}>
+                                        The slot will not be canceled if 48 hours are left of the selected slot time.
+                                    </Text>
+                                    <Text style={styles.modalText}>
+                                        48 canceled before 48 hours will be refunded after deducting 20 percent.
+                                    </Text>
+                                </View>
+
+
+                                <TouchableOpacity onPress={() => handleCheckboxChange()} style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'center', }}>
+                                    <CheckBox
+                                        value={isChecked}
+                                        onValueChange={() => handleCheckboxChange()}
+                                    />
+                                    <Text style={styles.modalText2}>
+                                        I agree to above conditions</Text>
+                                </TouchableOpacity>
+
+                                {
+                                    isChecked &&
+
+                                    <TouchableOpacity style={{ alignSelf: 'center' }} onPress={() => closedi()} >
+                                        <View style={{ backgroundColor: isChecked ? '#027850' : '#c0e8a1', paddingVertical: hp(1), borderRadius: 8 }}>
+                                            <Text style={{ color: '#fff', padding: wp(2) }}>Confirm Booking</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                }
+                            </View>
+
+                        </View>
+                    </TouchableWithoutFeedback >
+
+                </Modal>
+            </View>
+
+            {
+                isLoading && (
+                    <View style={{ height: '100%', position: 'absolute', width: '100%', justifyContent: 'center', }}>
+                        <ActivityIndicator size="large" color="#0000ff" style={{ position: 'absolute', justifyContent: 'center', alignSelf: 'center', height: '100%' }} />
+                    </View>
+                )
+            }
+        </View >
     );
 }
 export default TornamentBook;
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    modalContent: {
+
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)'
+    },
+    modalText: {
+        marginBottom: hp(2),
+        color: 'red',
+        flex: 1,
+        fontSize: 15
+    },
+    modalText2: {
+        color: 'red',
+        flex: 1,
+    },
     datess: { alignSelf: 'center', color: '#f97272', marginVertical: hp(1) },
 
     sold: { color: '#000' },

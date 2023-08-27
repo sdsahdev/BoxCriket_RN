@@ -1,6 +1,6 @@
 
 
-import { StyleSheet, Text, View, ActivityIndicator, Modal, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator, Modal, ScrollView, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import About from './About';
 import CalanderFile from '../Components/CalanderFile';
@@ -39,8 +39,6 @@ const DateTime = () => {
   const [apidate, setapidate] = useState([]);
   const [showWarning, setShowWarning] = useState(false);
   const [isChecked, setIsChecked] = useState(false); // State for checkbox
-
-
   const [hasLoaded, setHasLoaded] = useState(false);
 
   useEffect(() => {
@@ -154,10 +152,12 @@ const DateTime = () => {
 
   const BookingPro = async (amount) => {
     const keys = await AsyncStorage.getItem('rkey')
-    console.log(keys);
-    var options = {
-      description: 'Credits towards ',
+    const phn = await AsyncStorage.getItem('phn')
 
+    console.log(amount);
+    var options = {
+
+      description: `user number ${phn}`,
       image: 'https://i.imgur.com/3g7nmJC.jpg',
       currency: 'INR',
       key: keys,
@@ -190,11 +190,11 @@ const DateTime = () => {
       });
     }).catch((error) => {
       // handle failure
-      console.log('fails');
+      console.log('fails' + error.description);
 
       // alert(`Error: ${error.code} | ${error.description}`);
       showMessage({
-        message: error.description,
+        message: error.error.description ? error.error.description : error.description,
         type: "Danger",
         backgroundColor: "red", // background color
         duration: 5000,
@@ -367,7 +367,7 @@ const DateTime = () => {
   return (
     <View style={styles.mainView}>
       <ScrollView>
-        <View>
+        <View style={{ width: '100%' }}>
           <TopHeader name={'Book Your Slot'} />
         </View>
 
@@ -402,40 +402,55 @@ const DateTime = () => {
           visible={showWarning}
           transparent={true}
           animationType="slide">
-          <View style={styles.modalContent}>
+          <TouchableWithoutFeedback onPress={() => setShowWarning(false)}>
 
-            <View style={{ flexDirection: 'column', marginLeft: wp(8) }}>
-              {/* <CheckBox
+            <View style={styles.modalContent}>
+              <View style={{
+                paddingVertical: hp(1), borderRadius: 8, backgroundColor: '#fff',
+                padding: 20,
+                borderRadius: 8,
+                elevation: 5,
+                position: 'absolute',
+                alignSelf: 'center',
+                top: '40%',
+                width: '80%'
+              }}>
+                <View style={{ flexDirection: 'column', marginLeft: wp(8) }}>
+                  {/* <CheckBox
                 value={isChecked}
                 onValueChange={() => handleCheckboxChange()}
               /> */}
-              <Text style={styles.modalText}>
-                The slot will not be canceled if 48 hours are left of the selected slot time.
-              </Text>
-              <Text style={styles.modalText}>
-                48 canceled before 48 hours will be refunded after deducting 20 percent.
-              </Text>
-            </View>
-
-            <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'center', }}>
-              <CheckBox
-                value={isChecked}
-                onValueChange={() => handleCheckboxChange()}
-              />
-              <Text style={styles.modalText2}>
-                I agree to the terms and conditions</Text>
-            </View>
-
-            {
-              isChecked &&
-
-              <TouchableOpacity style={{ alignSelf: 'center' }} onPress={console.log("suuws")} >
-                <View style={{ backgroundColor: isChecked ? '#027850' : '#c0e8a1', paddingVertical: hp(1), borderRadius: 8 }}>
-                  {/* <Text style={{ color: '#fff', backgroundColor: '#000' }}>Confirm Booking</Text> */}
+                  {/* <Text style={{ textAlign: 'center', color: 'red', fontSize: wp(7) }}>Alert</Text> */}
+                  <Text style={styles.modalText}>
+                    The slot will not be canceled if 48 hours are left of the selected slot time.
+                  </Text>
+                  <Text style={styles.modalText}>
+                    48 canceled before 48 hours will be refunded after deducting 20 percent.
+                  </Text>
                 </View>
-              </TouchableOpacity>
-            }
-          </View>
+
+                <TouchableOpacity onPress={() => handleCheckboxChange()} style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'center', }}>
+                  <CheckBox
+                    value={isChecked}
+                    onValueChange={() => handleCheckboxChange()}
+                  />
+                  <Text style={styles.modalText2}>
+                    I agree to above conditions</Text>
+                </TouchableOpacity>
+
+                {
+                  isChecked &&
+                  <TouchableOpacity style={{ alignSelf: 'center' }} onPress={() => closedi()} >
+                    <View style={{ backgroundColor: isChecked ? '#027850' : '#c0e8a1', paddingVertical: hp(1), borderRadius: 8 }}>
+                      <Text style={{ color: '#fff', padding: wp(2) }}>Confirm Booking</Text>
+                    </View>
+                  </TouchableOpacity>
+                }
+              </View>
+
+            </View>
+          </TouchableWithoutFeedback >
+
         </Modal>
       </View>
 
@@ -456,14 +471,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   modalContent: {
-    backgroundColor: '#ecf9e8',
-    padding: 20,
-    borderRadius: 8,
-    elevation: 5,
-    position: 'absolute',
-    alignSelf: 'center',
-    top: '40%',
-    width: '80%'
+
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
   },
   modalText: {
     marginBottom: hp(2),

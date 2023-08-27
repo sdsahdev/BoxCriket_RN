@@ -14,7 +14,8 @@ import {
     Image,
     ScrollView,
     Modal,
-    TouchableWithoutFeedback
+    TouchableWithoutFeedback,
+    ActivityIndicator
 } from 'react-native';
 import imagesClass from '../asserts/imagepath';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -32,6 +33,7 @@ const Inbox = ({ navigation }) => {
     const [Visible, setVisible] = useState([]);
     const [searchText, setSearchText] = useState('');
     const isFocused = useIsFocused(); // Get the screen's focused state
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         // Call the API when the component mounts
@@ -41,7 +43,7 @@ const Inbox = ({ navigation }) => {
 
     const inboxapi = async () => {
         const Token = await AsyncStorage.getItem('token');
-
+        setIsLoading(true)
         fetch('https://boxclub.in/Joker/Admin/index.php?what=showInboxUser', {
             method: 'POST', // Assuming you want to use POST method
             headers: {
@@ -51,6 +53,7 @@ const Inbox = ({ navigation }) => {
         })
             .then(response => response.json())
             .then(data => {
+                setIsLoading(false)
                 // Handle the response data here
                 console.log(data);
                 if (data.success) {
@@ -66,6 +69,13 @@ const Inbox = ({ navigation }) => {
                 }
             })
             .catch(error => {
+                showMessage({
+                    message: 'something went wrong',
+                    type: 'Danger',
+                    backgroundColor: 'red', // background color
+                    color: '#fff', // text color
+                });
+                setIsLoading(false)
                 // Handle any errors here
                 console.error('Error:', error);
             });
@@ -75,7 +85,7 @@ const Inbox = ({ navigation }) => {
         <View style={styles.timeSlot}>
             <View style={{ flexDirection: 'row' }}>
                 <Text style={styles.textLeft}>code</Text>
-                <Text style={styles.textLeft}>{item.code}</Text>
+                <Text style={[styles.textLeft, { color: 'red' }]}>{item.code}</Text>
             </View>
             <View style={{ flexDirection: 'row' }}>
                 <Text style={styles.textLeft}>Time</Text>
@@ -140,15 +150,24 @@ const Inbox = ({ navigation }) => {
         console.log("truew");
         setVisible(true)
     }
+    const filterData = (keywork) => {
+        const filtered = idata2.filter(item => {
+            // Replace this condition with your own filtering logic
+            return item.message === keywork;
+        });
+
+        setidata(filtered);
+        setVisible(false)
+    };
     return (
         <SafeAreaView style={{ position: 'relative' }}>
             <View style={{ position: 'relative' }}>
-                <View>
+                <View style={{ position: 'absolute', width: '100%' }}>
                     <TopHeader name={'Inbox'} />
                 </View>
                 <SearchBar searchText={searchText} onChangeSearchText={handleSerach} press={() => handlemodal()} />
 
-                <View style={{ marginRight: wp(9), width: '100%', marginBottom: hp(75) }}>
+                <View style={{ marginRight: wp(9), width: '100%', marginBottom: hp(50) }}>
                     <FlatList
                         style={{ alignSelf: 'center', width: '95%' }}
                         data={idata}
@@ -175,15 +194,14 @@ const Inbox = ({ navigation }) => {
                                 alignSelf: 'center',
                                 top: '40%',
                             }}>
-                                <TouchableOpacity style={styles.mbtn} onPress={() => console.log("ook")} >
+                                <TouchableOpacity style={styles.mbtn} onPress={() => filterData("booked")} >
                                     <Text style={{ color: '#fff' }}>Booked</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={styles.mbtn} onPress={() => console.log("ook")} >
-                                    <Text style={{ color: '#fff' }}>Cancel Booking</Text>
+                                <TouchableOpacity style={styles.mbtn} onPress={() => filterData("cancel_request")} >
+                                    <Text style={{ color: '#fff' }}>cancel request</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={styles.mbtn} onPress={() => console.log("ook")} >
-
-                                    <Text style={{ color: '#fff' }}>Confirm Booking</Text>
+                                <TouchableOpacity style={styles.mbtn} onPress={() => filterData("cancelled")} >
+                                    <Text style={{ color: '#fff' }}>cancelled</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -191,6 +209,13 @@ const Inbox = ({ navigation }) => {
 
                 </Modal >
             </View >
+            {
+                isLoading && (
+                    <View style={{ height: '100%', position: 'absolute', width: '100%', justifyContent: 'center', }}>
+                        <ActivityIndicator size="large" color="#0000ff" style={{ position: 'absolute', justifyContent: 'center', alignSelf: 'center', height: '100%' }} />
+                    </View>
+                )
+            }
         </SafeAreaView >
     );
 };
@@ -200,13 +225,6 @@ export default Inbox;
 const styles = StyleSheet.create({
     mbtn: { alignSelf: 'center', marginVertical: hp(0.5), backgroundColor: '#027850', padding: hp(2), borderRadius: 3, width: wp(40), alignItems: 'center' }
     , modalContent: {
-        // backgroundColor: '#fff',
-        // padding: 20,
-        // borderRadius: 8,
-        // elevation: 5,
-        // position: 'absolute',
-        // alignSelf: 'center',
-        // top: '40%',
         flex: 1,
         backgroundColor: 'rgba(0, 0, 0, 0.5)'
 

@@ -81,21 +81,22 @@ const BottomTab = () => {
             color: '#027850',
             alphaClr: '#C3EDC0',
         },
-        {
-            route: 'Rules',
-            label: 'Rules',
-            type: imagesClass.document, // Replace with actual image paths
-            icon: 'search',
-            component: Rules,
-            color: '#027850',
-            alphaClr: '#C3EDC0',
-        },
+
         {
             route: 'Inbox',
             label: 'Inbox',
             type: imagesClass.history, // Replace with actual image paths
             icon: 'user-circle-o',
             component: Inbox,
+            color: '#027850',
+            alphaClr: '#C3EDC0',
+        },
+        {
+            route: 'Rules',
+            label: 'Rules',
+            type: imagesClass.document, // Replace with actual image paths
+            icon: 'search',
+            component: Rules,
             color: '#027850',
             alphaClr: '#C3EDC0',
         },
