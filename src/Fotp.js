@@ -28,6 +28,7 @@ import FlashMessage, {
 } from 'react-native-flash-message';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ProgressLoader from 'rn-progress-loader';
 
 const Fotp = ({ navigation, route }) => {
     const { phoneNumber } = route.params;
@@ -179,9 +180,11 @@ Please enter this OTP to complete your registration process.`,
                     Verify Otp
                 </Text>
             </TouchableOpacity>
-            {isLoading && (
-                <ActivityIndicator size="large" color="#0000ff" style={{ position: 'absolute', justifyContent: 'center', alignSelf: 'center', height: '100%' }} />)}
-
+            <ProgressLoader
+                visible={isLoading}
+                isModal={true} isHUD={true}
+                hudColor={"#fff"}
+                color={"#027850"} />
         </View>
     );
 };

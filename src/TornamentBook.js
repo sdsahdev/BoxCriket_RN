@@ -8,24 +8,19 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import Facilities from '../Components/Facilities';
-import BackgroundSvg from '../asserts/svgs/BgImg';
 import TopHeader from '../Components/TopHeader';
 import TimeComp from '../Components/TimeComp';
 import SlotTime from '../Components/SlotTime';
 import RazorpayCheckout from 'react-native-razorpay';
-import { encode } from 'base-64';
-import { base64 } from 'react-native-base64';
 import CheckBox from '@react-native-community/checkbox';
 import { useRoute } from '@react-navigation/native';
 import FlashMessage, {
     showMessage,
-    hideMessage,
-    FlashMessageManager,
 } from 'react-native-flash-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ProgressLoader from 'rn-progress-loader';
 
-const TornamentBook = () => {
+const TornamentBook = ({ navigation }) => {
 
     const [isLoading, setIsLoading] = useState(false);
     const route = useRoute();
@@ -33,34 +28,10 @@ const TornamentBook = () => {
     const [startTime, setStartTime] = useState(null);
     const [endTime, setEndTime] = useState(null);
     const [caldate, setcalldat] = useState({});
-    const [startTimeData, setStartTimeData] = useState(null);
-    const [endTimeData, setEndTimeData] = useState(null);
     const [data, setdatea6] = useState([])
-    const [amo, setamo] = useState(0);
     const [apidate, setapidate] = useState([]);
     const [showWarning, setShowWarning] = useState(false);
     const [isChecked, setIsChecked] = useState(false); // State for checkbox
-    const [hasLoaded, setHasLoaded] = useState(false);
-
-    useEffect(() => {
-        // setdatea6(Object.values(data6))
-        if (!hasLoaded) {
-            // slotapi();
-            setHasLoaded(true);
-        }
-        if (startTimeData) {
-            setStartTime(startTimeData.start_time);
-            if (!endTimeData) {
-                // If endTimeData is not set, set it to startTimeData.etime initially
-                setEndTime(startTimeData.end_time);
-            }
-
-        }
-        if (endTimeData) {
-            setEndTime(endTimeData.end_time);
-        }
-    }, [startTimeData, endTimeData]);
-
 
     const slotapi = (date) => {
         setIsLoading(true)
@@ -78,35 +49,14 @@ const TornamentBook = () => {
             .then((data, index) => {
                 setIsLoading(false)
 
-                function convertTimeFormat(time, index) {
-                    console.log(Object.values(data).length);
-                    if (index === 0) {
-                        return '01-02 am'
-                    }
-                    if (data.length === 23) {
-                        return '22-01 pm'
-                    }
-                    const [hourMinute, ampm] = time.split(' ');
-                    const [shour, ehour] = hourMinute.split('-');
-                    const newsHour = String(parseInt(shour, 10) + 1).padStart(2, '0');
-                    const neweHour = String(parseInt(ehour, 10) + 1).padStart(2, '0');
 
-                    return `${newsHour}-${neweHour} ${ampm}`;
-                }
-                const customTimeArray = [
-                    "12:00 am", "01:00 am", "02:00 am", "03:00 am", "04:00 am",
-                    "05:00 am", "06:00 am", "07:00 am", "08:00 am", "09:00 am",
-                    "10:00 am", "11:00 am", "12:00 pm", "01:00 pm", "02:00 pm",
-                    "03:00 pm", "04:00 pm", "05:00 pm", "06:00 pm", "07:00 pm",
-                    "08:00 pm", "09:00 pm", "10:00 pm", "11:00 pm"
-                ];
 
                 // Create a new array of modified response objects
                 const modifiedResponse = Object.values(data).map((slot, index) => {
                     if (typeof slot === 'object' && slot.time) {
                         return {
                             ...slot,
-                            time: convertTimeFormat(slot.time, index)
+                            id: index + 1
                         };
                     }
                     return slot;
@@ -115,17 +65,12 @@ const TornamentBook = () => {
                 console.log(modifiedResponse);
                 setdatea6(Object.values(modifiedResponse))
 
-                // Handle the response data here
-                // console.log(data);
             })
             .catch(error => {
                 setIsLoading(false)
-
-                // Handle any errors here
                 console.error('Error:', error);
             });
     }
-
 
     const handleDateSelect = date => {
         console.log(date, "****data");
@@ -198,34 +143,7 @@ const TornamentBook = () => {
         });
     };
 
-    const handleStartTimeChange = time => {
-        if (!time) {
-            return;
-        }
-        const selectedStartTimeData = data.find(item => item.time === time);
-
-        if (selectedStartTimeData) {
-            setStartTimeData(selectedStartTimeData);
-        }
-    };
-
-    const handleEndTimeChange = time => {
-        if (!time) {
-            console.error('endTime is not valid:', time);
-            setEndTimeData(null)
-            return;
-        }
-
-        const selectedEndTimeData = data.find(item => item.time === time);
-        if (selectedEndTimeData) {
-            setEndTimeData(selectedEndTimeData);
-        }
-    };
-
-
     const handletor = time => {
-        // setEndTime(time);
-        // console.log(time, "++++end Times++++++++");
     };
 
     const csapi = () => {
@@ -349,7 +267,7 @@ const TornamentBook = () => {
         <View style={styles.mainView}>
             <ScrollView>
                 <View style={{ width: '100%' }}>
-                    <TopHeader name={'Book Your Slot'} />
+                    <TopHeader name={'Book Your Tournament'} back={true} navigation={navigation} />
                 </View>
 
                 <Text style={styles.datess}>select date is required</Text>
@@ -369,8 +287,8 @@ const TornamentBook = () => {
                 </View>
                 <View style={styles.sendView}>
                     <SlotTime
-                        onStartTimeChange={handleStartTimeChange}
-                        onEndTimeChange={handleEndTimeChange}
+                        onStartTimeChange={(e) => setStartTime(e)}
+                        onEndTimeChange={(e) => setEndTime(e)}
                         tor={handletor}
                         data={data} />
                 </View>
@@ -434,13 +352,11 @@ const TornamentBook = () => {
                 </Modal>
             </View>
 
-            {
-                isLoading && (
-                    <View style={{ height: '100%', position: 'absolute', width: '100%', justifyContent: 'center', }}>
-                        <ActivityIndicator size="large" color="#0000ff" style={{ position: 'absolute', justifyContent: 'center', alignSelf: 'center', height: '100%' }} />
-                    </View>
-                )
-            }
+            <ProgressLoader
+                visible={isLoading}
+                isModal={true} isHUD={true}
+                hudColor={"#fff"}
+                color={"#027850"} />
         </View >
     );
 }

@@ -4,17 +4,7 @@ import imagesClass from '../asserts/imagepath';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 
-
-// const data = [
-//     { id: '1', image: imagesClass.banner2, leftText: 'Box 1', rightText: '$100/hr' },
-//     { id: '2', image: imagesClass.box2, leftText: 'Box 2', rightText: '$200/hr' },
-//     { id: '3', image: imagesClass.box3, leftText: 'Box 3', rightText: '$300/hr' },
-//     { id: '4', image: imagesClass.box4, leftText: 'Box 3', rightText: '$300/hr' },
-
-//     // Add more items as needed
-// ];
-
-
+import ProgressLoader from 'rn-progress-loader';
 
 const BoxeItems = ({ navigation }) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -36,6 +26,8 @@ const BoxeItems = ({ navigation }) => {
                 setIsLoading(false);
                 console.log("not ok");
                 throw new Error('Network response was not ok');
+            } else {
+                setIsLoading(false);
             }
             const jsonData = await response.json();
             console.log(jsonData[0].images[0].url, "==== datas");
@@ -82,8 +74,6 @@ const BoxeItems = ({ navigation }) => {
     );
     return (
         <View style={styles.container}>
-            {isLoading && (
-                <ActivityIndicator size="large" color="#0000ff" style={{ position: 'absolute', justifyContent: 'center', alignSelf: 'center', height: '100%' }} />)}
             <FlatList
                 style={{ marginBottom: wp(19) }}
                 data={Object.values(filteredData)}
@@ -91,6 +81,11 @@ const BoxeItems = ({ navigation }) => {
                 keyExtractor={item => item.id}
                 renderItem={renderItem}
             />
+            <ProgressLoader
+                visible={isLoading}
+                isModal={true} isHUD={true}
+                hudColor={"#fff"}
+                color={"#027850"} />
         </View>
     );
 };

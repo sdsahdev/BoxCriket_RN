@@ -24,42 +24,20 @@ import FlashMessage, {
   FlashMessageManager,
 } from 'react-native-flash-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ProgressLoader from 'rn-progress-loader';
 
-const DateTime = () => {
+const DateTime = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const route = useRoute();
   const { item } = route.params;
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [caldate, setcalldat] = useState({});
-  const [startTimeData, setStartTimeData] = useState(null);
-  const [endTimeData, setEndTimeData] = useState(null);
   const [data, setdatea6] = useState([])
-  const [amo, setamo] = useState(0);
   const [apidate, setapidate] = useState([]);
   const [showWarning, setShowWarning] = useState(false);
   const [isChecked, setIsChecked] = useState(false); // State for checkbox
   const [hasLoaded, setHasLoaded] = useState(false);
-
-  useEffect(() => {
-    // setdatea6(Object.values(data6))
-    if (!hasLoaded) {
-      // slotapi();
-      setHasLoaded(true);
-    }
-    if (startTimeData) {
-      setStartTime(startTimeData.start_time);
-      if (!endTimeData) {
-        // If endTimeData is not set, set it to startTimeData.etime initially
-        setEndTime(startTimeData.end_time);
-      }
-
-    }
-    if (endTimeData) {
-      setEndTime(endTimeData.end_time);
-    }
-  }, [startTimeData, endTimeData]);
-
 
   const slotapi = (date) => {
     setIsLoading(true)
@@ -76,36 +54,12 @@ const DateTime = () => {
       .then(response => response.json())
       .then((data, index) => {
         setIsLoading(false)
-
-        function convertTimeFormat(time, index) {
-          console.log(Object.values(data).length);
-          if (index === 0) {
-            return '01-02 am'
-          }
-          if (data.length === 23) {
-            return '22-01 pm'
-          }
-          const [hourMinute, ampm] = time.split(' ');
-          const [shour, ehour] = hourMinute.split('-');
-          const newsHour = String(parseInt(shour, 10) + 1).padStart(2, '0');
-          const neweHour = String(parseInt(ehour, 10) + 1).padStart(2, '0');
-
-          return `${newsHour}-${neweHour} ${ampm}`;
-        }
-        const customTimeArray = [
-          "12:00 am", "01:00 am", "02:00 am", "03:00 am", "04:00 am",
-          "05:00 am", "06:00 am", "07:00 am", "08:00 am", "09:00 am",
-          "10:00 am", "11:00 am", "12:00 pm", "01:00 pm", "02:00 pm",
-          "03:00 pm", "04:00 pm", "05:00 pm", "06:00 pm", "07:00 pm",
-          "08:00 pm", "09:00 pm", "10:00 pm", "11:00 pm"
-        ];
-
         // Create a new array of modified response objects
         const modifiedResponse = Object.values(data).map((slot, index) => {
           if (typeof slot === 'object' && slot.time) {
             return {
               ...slot,
-              time: convertTimeFormat(slot.time, index)
+              id: index + 1
             };
           }
           return slot;
@@ -113,9 +67,6 @@ const DateTime = () => {
 
         console.log(modifiedResponse);
         setdatea6(Object.values(modifiedResponse))
-
-        // Handle the response data here
-        // console.log(data);
       })
       .catch(error => {
         setIsLoading(false)
@@ -203,35 +154,8 @@ const DateTime = () => {
     });
   };
 
-  const handleStartTimeChange = time => {
-    if (!time) {
-      return;
-    }
-
-    const selectedStartTimeData = data.find(item => item.time === time);
-
-    if (selectedStartTimeData) {
-      setStartTimeData(selectedStartTimeData);
-    }
-  };
-
-  const handleEndTimeChange = time => {
-    if (!time) {
-      console.error('endTime is not valid:', time);
-      setEndTimeData(null)
-      return;
-    }
-
-    const selectedEndTimeData = data.find(item => item.time === time);
-    if (selectedEndTimeData) {
-      setEndTimeData(selectedEndTimeData);
-    }
-  };
-
 
   const handletor = time => {
-    // setEndTime(time);
-    // console.log(time, "++++end Times++++++++");
   };
 
   const csapi = () => {
@@ -276,7 +200,7 @@ const DateTime = () => {
       .catch(error => {
         setIsLoading(false)
         showMessage({
-          message: error,
+          message: 'Please try again later',
           type: "Danger",
           duration: 10000,
           backgroundColor: "red", // background color
@@ -331,7 +255,6 @@ const DateTime = () => {
             backgroundColor: "green", // background color
             color: "#fff", // text color
             onHide: () => {
-
             }
           });
         } else {
@@ -364,11 +287,12 @@ const DateTime = () => {
     setShowWarning(false)
     csapi()
   }
+
   return (
     <View style={styles.mainView}>
       <ScrollView>
         <View style={{ width: '100%' }}>
-          <TopHeader name={'Book Your Slot'} />
+          <TopHeader name={'Book Your Slot'} back={true} navigation={navigation} />
         </View>
 
         {/* {console.log(startTime, "==satrt===")}
@@ -381,7 +305,6 @@ const DateTime = () => {
         <View>
 
           {Object.keys(caldate).length !== 0 && startTime !== null && (
-            // <TouchableOpacity style={styles.btn} onPress={() => BookingPro()}>
             <TouchableOpacity style={styles.btn} onPress={() => setShowWarning(true)}>
               <Text style={styles.payment}>
                 Book Now
@@ -390,9 +313,10 @@ const DateTime = () => {
           )}
         </View>
         <View style={styles.sendView}>
+
           <SlotTime
-            onStartTimeChange={handleStartTimeChange}
-            onEndTimeChange={handleEndTimeChange}
+            onStartTimeChange={(e) => setStartTime(e)}
+            onEndTimeChange={(e) => setEndTime(e)}
             tor={handletor}
             data={data} />
         </View>
@@ -405,22 +329,9 @@ const DateTime = () => {
           <TouchableWithoutFeedback onPress={() => setShowWarning(false)}>
 
             <View style={styles.modalContent}>
-              <View style={{
-                paddingVertical: hp(1), borderRadius: 8, backgroundColor: '#fff',
-                padding: 20,
-                borderRadius: 8,
-                elevation: 5,
-                position: 'absolute',
-                alignSelf: 'center',
-                top: '40%',
-                width: '80%'
-              }}>
-                <View style={{ flexDirection: 'column', marginLeft: wp(8) }}>
-                  {/* <CheckBox
-                value={isChecked}
-                onValueChange={() => handleCheckboxChange()}
-              /> */}
-                  {/* <Text style={{ textAlign: 'center', color: 'red', fontSize: wp(7) }}>Alert</Text> */}
+              <View style={styles.modalv}>
+                <View style={styles.modalSv}>
+
                   <Text style={styles.modalText}>
                     The slot will not be canceled if 48 hours are left of the selected slot time.
                   </Text>
@@ -447,26 +358,33 @@ const DateTime = () => {
                   </TouchableOpacity>
                 }
               </View>
-
             </View>
           </TouchableWithoutFeedback >
 
         </Modal>
       </View>
-
-      {
-        isLoading && (
-          <View style={{ height: '100%', position: 'absolute', width: '100%', justifyContent: 'center', }}>
-            <ActivityIndicator size="large" color="#0000ff" style={{ position: 'absolute', justifyContent: 'center', alignSelf: 'center', height: '100%' }} />
-          </View>
-        )
-      }
+      <ProgressLoader
+        visible={isLoading}
+        isModal={true} isHUD={true}
+        hudColor={"#fff"}
+        color={"#027850"} />
     </View >
   );
 }
 export default DateTime;
 
 const styles = StyleSheet.create({
+  modalSv: { flexDirection: 'column', marginLeft: wp(8) },
+  modalv: {
+    paddingVertical: hp(1), borderRadius: 8, backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 8,
+    elevation: 5,
+    position: 'absolute',
+    alignSelf: 'center',
+    top: '40%',
+    width: '80%'
+  },
   container: {
     flex: 1,
   },

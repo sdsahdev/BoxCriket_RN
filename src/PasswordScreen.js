@@ -20,6 +20,7 @@ import Frame from '../asserts/svgs/Frame.svg';
 import imagesClass from '../asserts/imagepath';
 import TopHeader from '../Components/TopHeader';
 import ChangePass from '../Components/ChangePass';
+import ProgressLoader from 'rn-progress-loader';
 
 import FlashMessage, {
     showMessage,
@@ -160,8 +161,12 @@ const PasswordScreen = ({ navigation, route }) => {
                 </TouchableOpacity>
 
             </View>
-            {isLoading && (
-                <ActivityIndicator size="large" color="#0000ff" style={{ position: 'absolute', justifyContent: 'center', alignSelf: 'center', height: '100%' }} />)}
+
+            <ProgressLoader
+                visible={isLoading}
+                isModal={true} isHUD={true}
+                hudColor={"#fff"}
+                color={"#027850"} />
         </View>
 
     )

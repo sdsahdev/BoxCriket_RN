@@ -23,6 +23,7 @@ import TopHeader from '../Components/TopHeader';
 import ChangePass from '../Components/ChangePass';
 import FlashMessage, { showMessage, hideMessage, FlashMessageManager } from "react-native-flash-message";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ProgressLoader from 'rn-progress-loader';
 
 
 // create a component
@@ -50,7 +51,10 @@ const loginSceen = ({ navigation }) => {
       console.log(userToken, '====token');
       if (userToken) {
         // User is authenticated, navigate to DateTime or other screen
-        navigation.navigate('BoxList'); // Adjust this based on your navigation structure
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'BoxList' }],
+        });
       }
     } catch (error) {
       // Handle error
@@ -208,9 +212,12 @@ const loginSceen = ({ navigation }) => {
           Login
         </Text>
       </TouchableOpacity>
-      {isLoading && (
-        <ActivityIndicator size="large" color="#0000ff" style={{ position: 'absolute', justifyContent: 'center', alignSelf: 'center', height: '100%' }} />)}
 
+      <ProgressLoader
+        visible={isLoading}
+        isModal={true} isHUD={true}
+        hudColor={"#fff"}
+        color={"#027850"} />
     </View >
   );
 };

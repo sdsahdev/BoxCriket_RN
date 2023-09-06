@@ -25,6 +25,9 @@ import FlashMessage, {
     FlashMessageManager,
 } from 'react-native-flash-message';
 import imagesClass from '../asserts/imagepath';
+import ProgressLoader from 'rn-progress-loader';
+
+
 
 // create a component
 const RegisterScreen = ({ navigation }) => {
@@ -123,18 +126,13 @@ const RegisterScreen = ({ navigation }) => {
             <TouchableOpacity style={styles.bookbtn} onPress={() => msgapi()}>
                 <Text style={styles.booktxt}>Register</Text>
             </TouchableOpacity>
-            {isLoading && (
-                <ActivityIndicator
-                    size="large"
-                    color="#0000ff"
-                    style={{
-                        position: 'absolute',
-                        justifyContent: 'center',
-                        alignSelf: 'center',
-                        height: '100%',
-                    }}
-                />
-            )}
+
+
+            <ProgressLoader
+                visible={isLoading}
+                isModal={true} isHUD={true}
+                hudColor={"#fff"}
+                color={"#027850"} />
         </View>
     );
 };

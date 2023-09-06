@@ -31,6 +31,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from "@react-navigation/native";
 // import { err } from 'react-native-svg/lib/typescript/xml';
 import axios from 'axios';
+import ProgressLoader from 'rn-progress-loader';
 
 const Otp = ({ navigation, route }) => {
     const { phoneNumber, username, password } = route.params;
@@ -279,9 +280,12 @@ Please enter this OTP to complete your registration process.`,
                     Verify Otp
                 </Text>
             </TouchableOpacity>
-            {isLoading && (
-                <ActivityIndicator size="large" color="#0000ff" style={{ position: 'absolute', justifyContent: 'center', alignSelf: 'center', height: '100%' }} />)}
 
+            <ProgressLoader
+                visible={isLoading}
+                isModal={true} isHUD={true}
+                hudColor={"#fff"}
+                color={"#027850"} />
         </View>
     );
 };

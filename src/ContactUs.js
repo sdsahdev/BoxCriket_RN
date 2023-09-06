@@ -28,10 +28,10 @@ import ChangePass from '../Components/ChangePass';
 const ContactUs = ({ navigation }) => {
     return (
         <View>
-            <View style={{ position: 'absolute', width: '100%' }}>
+            <View style={{ width: '100%' }}>
                 <TopHeader name={'Contact Us'} back={true} navigation={navigation} />
             </View>
-            <View style={{ marginTop: hp(15) }}>
+            <View style={{ marginTop: hp(3) }}>
                 <Text style={styles.txt}>
                     We value your feedback and are committed to providing exceptional
                     customer service. {'\n'}{'\n'}If you have any questions, concerns, or feedback

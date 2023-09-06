@@ -43,7 +43,7 @@ const ProfileScreen = ({ navigation }) => {
     return (
         <View style={{ position: 'relative', backgroundColor: '#eeeeee', height: '100%' }}>
             <ScrollView style={{ marginBottom: hp(10) }}>
-                <View style={{ position: 'absolute', width: '100%' }}>
+                <View style={{ width: '100%' }}>
                     <TopHeader name={"My Profile"} />
                 </View>
                 {/* <View style={{ alignItems: 'center', marginTop: hp(4) }}>
@@ -54,7 +54,7 @@ const ProfileScreen = ({ navigation }) => {
                     <Text style={{ color: '#000', fontSize: wp(5) }}>
                         123456789</Text>
                 </View> */}
-                <View style={{ marginTop: hp(10) }}>
+                <View style={{ marginTop: hp(3) }}>
 
                     {/* <Menu icon={imagesClass.pen} name={"Edit Profile"} onpress={() => hEdit()} /> */}
                     {/* <Menu icon={imagesClass.password} name={"Change Password"} onpress={() => hpassword()} /> */}

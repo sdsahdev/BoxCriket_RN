@@ -89,7 +89,7 @@ const DetailsCompo = ({ navigation }) => {
 
                 <TouchableOpacity style={styles.bookbtn} onPress={() => navigation.navigate("TornamentBook", { item: item })}>
                     <Text style={styles.booktxt}>
-                        Tounament Booking
+                        Tournament Booking
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.bookbtn} onPress={() => navigation.navigate("DateTime", { item: item })}>

@@ -114,7 +114,7 @@ const Cancel = ({ route }) => {
             style={{ position: 'relative', marginBottom: hp(12), height: '100%' }}>
             <View style={{ position: 'relative' }}>
                 <ScrollView>
-                    <View style={{ position: 'absolute', width: '100%' }}>
+                    <View style={{ width: '100%' }}>
                         <TopHeader name={'Cancellation and refund policy'} />
                     </View>
 

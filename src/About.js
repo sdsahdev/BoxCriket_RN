@@ -31,10 +31,10 @@ const About = ({ navigation }) => {
         <View>
             <ScrollView style={{}}>
 
-                <View style={{ position: 'absolute', width: '100%' }}>
+                <View style={{ width: '100%' }}>
                     <TopHeader name={'About Us'} back={true} navigation={navigation} />
                 </View>
-                <View style={{ marginTop: hp(15) }}>
+                <View style={{ marginTop: hp(2) }}>
                     <Text style={styles.txt}>
                         Welcome to the Joker The Box cricket, your go-to destination for booking cricket turf slots with ease and
                         convenience. We strive to provide cricket enthusiasts like you with a seamless and hassle-free

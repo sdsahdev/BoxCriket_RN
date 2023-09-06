@@ -31,10 +31,12 @@ const ForgotP = ({ navigation }) => {
     };
     return (
         <View style={{ flex: 1, flexDirection: 'column' }}>
-            <View style={{ position: 'absolute', width: '100%' }}>
-                <TopHeader />
+            <View style={{ width: '100%' }}>
+                <TopHeader name={"Verify Number"} />
             </View>
-            <View style={{ marginTop: hp(15), }}>
+
+
+            <View style={{ marginTop: hp(5), }}>
                 <ChangePass name={'phone number'} headerText={null} onChangeText={handleuserChange} called={true} im={imagesClass.telephone} />
             </View>
 

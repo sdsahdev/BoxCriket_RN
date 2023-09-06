@@ -26,6 +26,9 @@ import FlashMessage, {
 } from 'react-native-flash-message';
 import { useIsFocused } from '@react-navigation/native'; // Import the hook
 import SearchBar from '../Components/SearchBar';
+import ProgressLoader from 'rn-progress-loader';
+
+
 
 const Inbox = ({ navigation }) => {
     const [idata, setidata] = useState([]);
@@ -162,20 +165,25 @@ const Inbox = ({ navigation }) => {
     return (
         <SafeAreaView style={{ position: 'relative' }}>
             <View style={{ position: 'relative' }}>
-                <View style={{ position: 'absolute', width: '100%' }}>
+                <View style={{ width: '100%' }}>
                     <TopHeader name={'Inbox'} />
                 </View>
-                <SearchBar searchText={searchText} onChangeSearchText={handleSerach} press={() => handlemodal()} />
 
-                <View style={{ marginRight: wp(9), width: '100%', marginBottom: hp(50) }}>
-                    <FlatList
-                        style={{ alignSelf: 'center', width: '95%' }}
-                        data={idata}
-                        showsVerticalScrollIndicator={false}
-                        keyExtractor={item => item.id}
-                        renderItem={renderItem}
-                    />
-                </View>
+                <SearchBar searchText={searchText} onChangeSearchText={handleSerach} press={() => handlemodal()} />
+                <ScrollView >
+
+                    <View style={{ marginRight: wp(9), width: '100%', marginBottom: hp(50) }}>
+                        <FlatList
+                            style={{ alignSelf: 'center', width: '95%' }}
+                            data={idata}
+                            showsVerticalScrollIndicator={false}
+                            keyExtractor={item => item.id}
+                            renderItem={renderItem}
+                        />
+                    </View>
+
+                </ScrollView>
+
                 <Modal
                     visible={Visible}
                     transparent={true}
@@ -209,13 +217,13 @@ const Inbox = ({ navigation }) => {
 
                 </Modal >
             </View >
-            {
-                isLoading && (
-                    <View style={{ height: '100%', position: 'absolute', width: '100%', justifyContent: 'center', }}>
-                        <ActivityIndicator size="large" color="#0000ff" style={{ position: 'absolute', justifyContent: 'center', alignSelf: 'center', height: '100%' }} />
-                    </View>
-                )
-            }
+
+
+            <ProgressLoader
+                visible={isLoading}
+                isModal={true} isHUD={true}
+                hudColor={"#fff"}
+                color={"#027850"} />
         </SafeAreaView >
     );
 };

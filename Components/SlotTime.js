@@ -9,128 +9,59 @@ import CalanderFile from '../Components/CalanderFile';
 // nornmal and for bulk booking  comppoonent 
 const SlotTime = ({ onStartTimeChange, onEndTimeChange, tor, data }) => {
     const [numColumns, setNumColumns] = useState(4);
-    const [selectedItems, setSelectedItems] = useState({});
-    const [selectedStartTime, setSelectedStartTime] = useState(null); +7
-    const [selectedEndTime, setSelectedEndTime] = useState(null);
-    const [selectedStartTimeData, setSelectedStartTimeData] = useState(null);
-    const [selectedEndTimeData, setSelectedEndTimeData] = useState(null);
+    const [selectedSlot, setSelectedSlot] = useState([]);
 
     // const [torna, settoyna] = useState(tor);
 
+    const handleSlotSelection = (id, data) => {
 
+        if (selectedSlot.length == 1) {
+            const sID = selectedSlot[0].id
+            const filterSlot = data.filter(slot => sID > id ? slot.id <= sID && slot.id >= id : slot.id >= sID && slot.id <= id);
+            onStartTimeChange(filterSlot[0].start_time)
+            onEndTimeChange(filterSlot[filterSlot.length - 1].end_time)
+            setSelectedSlot(filterSlot)
 
-    const handleTimePress = time => {
-        if (!selectedStartTime) {
-            setSelectedStartTime(time);
-            setSelectedEndTime(null);
-            onStartTimeChange(time);
-            onEndTimeChange(null);
-        } else if (!selectedEndTime) {
-            if (time > selectedStartTime) {
-                onEndTimeChange(time)
-                setSelectedEndTime(time);
-            } else {
-                setSelectedEndTime(selectedStartTime);
-                setSelectedStartTime(time);
-                onEndTimeChange(selectedStartTime)
-                onStartTimeChange(time)
-            }
+            console.log(filterSlot[0].start_time);
+            console.log(filterSlot[filterSlot.length - 1].end_time);
         } else {
-            onStartTimeChange(time)
-            setSelectedStartTime(time);
-            setSelectedEndTime(null);
-            onEndTimeChange(null)
+            const filterSlot = data.filter(slot => slot.id == id);
+            onStartTimeChange(filterSlot[0].start_time)
+            onEndTimeChange(filterSlot[filterSlot.length - 1].end_time)
+            setSelectedSlot(filterSlot)
+            console.log(filterSlot[0].start_time);
+            console.log(filterSlot[filterSlot.length - 1].end_time);
         }
-        setSelectedStartTimeData(data.find(item => item.time === selectedStartTime));
-        setSelectedEndTimeData(data.find(item => item.time === selectedEndTime));
-    };
 
-    const handleItemPress = id => {
-        setSelectedItems(prevSelectedItems => {
-            const isSelected = prevSelectedItems[id];
-            const updatedSelectedItems = { ...prevSelectedItems };
-            if (isSelected) {
-                updatedSelectedItems[id].quantity -= 1;
-                if (updatedSelectedItems[id].quantity <= 0) {
-                    delete updatedSelectedItems[id];
-                }
-            } else {
-                updatedSelectedItems[id] = {
-                    ...data.find(item => item.id === id),
-                    quantity: 1,
-                };
-            }
-            return updatedSelectedItems;
-        });
-    };
+    }
 
     const renderItem = ({ item, index }) => {
-        const isSelected =
-            (selectedStartTime &&
-                selectedEndTime &&
-                item.time >= selectedStartTime &&
-                item.time <= selectedEndTime) ||
-            (selectedStartTime && item.time === selectedStartTime) ||
-            (selectedEndTime && item.time === selectedEndTime);
+
+        const slot = selectedSlot.map(i => i.id)
 
         return (
             <>
+
                 {item.start_time &&
                     <TouchableOpacity
                         disabled={!item.available}
                         onPress={() => {
-                            handleTimePress(item.time, data);
-                            handleItemPress(index + 1);
+                            handleSlotSelection(item.id, data)
                         }}>
-                        <View style={[styles.timeSlot, isSelected && styles.selectedTimeSlot, !item.available ? styles.notAvaable : null]}>
-                            <Text style={[styles.timeText, isSelected && styles.selectedtext]}>
+                        <View style={[styles.timeSlot, slot.includes(item.id) && styles.selectedTimeSlot, !item.available ? styles.notAvaable : null]}>
+                            <Text style={[styles.timeText, slot.includes(item.id) && styles.selectedtext]}>
                                 {item.time2}
                             </Text>
                         </View>
                     </TouchableOpacity>}
+
+
             </>
-        );
-    };
-    const calculateTotalDuration = () => {
-        if (selectedStartTime && selectedEndTime) {
-            // Calculate the time difference in hours
-            const startMoment = moment(selectedStartTime, 'hh:mm a');
-            const endMoment = moment(selectedEndTime, 'hh:mm a');
-            const totalDuration = endMoment.diff(startMoment, 'hours');
-
-            // { console.log(selectedStartTime, '===sat time ==='); }
-            // { console.log(selectedEndTime, '===end time ==='); }
-            // { console.log(startMoment, '===startMoment ==='); }
-            // { console.log(endMoment, '===eendMoment ==='); }
-            // { console.log(totalDuration, '===totalDuration ==='); }
-            return totalDuration;
-        }
-
-        return 0; // Return 0 if start or end time is not selected
-    };
-
-
-    const renderSelectedItemsText = () => {
-        const totalDuration = calculateTotalDuration();
-        const requireDuration = 4 - totalDuration;
-        const selectedItemsCount = Object.keys(selectedItems).length;
-        return (
-            <View>
-                {totalDuration > 3 ? tor(true) : (
-                    <>
-                        {tor(false)}
-                    </>
-                )}
-            </View>
         );
     };
 
     return (
         <View style={styles.container}>
-            {/* {console.log(selectedStartTime, "===== start time ==")}
-            {console.log(selectedEndTime, "===End time==")} */}
-
-            {renderSelectedItemsText()}
 
             <FlatList
                 style={{ flex: 1, alignSelf: 'center' }} // Set flex: 1 to occupy the remaining space
@@ -172,7 +103,7 @@ const SlotTime = ({ onStartTimeChange, onEndTimeChange, tor, data }) => {
 const styles = StyleSheet.create({
     notAvaable: {
         backgroundColor: '#E5D9B6',
-        color: '#fff'
+        color: '#000'
     },
     datess: { alignSelf: 'center', color: '#f97272', marginVertical: hp(1) },
     pxboxa: {
