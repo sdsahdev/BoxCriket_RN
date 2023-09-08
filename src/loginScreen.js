@@ -181,7 +181,7 @@ const loginSceen = ({ navigation }) => {
   }
   return (
     <View style={styles.container}>
-      <SafeAreaView>
+      <View>
         <View style={{ position: 'absolute', width: '100%' }}>
 
           <TopHeader />
@@ -205,7 +205,7 @@ const loginSceen = ({ navigation }) => {
             Register Your Profile
           </Text>
         </TouchableOpacity>
-      </SafeAreaView >
+      </View >
       <TouchableOpacity style={styles.bookbtn} onPress={() => handleSubmit()}>
         {/* <TouchableOpacity style={styles.bookbtn} onPress={() => navigation.navigate("BoxList")}> */}
         <Text style={styles.booktxt}>

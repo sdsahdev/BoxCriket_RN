@@ -163,7 +163,7 @@ const Inbox = ({ navigation }) => {
         setVisible(false)
     };
     return (
-        <SafeAreaView style={{ position: 'relative' }}>
+        <View style={{ position: 'relative' }}>
             <View style={{ position: 'relative' }}>
                 <View style={{ width: '100%' }}>
                     <TopHeader name={'Inbox'} />
@@ -224,7 +224,7 @@ const Inbox = ({ navigation }) => {
                 isModal={true} isHUD={true}
                 hudColor={"#fff"}
                 color={"#027850"} />
-        </SafeAreaView >
+        </View >
     );
 };
 

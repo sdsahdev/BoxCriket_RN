@@ -5,14 +5,14 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 const TimeComp = ({ img, text }) => {
 
     return (
-        <SafeAreaView style={styles.mainstyle}>
+        <View style={styles.mainstyle}>
             <Image
                 source={img}
                 style={styles.clocks}
                 resizeMode="cover"
             />
             <Text style={styles.textStyle}>{text}</Text>
-        </SafeAreaView>
+        </View>
     )
 }
 

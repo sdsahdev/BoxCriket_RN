@@ -86,7 +86,7 @@ const RegisterScreen = ({ navigation }) => {
         <View style={styles.container}>
             <FlashMessage />
 
-            <SafeAreaView>
+            <View>
                 <View style={{ position: 'absolute', width: '100%' }}>
 
                     <TopHeader />
@@ -118,7 +118,7 @@ const RegisterScreen = ({ navigation }) => {
                     eye={true}
                     im={imagesClass.padlock}
                 />
-            </SafeAreaView>
+            </View>
             <FlashMessage position="bottom" />
 
             {/* <TouchableOpacity style={styles.bookbtn} onPress={() => callApi()}> */}

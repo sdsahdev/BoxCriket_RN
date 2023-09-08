@@ -107,7 +107,7 @@ const Rules = () => {
         </View>
     );
     return (
-        <SafeAreaView style={{ position: 'relative', marginBottom: hp(12) }}>
+        <View style={{ position: 'relative', marginBottom: hp(12) }}>
             <View style={{ position: 'relative' }}>
                 <ScrollView>
                     <View style={{ width: '100%' }}>
@@ -154,7 +154,7 @@ const Rules = () => {
                     </View>
                 </ScrollView>
             </View>
-        </SafeAreaView>
+        </View>
     );
 };
 

@@ -53,24 +53,11 @@ export default ChangePass;
 
 // define your styles
 const styles = StyleSheet.create({
-    phnimage: { width: wp(5), height: hp(5), tintColor: '#027850' },
-    booktxt: { color: '#fff', alignSelf: 'center', textAlignVertical: 'center', flex: 1, fontSize: wp(4) },
-    bookbtn: {
-        backgroundColor: '#027850', height: hp(6), width: "90%", position: 'absolute', bottom: 0, alignSelf: 'center', marginBottom: hp(5), borderRadius: wp(2)
+    phnimage: { width: wp(5), height: hp(5), tintColor: '#027850', alignSelf: 'center' },
 
-    },
     container: {
         flex: 1,
 
-    },
-    titelText: {
-        width: wp(80),
-        height: hp(9),
-        color: '#027850',
-        fontSize: wp(7),
-        marginTop: hp(10),
-        marginHorizontal: hp(4),
-        fontWeight: 'bold',
     },
     fillDetails: {
         backgroundColor: '#fff',
@@ -81,10 +68,11 @@ const styles = StyleSheet.create({
         borderBottomColor: '#027850',
         borderBottomWidth: 2
         , justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
+
     },
     inputFild: {
-        height: hp(5), color: 'black', paddingLeft: wp(4), flexWrap: 'wrap', flex: 1, fontSize: wp(4)
+        color: 'black', paddingLeft: wp(4), flexWrap: 'wrap', flex: 1, fontSize: wp(4)
     },
 });
 

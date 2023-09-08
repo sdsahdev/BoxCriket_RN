@@ -5,60 +5,26 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 
 
 import ProgressLoader from 'rn-progress-loader';
+import FastImage from 'react-native-fast-image';
 
-const BoxeItems = ({ navigation }) => {
+const BoxeItems = ({ navigation, boxData }) => {
     const [isLoading, setIsLoading] = useState(false);
 
-    const [data, setData] = useState([]);
-
-    useEffect(() => {
-        // Call the API when the component mounts
-        console.log("+++++++");
-        fetchBoxData();
-    }, []);
-
-    const fetchBoxData = async () => {
-        console.log("-----------");
-        try {
-            setIsLoading(true);
-            const response = await fetch('https://boxclub.in/Joker/Admin/index.php?what=getBox');
-            if (!response.ok) {
-                setIsLoading(false);
-                console.log("not ok");
-                throw new Error('Network response was not ok');
-            } else {
-                setIsLoading(false);
-            }
-            const jsonData = await response.json();
-            console.log(jsonData[0].images[0].url, "==== datas");
-            setData(jsonData);
-        } catch (error) {
-            setIsLoading(false);
-            console.log('Error:', error);
-        }
-    };
-
-    // const navigation = useNavigation();
-    const filteredData = Object.keys(data).filter(key => key !== 'keys').reduce((obj, key) => {
-        obj[key] = data[key];
-        return obj;
-    }, {});
     const renderItem = ({ item }) => (
 
         <View style={styles.container}>
             <TouchableOpacity
-                onPress={() => navigation.navigate("Details", { item })}
-            >
+                onPress={() => navigation.navigate("Details", { item })} >
                 <View style={{ flexDirection: 'row' }}>
 
                     {console.log(item.images[0])}
                     {console.log(item.images[1])}
-                    {item.images[0] && <Image
+                    {item.images[0] && <FastImage
                         source={{ uri: item.images[0].url }}
                         style={[item.images[1] ? [styles.image] : [item.images[1], { width: '100%', height: '100%' }]]}
                         resizeMode="stretch"
                     />}
-                    <Image
+                    <FastImage
                         source={{ uri: item.images[1] ? item.images[1].url : item.images[0].url }}
                         style={styles.image2}
                         resizeMode="stretch"
@@ -72,11 +38,15 @@ const BoxeItems = ({ navigation }) => {
 
         </View>
     );
+
     return (
         <View style={styles.container}>
+
+            {/* {console.log(boxData)}
+            {console.log(Object.values(boxData))} */}
             <FlatList
                 style={{ marginBottom: wp(19) }}
-                data={Object.values(filteredData)}
+                data={boxData}
                 showsVerticalScrollIndicator={false}
                 keyExtractor={item => item.id}
                 renderItem={renderItem}

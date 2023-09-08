@@ -110,7 +110,7 @@ const Cancel = ({ route }) => {
         </View>
     );
     return (
-        <SafeAreaView
+        <View
             style={{ position: 'relative', marginBottom: hp(12), height: '100%' }}>
             <View style={{ position: 'relative' }}>
                 <ScrollView>
@@ -135,7 +135,7 @@ const Cancel = ({ route }) => {
                     </View>
                 </ScrollView>
             </View>
-        </SafeAreaView>
+        </View>
     );
 };
 

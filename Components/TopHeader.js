@@ -10,7 +10,7 @@ import imagesClass from '../asserts/imagepath';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 const TopHeader = ({ name, back, navigation }) => {
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <View style={{ width: '100%', flex: 1, }} >
                 {/* <BackgroundSvg /> */}
                 <Image source={imagesClass.headerbg} style={{ height: hp(50), width: '100%', position: 'absolute', flex: 1 }} />
@@ -26,7 +26,7 @@ const TopHeader = ({ name, back, navigation }) => {
                     {name}
                 </Text>
             </View>
-        </SafeAreaView>
+        </View>
     )
 }
 export default TopHeader

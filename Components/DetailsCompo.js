@@ -1,15 +1,13 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity, Linking } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity, Linking, ScrollView } from 'react-native'
 import React from 'react'
 import imagesClass from '../asserts/imagepath'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import Back from '../asserts/svgs/Back';
-import Icon from '../asserts/svgs/Back';
-import { Svg, G, Rect, Path, Defs, Filter, FeFlood, FeGaussianBlur, FeComposite, FeBlend, Stop, LinearGradient } from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import TimeComp from './TimeComp';
 import Titels from './Titels';
 import Facilities from './Facilities';
 import { useRoute } from '@react-navigation/native';
+import FastImage from 'react-native-fast-image';
 
 const DetailsCompo = ({ navigation }) => {
     const route = useRoute();
@@ -24,22 +22,24 @@ const DetailsCompo = ({ navigation }) => {
             .catch(error => console.error('Error opening Google Maps', error));
     }
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.imageContainer}>
-                <Image
-                    source={imagesClass.GroudDetails}
-                    style={styles.image}
-                    resizeMode="cover"
-                />
-                <View style={styles.imagesOverlay}>
-                    <TouchableOpacity onPress={() => navigation.pop()}>
-                        <Image
-                            source={imagesClass.backbig}
-                            style={styles.image1}
-                            resizeMode="cover"
-                        />
-                    </TouchableOpacity>
-                    {/* <TouchableOpacity>
+        <View style={styles.container}>
+            <ScrollView>
+
+                <View style={styles.imageContainer}>
+                    <Image
+                        source={imagesClass.GroudDetails}
+                        style={styles.image}
+                        resizeMode="cover"
+                    />
+                    <View style={styles.imagesOverlay}>
+                        <TouchableOpacity onPress={() => navigation.pop()}>
+                            <FastImage
+                                source={imagesClass.backbig}
+                                style={styles.image1}
+                                resizeMode="cover"
+                            />
+                        </TouchableOpacity>
+                        {/* <TouchableOpacity>
 ​
                         <Image
                             source={imagesClass.share}
@@ -47,80 +47,67 @@ const DetailsCompo = ({ navigation }) => {
                             resizeMode="cover"
                         />
                     </TouchableOpacity> */}
+                    </View>
                 </View>
-            </View>
-            <Titels text1={item.name} text2={`${parseInt(item.morning_price) + " ₹"}`} />
+                <Titels text1={item.name} text2={`${parseInt(item.morning_price) + " ₹"}`} />
 
 
 
-            <TimeComp img={imagesClass.clock} text={"Open: 24 hours"} />
-            {/* <TimeComp img={imagesClass.bluerike} text={"2 Slot available"} /> */}
+                <TimeComp img={imagesClass.clock} text={"Open: 24 hours"} />
+                {/* <TimeComp img={imagesClass.bluerike} text={"2 Slot available"} /> */}
 
-            <Titels text1={"Location"} />
-            <Text style={styles.addrestxt}>Anthem compound, NR. Harekrishna village Restaurant, simada kenal road</Text>
-            <View style={styles.locationview}>
-                <TouchableOpacity onPress={openMaps}>
+                <Titels text1={"Location"} />
+                <Text style={styles.addrestxt}>Anthem compound, NR. Harekrishna village Restaurant, simada kenal road</Text>
+                <View style={styles.locationview}>
+                    <TouchableOpacity onPress={openMaps}>
 
-                    <Image
-                        source={imagesClass.location}
-                        style={styles.mapimage}
-                        resizeMode="cover"
-                    />
-                </TouchableOpacity>
-            </View>
-            <View style={{ marginTop: hp(1) }}>
+                        <FastImage
+                            source={imagesClass.location}
+                            style={styles.mapimage}
+                            resizeMode="cover"
+                        />
+                    </TouchableOpacity>
+                </View>
+                <View style={{ marginTop: hp(1) }}>
 
-                <Titels text1={"Facilities provided"} />
-            </View>
-            <SafeAreaView style={styles.facilityView}>
+                    <Titels text1={"Facilities provided"} />
+                </View>
+                <SafeAreaView style={styles.facilityView}>
 
-                <SafeAreaView>
-                    <Facilities img={imagesClass.waiting} text3={"Waiting Area"} />
-                    <Facilities img={imagesClass.bat} text3={"bat"} />
+                    <SafeAreaView>
+                        <Facilities img={imagesClass.waiting} text3={"Waiting Area"} />
+                        <Facilities img={imagesClass.bat} text3={"bat"} />
 
+                    </SafeAreaView>
+                    <SafeAreaView>
+                        <Facilities img={imagesClass.water} text3={"Water"} />
+                        <Facilities img={imagesClass.parking} text3={"Parking"} />
+
+                    </SafeAreaView>
                 </SafeAreaView>
-                <SafeAreaView>
-                    <Facilities img={imagesClass.water} text3={"Water"} />
-                    <Facilities img={imagesClass.parking} text3={"Parking"} />
+                <View style={{ flexDirection: 'row', marginBottom: hp(2) }}>
 
-                </SafeAreaView>
-            </SafeAreaView>
-            <View style={{ flexDirection: 'row' }}>
+                    <TouchableOpacity style={styles.bookbtn} onPress={() => navigation.navigate("TornamentBook", { item: item })}>
+                        <Text style={styles.booktxt}>
+                            Tournament Booking
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.bookbtn} onPress={() => navigation.navigate("DateTime", { item: item })}>
+                        <Text style={styles.booktxt}>
+                            Slot Booking
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
 
-                <TouchableOpacity style={styles.bookbtn} onPress={() => navigation.navigate("TornamentBook", { item: item })}>
-                    <Text style={styles.booktxt}>
-                        Tournament Booking
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.bookbtn} onPress={() => navigation.navigate("DateTime", { item: item })}>
-                    <Text style={styles.booktxt}>
-                        Slot Booking
-                    </Text>
-                </TouchableOpacity>
-            </View>
-        </SafeAreaView >
+        </View >
 
 
     );
 };
 
 const styles = StyleSheet.create({
-    //   booktxt: {
-    //     color: '#fff',
-    //     alignSelf: 'center',
-    //     textAlignVertical: 'center',
-    //     flex: 1,
-    //     fontSize: wp(4),
-    //   },
-    // bookbtn: {
-    //     backgroundColor: '#027850',
-    //     height: hp(6),
-    //     flex: 1,
-    //     alignSelf: 'center',
-    //     borderRadius: wp(2),
-    //     marginTop: hp(4),
-    //     marginHorizontal: wp(2),
-    // },
+
     booktxt: {
         color: '#fff',
         fontSize: wp(4),

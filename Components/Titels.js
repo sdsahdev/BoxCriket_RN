@@ -5,7 +5,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 const Titels = ({ text1, text2, boolian }) => {
     return (
 
-        <SafeAreaView style={styles.TitelView}>
+        <View style={styles.TitelView}>
 
             <Text style={{
                 width: 'auto',
@@ -14,7 +14,7 @@ const Titels = ({ text1, text2, boolian }) => {
                 color: !boolian ? "#000" : null
             }}>{text1}</Text>
             <Text style={styles.textStyle2}>{text2}</Text>
-        </SafeAreaView>
+        </View>
     )
 
 

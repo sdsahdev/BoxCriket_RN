@@ -38,6 +38,8 @@ const DateTime = ({ navigation }) => {
   const [showWarning, setShowWarning] = useState(false);
   const [isChecked, setIsChecked] = useState(false); // State for checkbox
   const [hasLoaded, setHasLoaded] = useState(false);
+  const [fDate, setfDate] = useState('')
+
 
   const slotapi = (date) => {
     setIsLoading(true)
@@ -93,8 +95,9 @@ const DateTime = ({ navigation }) => {
     console.log(selectedDates, '---');
     if (selectedDates.length === 1) {
       const firstSelectedDate = selectedDates[0];
-
+      setfDate(firstSelectedDate);
       slotapi(firstSelectedDate)
+
       console.log("First selected date:", firstSelectedDate);
       // slotapi(firstSelectedDate);
       // Do something with the first selected date
@@ -248,7 +251,7 @@ const DateTime = ({ navigation }) => {
         setIsLoading(false)
         console.log('API response:', data);
         if (data.success) {
-          slotapi()
+          slotapi(fDate)
           showMessage({
             message: `Your booking is successfull`,
             type: "Success",

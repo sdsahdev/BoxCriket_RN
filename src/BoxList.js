@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import imagesClass from '../asserts/imagepath';
 import { View, Text, StyleSheet, FlatList, Image, ScrollView, Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -13,6 +13,43 @@ import TopHeader from '../Components/TopHeader';
 
 
 const BoxList = ({ navigation }) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    // Call the API when the component mounts
+    console.log("+++++++");
+    fetchBoxData();
+  }, []);
+
+  const fetchBoxData = async () => {
+    console.log("-----------");
+    try {
+      setIsLoading(true);
+      const response = await fetch('https://boxclub.in/Joker/Admin/index.php?what=getBox');
+      if (!response.ok) {
+        setIsLoading(false);
+        console.log("not ok");
+        throw new Error('Network response was not ok');
+      } else {
+        setIsLoading(false);
+      }
+      const jsonData = await response.json();
+      console.log(jsonData[0].images[0].url, "==== datas");
+      setData(jsonData);
+    } catch (error) {
+      setIsLoading(false);
+      console.log('Error:', error);
+    }
+  };
+
+  // const navigation = useNavigation();
+  const filteredData = Object.keys(data).filter(key => key !== 'keys').reduce((obj, key) => {
+    obj[key] = data[key];
+    return obj;
+  }, {});
+
   const openMaps = () => {
 
     const latitude = 21.21382748197297; // Replace with the destination latitude
@@ -23,7 +60,7 @@ const BoxList = ({ navigation }) => {
       .catch(error => console.error('Error opening Google Maps', error));
   }
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <ScrollView>
         <View style={{ position: 'absolute', width: '100%' }}>
           <TopHeader />
@@ -42,24 +79,19 @@ const BoxList = ({ navigation }) => {
 
           <View>
             <TouchableOpacity onPress={() => openMaps()} >
-              {/* <TouchableOpacity onPress={() => newclass()} > */}
-
               <Image source={imagesClass.locationIcon} style={styles.imageStyle} resizeMode='contain' />
             </TouchableOpacity>
 
           </View>
         </View>
         <View style={styles.swipest}>
-          <SwipList />
+          <SwipList boxData={Object.values(filteredData)} />
         </View>
 
-        <BoxeItems navigation={navigation} />
+        <BoxeItems navigation={navigation} boxData={Object.values(filteredData)} />
 
-        {/* <View style={styles.botttombg}>
-          <BackgroundSvg />
-        </View> */}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

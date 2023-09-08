@@ -10,6 +10,7 @@ import {
     TouchableOpacity,
     StatusBar,
     Alert,
+    ScrollView
 } from 'react-native';
 import {
     widthPercentageToDP as wp,
@@ -27,47 +28,51 @@ import ChangePass from '../Components/ChangePass';
 
 const ContactUs = ({ navigation }) => {
     return (
-        <View>
-            <View style={{ width: '100%' }}>
-                <TopHeader name={'Contact Us'} back={true} navigation={navigation} />
-            </View>
-            <View style={{ marginTop: hp(3) }}>
-                <Text style={styles.txt}>
-                    We value your feedback and are committed to providing exceptional
-                    customer service. {'\n'}{'\n'}If you have any questions, concerns, or feedback
-                    regarding our cricket turf booking app, please don’t hesitate to reach
-                    out to us. We’re here to assist you!
-                </Text>
+        <View >
+            <ScrollView >
+
+                <View style={{ width: '100%' }}>
+                    <TopHeader name={'Contact Us'} back={true} navigation={navigation} />
+                </View>
+                <View style={{ marginTop: hp(3), marginBottom: 20 }}>
+                    <Text style={styles.txt}>
+                        We value your feedback and are committed to providing exceptional
+                        customer service. {'\n'}{'\n'}If you have any questions, concerns, or feedback
+                        regarding our cricket turf booking app, please don’t hesitate to reach
+                        out to us. We’re here to assist you!
+                    </Text>
 
 
-                <Text style={styles.txt2}>Customer Support:</Text>
-                {/* 
+                    <Text style={styles.txt2}>Customer Support:</Text>
+                    {/* 
                 <Text style={styles.cont} >
                     Phone: 8520020093{'\n'}{'\n'}
                     Email: jokerbox0099@gmail.com{'\n'}{'\n'}
                     Location: Anthem compound, NR. Harekrishna village Restaurant, simada kenal road{'\n'}{'\n'}
                 </Text> */}
-                {/* <View style={styles.container}> */}
-                <Text style={styles.contactText}>
-                    {'\n'}   <Text style={styles.label}>Phone:{'\n'}</Text> <Text style={styles.info}>8520020093</Text>{'\n'}
-                    <Text style={styles.label}>Email:{'\n'}</Text> <Text style={styles.info}>jokerbox0099@gmail.com</Text>{'\n'}
-                    <Text style={styles.label}>Location:{'\n'}</Text> <Text style={styles.info}>Anthem compound, NR. Harekrishna village Restaurant, simada kenal road</Text>{'\n'}
-                </Text>
-                {/* </View> */}
+                    {/* <View style={styles.container}> */}
+                    <Text style={styles.contactText}>
+                        {'\n'}   <Text style={styles.label}>Phone:{'\n'}</Text> <Text style={styles.info}>8520020093</Text>{'\n'}
+                        <Text style={styles.label}>Email:{'\n'}</Text> <Text style={styles.info}>jokerbox0099@gmail.com</Text>{'\n'}
+                        <Text style={styles.label}>Location:{'\n'}</Text> <Text style={styles.info}>Anthem compound, NR. Harekrishna village Restaurant, simada kenal road</Text>{'\n'}
+                    </Text>
+                    {/* </View> */}
 
-                <Text style={styles.txt}>
-                    Our customer support team is available during working hours to assist you with any inquiries or issues
-                    you may have. We strive to provide prompt and helpful responses to ensure your satisfaction.
+                    <Text style={styles.txt}>
+                        Our customer support team is available during working hours to assist you with any inquiries or issues
+                        you may have. We strive to provide prompt and helpful responses to ensure your satisfaction.
 
-                    {'\n'}{'\n'}
-                    For general inquiries, partnerships, or business opportunities, please reach out to us via email. We will
-                    respond to your inquiries as soon as possible.
-                    {'\n'}{'\n'}
+                        {'\n'}{'\n'}
+                        For general inquiries, partnerships, or business opportunities, please reach out to us via email. We will
+                        respond to your inquiries as soon as possible.
+                        {'\n'}{'\n'}
 
-                    Thank you for choosing our cricket turf booking app. We appreciate your support and look forward to
-                    serving you
-                </Text>
-            </View>
+                        Thank you for choosing our cricket turf booking app. We appreciate your support and look forward to
+                        serving you
+                    </Text>
+                </View>
+            </ScrollView>
+
         </View>
     );
 };
@@ -80,6 +85,7 @@ const styles = StyleSheet.create({
         marginHorizontal: wp(5),
         fontSize: wp(4.3),
         color: '#000',
+
     },
     txt2: {
         marginHorizontal: wp(5),

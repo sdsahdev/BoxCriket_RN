@@ -32,6 +32,7 @@ const TornamentBook = ({ navigation }) => {
     const [apidate, setapidate] = useState([]);
     const [showWarning, setShowWarning] = useState(false);
     const [isChecked, setIsChecked] = useState(false); // State for checkbox
+    const [fDate, setfDate] = useState('')
 
     const slotapi = (date) => {
         setIsLoading(true)
@@ -82,7 +83,7 @@ const TornamentBook = ({ navigation }) => {
         console.log(selectedDates, '---');
         if (selectedDates.length === 1) {
             const firstSelectedDate = selectedDates[0];
-
+            setfDate(firstSelectedDate);
             slotapi(firstSelectedDate)
             console.log("First selected date:", firstSelectedDate);
             // slotapi(firstSelectedDate);
@@ -229,7 +230,7 @@ const TornamentBook = ({ navigation }) => {
 
                 console.log('API response:', data);
                 if (data.success) {
-                    slotapi()
+                    slotapi(fDate)
                     showMessage({
                         message: `Your booking is successfull`,
                         type: "Success",
