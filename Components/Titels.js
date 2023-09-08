@@ -8,8 +8,6 @@ const Titels = ({ text1, text2, boolian }) => {
         <View style={styles.TitelView}>
 
             <Text style={{
-                width: 'auto',
-                height: 'auto',
                 fontSize: boolian ? 13 : 18,
                 color: !boolian ? "#000" : null
             }}>{text1}</Text>
@@ -24,18 +22,7 @@ const Titels = ({ text1, text2, boolian }) => {
 export default Titels;
 
 const styles = StyleSheet.create({
-    TitelView: { width: "100%", height: hp(3), flexDirection: 'row', justifyContent: 'space-between', marginVertical: wp(2), marginHorizontal: wp(4) },
-    mainstyle: {
-        width: "100%", height: hp(3), flexDirection: 'row', alignItems: 'center', marginHorizontal: wp(4)
-    },
-    textStyle: {
-
-        width: 'auto',
-        height: 'auto',
-        // fontSize: boolian ? 13 : 18,
-        // color: !boolian ? "#000" : null
-
-    },
+    TitelView: { width: "100%", flexDirection: 'row', justifyContent: 'space-between', marginVertical: wp(2), marginHorizontal: wp(4) },
     textStyle2: {
         width: 'auto',
         height: 'auto',
