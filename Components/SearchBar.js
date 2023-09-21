@@ -15,6 +15,7 @@ const SearchBar = ({ searchText, onChangeSearchText, press }) => {
                     style={styles.input}
                     placeholder="Search"
                     value={searchText}
+                    returnKeyType='done'
                     onChangeText={onChangeSearchText}
                 />
             </View>

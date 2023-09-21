@@ -156,8 +156,8 @@ const styles = StyleSheet.create({
     textLeft: { textAlignVertical: 'center', flex: 1 },
     timeSlot: {
         backgroundColor: '#E3EFEB',
-        width: wp(18),
-        height: hp(6),
+        width: wp(20),
+        paddingVertical: hp(1.5),
         margin: wp(2),
         borderRadius: wp(1.5),
         alignItems: 'center',

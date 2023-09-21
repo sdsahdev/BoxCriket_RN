@@ -7,14 +7,20 @@ import {
     SafeAreaView,
     Image,
     TextInput,
-    TouchableOpacity, StatusBar, Alert, Pressable, ActivityIndicator
+    TouchableOpacity,
+    StatusBar,
+    Alert,
+    Pressable,
+    ActivityIndicator,
 } from 'react-native';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import PhoneInput, { getCountryCallingCode } from 'react-phone-number-input/react-native-input'
-import PhoneInputWithCountry from 'react-phone-number-input/react-hook-form'
+import PhoneInput, {
+    getCountryCallingCode,
+} from 'react-phone-number-input/react-native-input';
+import PhoneInputWithCountry from 'react-phone-number-input/react-hook-form';
 import Svg, { Path } from 'react-native-svg';
 import Frame from '../asserts/svgs/Frame.svg';
 import imagesClass from '../asserts/imagepath';
@@ -36,17 +42,16 @@ const PasswordScreen = ({ navigation, route }) => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleNewPasswordChange = (text) => {
+    const handleNewPasswordChange = text => {
         setNewPassword(text);
     };
 
-    const handleConfirmPasswordChange = (text) => {
+    const handleConfirmPasswordChange = text => {
         setConfirmPassword(text);
     };
 
     const callApi = async () => {
         try {
-
             setIsLoading(true);
             const token = await AsyncStorage.getItem('token');
             console.log(token, '-----');
@@ -55,14 +60,13 @@ const PasswordScreen = ({ navigation, route }) => {
             const data = {
                 phone: phoneNumber,
                 password: newPassword,
-                role: 'user'
+                role: 'user',
             };
             console.log('=== n 3' + phoneNumber + ' ' + newPassword);
             const response = await fetch(apiUrl, {
                 method: 'POST',
                 body: JSON.stringify(data),
             });
-
 
             if (response.ok) {
                 const data = await response.json();
@@ -106,7 +110,6 @@ const PasswordScreen = ({ navigation, route }) => {
                     },
                 });
             }
-
         } catch (error) {
             console.error('Network error:', error);
             setIsLoading(false);
@@ -123,62 +126,86 @@ const PasswordScreen = ({ navigation, route }) => {
         }
     };
 
-
     const handleSubmit = () => {
         if (newPassword === confirmPassword && newPassword !== '') {
-
-            callApi()
+            callApi();
         } else {
             showMessage({
-                message: "please enter same password ",
+                message: 'please enter same password ',
                 type: 'danger',
                 backgroundColor: 'red', // background color
                 color: '#fff', // text color
-
             });
         }
-    }
+    };
 
     return (
-        <View style={{ flex: 1, position: 'relative', flexDirection: 'column', height: '100%' }}>
+        <View
+            style={{
+                flex: 1,
+                position: 'relative',
+                flexDirection: 'column',
+                height: '100%',
+            }}>
             <View style={{ position: 'absolute', width: '100%' }}>
-
-                <TopHeader name={"Change Password"} back={true} navigation={navigation} />
-
+                <TopHeader
+                    name={'Change Password'}
+                    back={true}
+                    navigation={navigation}
+                />
             </View>
-            <View style={{ marginTop: hp(15), }}>
-
-                <ChangePass name={'Enter new password'} onChangeText={handleNewPasswordChange} headerText={'Enter new password'} eye={true} />
-                <ChangePass name={'Re-enter new password'} onChangeText={handleConfirmPasswordChange} headerText={'Re-enter new password'} eye={true} />
-
+            <View style={{ marginTop: hp(15) }}>
+                <ChangePass
+                    name={'Enter new password'}
+                    onChangeText={handleNewPasswordChange}
+                    headerText={'Enter new password'}
+                    eye={true}
+                />
+                <ChangePass
+                    name={'Re-enter new password'}
+                    onChangeText={handleConfirmPasswordChange}
+                    headerText={'Re-enter new password'}
+                    eye={true}
+                />
             </View>
             <View style={{ flex: 1 }}>
-
                 <TouchableOpacity style={styles.bookbtn} onPress={() => handleSubmit()}>
-                    <Text style={styles.booktxt}>
-                        Change Password
-                    </Text>
+                    <Text style={styles.booktxt}>Change Password</Text>
                 </TouchableOpacity>
-
             </View>
 
             <ProgressLoader
                 visible={isLoading}
-                isModal={true} isHUD={true}
-                hudColor={"#fff"}
-                color={"#027850"} />
+                isModal={true}
+                isHUD={true}
+                hudColor={'#fff'}
+                color={'#027850'}
+            />
         </View>
+    );
+};
 
-    )
-}
-
-export default PasswordScreen
+export default PasswordScreen;
 
 const styles = StyleSheet.create({
-    booktxt: { color: '#fff', alignSelf: 'center', textAlignVertical: 'center', flex: 1, fontSize: wp(4) },
-    bookbtn: {
-        backgroundColor: '#027850', height: hp(6), width: "90%", position: 'absolute', bottom: 0, alignSelf: 'center', marginBottom: hp(5), borderRadius: wp(2)
+    booktxt: {
+        color: '#fff',
+        alignSelf: 'center',
+        // textAlignVertical: 'center',
+        textAlign: 'center',
+        fontSize: wp(4),
 
+    },
+    bookbtn: {
+        backgroundColor: '#027850',
+        width: '90%',
+        position: 'absolute',
+        bottom: hp(5),
+        alignSelf: 'center',
+        borderRadius: wp(2),
+        alignItems: "center",
+        justifyContent: "center",
+        padding: hp(1.5)
     },
     headetxt: {
         color: '#000',
@@ -187,4 +214,4 @@ const styles = StyleSheet.create({
 
         marginLeft: wp(10),
     },
-})
+});

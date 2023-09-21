@@ -135,6 +135,7 @@ Please enter this OTP to complete your registration process.`,
     }
 
     const handleSubmit = () => {
+
         if (randomOTP === otp && otp !== '') {
             navigation.navigate("PasswordScreen", { phoneNumber: phoneNumber })
         } else {
@@ -149,8 +150,8 @@ Please enter this OTP to complete your registration process.`,
     }
     return (
         <View style={{ flex: 1, }}>
-            <View style={{ position: 'absolute', width: '100%' }}>
-                <TopHeader name={'Otp Screen'} />
+            <View style={{ width: '100%' }}>
+                <TopHeader name={'Otp Screen'} navigation={navigation} back={true} />
             </View>
             <View style={{ borderRadius: wp(10), justifyContent: 'center', flex: 1, }}>
 
@@ -161,6 +162,7 @@ Please enter this OTP to complete your registration process.`,
                             ref={otpInputRefs[index]}
                             style={[styles.input, otp.length === index ? styles.inputFocus : null]}
                             keyboardType="numeric"
+                            returnKeyType='done'
                             maxLength={1}
                             value={otp[index] || ''}
                             onChangeText={text => handleOtpChange(index, text)}

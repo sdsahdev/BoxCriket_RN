@@ -1,8 +1,11 @@
 import React, { useRef, useEffect } from 'react';
-import { View, TouchableOpacity, StyleSheet, Image, Text } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Image, Text, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { BottomTabView, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
+import PushNotificationIOS from "@react-native-community/push-notification-ios";
+import PushNotification from "react-native-push-notification";
+import messaging from '@react-native-firebase/messaging';
 
 import * as Animatable from 'react-native-animatable';
 import imagesClass from './asserts/imagepath';
@@ -37,6 +40,100 @@ const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 const App = () => {
+
+  useEffect(() => {
+    requestUserPermission()
+    notificationConfig()
+
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
+      if (Platform.OS == 'android') {
+        PushNotification.createChannel(
+          {
+            channelId: 'BoxCricket',
+            channelName: 'BoxCricket',
+            importance: 4,
+            vibrate: true,
+          },
+          created => console.log(`createChannel returned '${created}'`),
+        );
+        PushNotification.localNotification({
+          message: remoteMessage.notification.body,
+          title: remoteMessage.notification.title,
+          channelId: 'BoxCricket',
+        });
+      } else {
+        PushNotificationIOS.addNotificationRequest({
+          title: remoteMessage.notification.title,
+          body: remoteMessage.notification.body,
+        })
+      }
+    });
+
+    messaging().setBackgroundMessageHandler(async remoteMessage => {
+      console.log('Message handled in the background!', remoteMessage);
+    });
+
+    messaging().getInitialNotification(async remoteMessage => {
+      console.log('Message handled in the background!', remoteMessage);
+    });
+
+    return unsubscribe;
+  }, [])
+
+  async function requestUserPermission() {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      console.log('Authorization status:', authStatus);
+      GetFcmToken()
+    }
+  }
+
+  async function GetFcmToken() {
+    try {
+      let fcmToken = await messaging().getToken();
+      await AsyncStorage.setItem('fcmToken', fcmToken);
+
+      console.log(fcmToken, "==firebase token==");
+    } catch (error) {
+      console.log(error, 'error');
+    }
+  }
+
+  function notificationConfig() {
+    PushNotification.configure({
+      onRegister: function (token) {
+        console.log("TOKEN:", token);
+      },
+
+      onNotification: function (notification) {
+        console.log("NOTIFICATION:", notification);
+        notification.finish(PushNotificationIOS.FetchResult.NoData);
+      },
+
+      onAction: function (notification) {
+        console.log("ACTION:", notification.action);
+        console.log("NOTIFICATION:", notification);
+
+      },
+
+      onRegistrationError: function (err) {
+        console.error(err.message, err);
+      },
+
+      permissions: {
+        alert: true,
+        badge: true,
+        sound: true,
+      },
+      popInitialNotification: true,
+      requestPermissions: true,
+    });
+  }
 
   return (
 

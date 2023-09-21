@@ -23,13 +23,14 @@ const ChangePass = ({ name, onChangeText, headerText, eye, called, im }) => {
                     <Image
                         source={im ? im : imagesClass.user}
                         style={styles.phnimage}
-                        resizeMode="center"
+                        resizeMode="contain"
                     />
                     <TextInput
                         secureTextEntry={secure}
                         keyboardType={called ? 'phone-pad' : null}
                         placeholder={name}
                         style={styles.inputFild}
+                        returnKeyType='done'
                         onChangeText={handleTextChange} // Set the onChangeText prop
                         value={inputValue} // Set the value prop for controlled input
                     />
@@ -39,7 +40,7 @@ const ChangePass = ({ name, onChangeText, headerText, eye, called, im }) => {
                         <Image
                             source={secure ? imagesClass.hide : imagesClass.view}
                             style={{ alignSelf: 'flex-end', height: 15, width: 20, justifyContent: 'center', tintColor: '#027850' }}
-                            resizeMode="center"
+                            resizeMode="contain"
                         />
                     </TouchableOpacity>
                 </View> : null}

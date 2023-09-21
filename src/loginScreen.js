@@ -191,7 +191,6 @@ const loginSceen = ({ navigation }) => {
           Welcome Back!
         </Text>
         <View style={{ marginTop: hp(4) }}>
-
           <ChangePass name={"Whatsapp Number"} headerText={null} onChangeText={handlePhn} im={imagesClass.telephone} called={true} />
         </View>
         <ChangePass name={"Password"} headerText={null} onChangeText={handlepass} eye={true} im={imagesClass.padlock} />
@@ -205,7 +204,7 @@ const loginSceen = ({ navigation }) => {
             Register Your Profile
           </Text>
         </TouchableOpacity>
-      </View >
+      </View>
       <TouchableOpacity style={styles.bookbtn} onPress={() => handleSubmit()}>
         {/* <TouchableOpacity style={styles.bookbtn} onPress={() => navigation.navigate("BoxList")}> */}
         <Text style={styles.booktxt}>
@@ -218,7 +217,7 @@ const loginSceen = ({ navigation }) => {
         isModal={true} isHUD={true}
         hudColor={"#fff"}
         color={"#027850"} />
-    </View >
+    </View>
   );
 };
 

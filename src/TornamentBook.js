@@ -394,14 +394,22 @@ const styles = StyleSheet.create({
         marginTop: hp(2),
     },
     mainView: { flex: 1, marginBottom: hp(5) },
-    btn: { marginHorizontal: wp(4), marginTop: hp(2), height: wp(12), flex: 1, width: '80%', alignSelf: 'center' },
-    payment: {
-        color: '#fff',
-        backgroundColor: '#027850',
+    btn: {
+        marginHorizontal: wp(4),
+        marginTop: hp(2),
+        height: wp(12),
         flex: 1,
+        width: '80%',
+        alignSelf: 'center',
+        borderRadius: 10,
+        backgroundColor: '#027850'
+
+    }, payment: {
+        color: '#fff',
         textAlign: 'center',
         textAlignVertical: 'center',
         fontSize: wp(5),
-        borderRadius: wp(2),
+        justifyContent: 'center',
+        padding: wp(3)
     },
 });

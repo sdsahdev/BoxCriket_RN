@@ -100,7 +100,7 @@ const Rules = () => {
         <View style={styles.timeSlot}>
             <Image
                 source={imagesClass.Arrow}
-                resizeMode="center"
+                resizeMode="contain"
                 style={{ height: hp(1.5), alignSelf: 'center' }}
             />
             <Text style={styles.textLeft}>{item.rule}</Text>

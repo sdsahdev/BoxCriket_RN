@@ -46,6 +46,7 @@ const imagesClass = {
   headerbg: require('./Images/headerbg.png'),
   search: require('./Images/search.png'),
   filter: require('./Images/filter.png'),
+  delete: require('./Images/deleteimg.png'),
 };
 
 export default imagesClass;

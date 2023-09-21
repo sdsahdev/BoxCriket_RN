@@ -8,7 +8,7 @@ const Facilities = ({ img, text3 }) => {
     return (
         <View style={styles.facilityView}>
             <Image source={img}
-                resizeMode='center'
+                resizeMode='contain'
                 style={styles.imgs}
             />
             <Text style={styles.txt}>

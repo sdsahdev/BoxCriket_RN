@@ -118,6 +118,12 @@ const RegisterScreen = ({ navigation }) => {
                     eye={true}
                     im={imagesClass.padlock}
                 />
+                <TouchableOpacity onPress={() => navigation.pop()}>
+                    <Text style={{ color: '#027850', textAlign: 'center', marginTop: hp(2), fontSize: wp(4) }}>
+                        Already have an account?
+                        <Text style={{ textDecorationLine: "underline" }}> Login</Text>
+                    </Text>
+                </TouchableOpacity>
             </View>
             <FlashMessage position="bottom" />
 

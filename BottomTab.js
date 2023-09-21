@@ -56,7 +56,7 @@ const TabButton = ({ item, onPress, accessibilityState }) => {
                         marginHorizontal: wp(2),
                         tintColor: focused ? "#fff" : "#027850",
                         justifyContent: 'center', alignItems: 'center', alignSelf: 'center'
-                    }} resizeMode="center" />
+                    }} resizeMode="contain" />
 
 
                     <Animatable.View ref={textViewRef}>

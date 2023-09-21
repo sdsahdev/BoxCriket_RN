@@ -308,10 +308,8 @@ const DateTime = ({ navigation }) => {
         <View>
 
           {Object.keys(caldate).length !== 0 && startTime !== null && (
-            <TouchableOpacity style={styles.btn} onPress={() => setShowWarning(true)}>
-              <Text style={styles.payment}>
-                Book Now
-              </Text>
+            <TouchableOpacity style={styles.btn} onPress={() => csapi()}>
+              <Text style={styles.payment}>Book Now</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -324,7 +322,7 @@ const DateTime = ({ navigation }) => {
             data={data} />
         </View>
       </ScrollView>
-      <View style={styles.modalContainer}>
+      <View >
         <Modal
           visible={showWarning}
           transparent={true}
@@ -362,7 +360,7 @@ const DateTime = ({ navigation }) => {
                 }
               </View>
             </View>
-          </TouchableWithoutFeedback >
+          </TouchableWithoutFeedback>
 
         </Modal>
       </View>
@@ -371,7 +369,7 @@ const DateTime = ({ navigation }) => {
         isModal={true} isHUD={true}
         hudColor={"#fff"}
         color={"#027850"} />
-    </View >
+    </View>
   );
 }
 export default DateTime;
@@ -388,14 +386,15 @@ const styles = StyleSheet.create({
     top: '40%',
     width: '80%'
   },
-  container: {
-    flex: 1,
-  },
   modalContent: {
 
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)'
   },
+  container: {
+    flex: 1,
+  },
+
   modalText: {
     marginBottom: hp(2),
     color: 'red',
@@ -419,14 +418,22 @@ const styles = StyleSheet.create({
     marginTop: hp(2),
   },
   mainView: { flex: 1, marginBottom: hp(5) },
-  btn: { marginHorizontal: wp(4), marginTop: hp(2), height: wp(12), flex: 1, width: '80%', alignSelf: 'center' },
-  payment: {
-    color: '#fff',
-    backgroundColor: '#027850',
+  btn: {
+    marginHorizontal: wp(4),
+    marginTop: hp(2),
+    height: wp(12),
     flex: 1,
+    width: '80%',
+    alignSelf: 'center',
+    borderRadius: 10,
+    backgroundColor: '#027850'
+
+  }, payment: {
+    color: '#fff',
     textAlign: 'center',
     textAlignVertical: 'center',
     fontSize: wp(5),
-    borderRadius: wp(2),
+    justifyContent: 'center',
+    padding: wp(3)
   },
 });

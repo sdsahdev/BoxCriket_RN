@@ -32,7 +32,7 @@ const ForgotP = ({ navigation }) => {
     return (
         <View style={{ flex: 1, flexDirection: 'column' }}>
             <View style={{ width: '100%' }}>
-                <TopHeader name={"Verify Number"} />
+                <TopHeader name={"Verify Number"} navigation={navigation} back={true} />
             </View>
 
 
