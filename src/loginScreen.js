@@ -43,8 +43,34 @@ const loginSceen = ({ navigation }) => {
 
   useEffect(() => {
     checkAuthStatus();
+    getuserdata()
   }, []);
+  const getuserdata = async () => {
+    const Token = await AsyncStorage.getItem('token');
+    fetch('https://boxclub.in/Joker/Admin/index.php?what=getProfile', {
+      method: 'POST', // Assuming you want to use POST method
+      headers: {
+        'Content-Type': 'application/json',
+        'token': Token
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
 
+        console.log(data.success, "=====data");
+        if (data.success) {
+          AsyncStorage.setItem('user_name', data.name),
+            AsyncStorage.setItem('user_email', data.email),
+            AsyncStorage.setItem('user_phone', data.phone)
+        }
+
+
+      })
+      .catch(error => {
+
+        console.error('Error:', error);
+      });
+  }
   const checkAuthStatus = async () => {
     try {
       const userToken = await AsyncStorage.getItem('token');

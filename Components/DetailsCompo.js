@@ -72,19 +72,19 @@ const DetailsCompo = ({ navigation }) => {
 
                     <Titels text1={"Facilities provided"} />
                 </View>
-                <SafeAreaView style={styles.facilityView}>
+                <View style={styles.facilityView}>
 
-                    <SafeAreaView>
+                    <View>
                         <Facilities img={imagesClass.waiting} text3={"Waiting Area"} />
                         <Facilities img={imagesClass.bat} text3={"bat"} />
 
-                    </SafeAreaView>
-                    <SafeAreaView>
+                    </View>
+                    <View>
                         <Facilities img={imagesClass.water} text3={"Water"} />
                         <Facilities img={imagesClass.parking} text3={"Parking"} />
 
-                    </SafeAreaView>
-                </SafeAreaView>
+                    </View>
+                </View>
                 <View style={{ flexDirection: 'row', marginBottom: hp(2) }}>
 
                     <TouchableOpacity style={styles.bookbtn} onPress={() => navigation.navigate("TornamentBook", { item: item })}>
@@ -100,7 +100,7 @@ const DetailsCompo = ({ navigation }) => {
                 </View>
             </ScrollView>
 
-        </View >
+        </View>
 
 
     );

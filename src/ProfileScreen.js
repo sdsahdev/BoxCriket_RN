@@ -20,10 +20,20 @@ import imagesClass from '../asserts/imagepath';
 import Menu from '../Components/Menu';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ModalCom from '../Components/ModalCom';
+import { Notificationutill } from './Notificationutill';
 
 const ProfileScreen = ({ navigation }) => {
     const [showWarning, setShowWarning] = useState(false);
     const [showclose, setshowclose] = useState(false);
+
+
+    const sendNotification = () => {
+        const titles = 'Title 2';
+        const messages = 'kam karo';
+        const fcmTokens = ['cssa9EVJ8UBkuhxM4Nwebc: APA91bEmfHtJbbTpkOdKVlSxcECkoSQT5pdzcANa_nLyT0zp6NDpLJTt0vXkol9mkVUqvKMIlqIY8qJihY - fdSit7QRCCQLlepmopW2TdvOefDI7tzhYuFhjUlrN_WjYuRa5ixEWcM_m', 'clEsWk9yQf-cED6WNtApGT:APA91bFAIQQ-YrRyj8TXU0Uw0vtJN0Z-RPVsFObc4-alPkHeLOk0ghXck9hZJtKArNMY9rlsyPsX6nPPtNqbMP-bFCps1j9QGeGGQGesy8DEe7HyFOkzFyeRuM-Yal9EiE_rB3v_Qrse', "fMjuTtQ0iUKjhhoiVlXoix:APA91bGEjMxDxCj9NhJDbM1PSKu8_p2jMIEJlkBxOS6ApgZmlI2JVAG7Hlv7PUQmqSWQr00KxqdhlJxVFWgFJp5tEYTgv4tYF5fY0DbDzwHWcR9uxpTpvZ7oIwu2MFslFzqBpB9WpAyC"];
+
+        Notificationutill(titles, messages, fcmTokens);
+    };
 
     const hEdit = () => {
         console.log('edit');
@@ -32,6 +42,7 @@ const ProfileScreen = ({ navigation }) => {
     const hcontact = () => {
 
         // handleSendNotification()
+        // sendNotification();
         console.log('Contact');
         navigation.navigate('ContactUs');
     };
@@ -120,8 +131,11 @@ const ProfileScreen = ({ navigation }) => {
     }
 
     const handleSendNotification = async () => {
+
+        const fcmtoken = await AsyncStorage.getItem('fcmToken');
+
         const notification = {
-            to: 'eriK83J4SC-Wvqm7kdHbhI:APA91bGoFNJCkEAJi6tgreeQAkAKccl-n1C0GXYnC4VEhPmw3_aOgz7cX2GSoApb96E5cBYdxC4_rFsiXCUTyvgl5AUzZqPPjq72Sx5LKWby1DVly4uXVyg-Miv4cFzEPhPJQiAXYspY',
+            to: fcmtoken,
             notification: {
                 title: 'Box Cricket',
                 body: 'Your slot is booked',

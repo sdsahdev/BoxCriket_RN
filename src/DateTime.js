@@ -25,6 +25,7 @@ import FlashMessage, {
 } from 'react-native-flash-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ProgressLoader from 'rn-progress-loader';
+import { Notificationutill } from './Notificationutill';
 
 const DateTime = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -215,12 +216,16 @@ const DateTime = ({ navigation }) => {
         // Handle the error here
       });
   }
+
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
   };
 
   const bookm = async (paymentid, amounts) => {
     const Token = await AsyncStorage.getItem('token');
+    const user_name = await AsyncStorage.getItem('user_name');
+    const user_email = await AsyncStorage.getItem('user_email');
+    const user_phone = await AsyncStorage.getItem('user_phone');
     setIsLoading(true)
     const apiUrl = 'https://boxclub.in/Joker/Admin/index.php?what=bookMultipleSlot';
 
@@ -252,6 +257,7 @@ const DateTime = ({ navigation }) => {
         console.log('API response:', data);
         if (data.success) {
           slotapi(fDate)
+          sendNotification(data.fcms, user_name, user_phone);
           showMessage({
             message: `Your booking is successfull`,
             type: "Success",
@@ -290,7 +296,13 @@ const DateTime = ({ navigation }) => {
     setShowWarning(false)
     csapi()
   }
+  const sendNotification = (fcm, name, phone) => {
+    const titles = 'Booking confirm';
+    const messages = `${name} is book the slot Please check your index in app`;
+    const fcmTokens = ['cssa9EVJ8UBkuhxM4Nwebc: APA91bEmfHtJbbTpkOdKVlSxcECkoSQT5pdzcANa_nLyT0zp6NDpLJTt0vXkol9mkVUqvKMIlqIY8qJihY - fdSit7QRCCQLlepmopW2TdvOefDI7tzhYuFhjUlrN_WjYuRa5ixEWcM_m', 'clEsWk9yQf-cED6WNtApGT:APA91bFAIQQ-YrRyj8TXU0Uw0vtJN0Z-RPVsFObc4-alPkHeLOk0ghXck9hZJtKArNMY9rlsyPsX6nPPtNqbMP-bFCps1j9QGeGGQGesy8DEe7HyFOkzFyeRuM-Yal9EiE_rB3v_Qrse', "fMjuTtQ0iUKjhhoiVlXoix:APA91bGEjMxDxCj9NhJDbM1PSKu8_p2jMIEJlkBxOS6ApgZmlI2JVAG7Hlv7PUQmqSWQr00KxqdhlJxVFWgFJp5tEYTgv4tYF5fY0DbDzwHWcR9uxpTpvZ7oIwu2MFslFzqBpB9WpAyC"];
 
+    Notificationutill(titles, messages, fcm);
+  };
   return (
     <View style={styles.mainView}>
       <ScrollView>

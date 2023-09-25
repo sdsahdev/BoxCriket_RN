@@ -20,6 +20,7 @@ import FlashMessage, {
 } from 'react-native-flash-message';
 import imagesClass from '../asserts/imagepath';
 import { ScrollView } from 'react-native-gesture-handler';
+import { Notificationutill } from '../src/Notificationutill';
 const Cancel = ({ route }) => {
     const { ids } = route.params;
     const Refunds = [
@@ -65,7 +66,16 @@ const Cancel = ({ route }) => {
             rule: 'In case of any dispute regarding refunds, users can contact our customer support team to resolve the issue.',
         },
     ];
+
+    const sendNotification = (fcm, name) => {
+        const titles = 'Booking cancel request';
+        const messages = `${name} is cancel the slot Please check your cancel request in app`;
+        const fcmTokens = ['cssa9EVJ8UBkuhxM4Nwebc: APA91bEmfHtJbbTpkOdKVlSxcECkoSQT5pdzcANa_nLyT0zp6NDpLJTt0vXkol9mkVUqvKMIlqIY8qJihY - fdSit7QRCCQLlepmopW2TdvOefDI7tzhYuFhjUlrN_WjYuRa5ixEWcM_m', 'clEsWk9yQf-cED6WNtApGT:APA91bFAIQQ-YrRyj8TXU0Uw0vtJN0Z-RPVsFObc4-alPkHeLOk0ghXck9hZJtKArNMY9rlsyPsX6nPPtNqbMP-bFCps1j9QGeGGQGesy8DEe7HyFOkzFyeRuM-Yal9EiE_rB3v_Qrse', "fMjuTtQ0iUKjhhoiVlXoix:APA91bGEjMxDxCj9NhJDbM1PSKu8_p2jMIEJlkBxOS6ApgZmlI2JVAG7Hlv7PUQmqSWQr00KxqdhlJxVFWgFJp5tEYTgv4tYF5fY0DbDzwHWcR9uxpTpvZ7oIwu2MFslFzqBpB9WpAyC"];
+        Notificationutill(titles, messages, fcm);
+    };
+
     const canapi = async (id) => {
+        const user_name = await AsyncStorage.getItem('user_name');
         console.log(id)
         fetch('https://boxclub.in/Joker/Admin/index.php?what=makeACancelRequest', {
             method: 'POST', // Assuming you want to use POST method
@@ -78,6 +88,8 @@ const Cancel = ({ route }) => {
             .then(data => {
                 // Handle the response data here
                 if (data.success) {
+
+                    sendNotification(data.fcms, user_name);
                     showMessage({
                         message: data.message,
                         type: "Success",
@@ -85,6 +97,7 @@ const Cancel = ({ route }) => {
                         color: "#fff", // text color
 
                     });
+
                 } else {
                     showMessage({
                         message: data.message ? data.message : "Request failed",

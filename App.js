@@ -66,6 +66,7 @@ const App = () => {
         PushNotificationIOS.addNotificationRequest({
           title: remoteMessage.notification.title,
           body: remoteMessage.notification.body,
+          id: remoteMessage.messageId
         })
       }
     });
