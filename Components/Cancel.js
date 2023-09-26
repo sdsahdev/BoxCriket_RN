@@ -81,8 +81,7 @@ const Cancel = ({ route }) => {
             method: 'POST', // Assuming you want to use POST method
             body: JSON.stringify({
                 booking_id: id
-            }),
-
+            })
         })
             .then(response => response.json())
             .then(data => {
