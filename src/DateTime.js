@@ -26,6 +26,7 @@ import FlashMessage, {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ProgressLoader from 'rn-progress-loader';
 import { Notificationutill } from './Notificationutill';
+import ModalCom from '../Components/ModalCom';
 
 const DateTime = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -40,6 +41,28 @@ const DateTime = ({ navigation }) => {
   const [isChecked, setIsChecked] = useState(false); // State for checkbox
   const [hasLoaded, setHasLoaded] = useState(false);
   const [fDate, setfDate] = useState('')
+
+  const [skiplog, setSkiplo] = useState('');
+  const [loginSkip, setloginSkip] = useState(false);
+
+
+  useEffect(() => {
+    // Define an async function to perform asynchronous operations
+    const fetchData = async () => {
+      console.log('+++++++');
+      try {
+        const skipLogin = await AsyncStorage.getItem('skiplogin');
+        console.log(skipLogin);
+        if (skipLogin === 'true') {
+          setSkiplo('true');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
 
   const slotapi = (date) => {
@@ -293,8 +316,12 @@ const DateTime = ({ navigation }) => {
   }
 
   const closedi = () => {
-    setShowWarning(false)
-    csapi()
+    if (skiplog === 'true') {
+      setloginSkip(true)
+    } else {
+      setShowWarning(true)
+    }
+
   }
   const sendNotification = (fcm, name, phone) => {
     const titles = 'Booking confirm';
@@ -303,6 +330,16 @@ const DateTime = ({ navigation }) => {
 
     Notificationutill(titles, messages, fcm);
   };
+  const hlogout = async () => {
+    console.log('Logout');
+
+    await AsyncStorage.clear();
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'loginSceen' }],
+    });
+  };
+
   return (
     <View style={styles.mainView}>
       <ScrollView>
@@ -320,10 +357,12 @@ const DateTime = ({ navigation }) => {
         <View>
 
           {Object.keys(caldate).length !== 0 && startTime !== null && (
-            <TouchableOpacity style={styles.btn} onPress={() => csapi()}>
+            <TouchableOpacity style={styles.btn} onPress={() => closedi()}>
               <Text style={styles.payment}>Book Now</Text>
             </TouchableOpacity>
           )}
+
+
         </View>
         <View style={styles.sendView}>
 
@@ -335,6 +374,9 @@ const DateTime = ({ navigation }) => {
         </View>
       </ScrollView>
       <View >
+        <ModalCom visible={loginSkip} onClose={() => setloginSkip(false)} content={"For Access the full functionality of the app, Please login/register with us."} title={"Login Account"} btn={"login"} btnonpress={() => hlogout()} />
+
+
         <Modal
           visible={showWarning}
           transparent={true}
@@ -364,7 +406,7 @@ const DateTime = ({ navigation }) => {
 
                 {
                   isChecked &&
-                  <TouchableOpacity style={{ alignSelf: 'center' }} onPress={() => closedi()} >
+                  <TouchableOpacity style={{ alignSelf: 'center' }} onPress={() => csapi()} >
                     <View style={{ backgroundColor: isChecked ? '#027850' : '#c0e8a1', paddingVertical: hp(1), borderRadius: 8 }}>
                       <Text style={{ color: '#fff', padding: wp(2) }}>Confirm Booking</Text>
                     </View>

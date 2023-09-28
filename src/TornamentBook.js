@@ -19,6 +19,7 @@ import FlashMessage, {
 } from 'react-native-flash-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ProgressLoader from 'rn-progress-loader';
+import ModalCom from '../Components/ModalCom';
 
 const TornamentBook = ({ navigation }) => {
 
@@ -33,6 +34,28 @@ const TornamentBook = ({ navigation }) => {
     const [showWarning, setShowWarning] = useState(false);
     const [isChecked, setIsChecked] = useState(false); // State for checkbox
     const [fDate, setfDate] = useState('')
+
+    const [skiplog, setSkiplo] = useState('');
+    const [loginSkip, setloginSkip] = useState(false);
+
+
+    useEffect(() => {
+        // Define an async function to perform asynchronous operations
+        const fetchData = async () => {
+            console.log('+++++++');
+            try {
+                const skipLogin = await AsyncStorage.getItem('skiplogin');
+                console.log(skipLogin);
+                if (skipLogin === 'true') {
+                    setSkiplo('true');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     const slotapi = (date) => {
         setIsLoading(true)
@@ -261,9 +284,27 @@ const TornamentBook = ({ navigation }) => {
         setIsChecked(!isChecked);
     };
     const closedi = () => {
-        setShowWarning(false)
-        csapi()
+        // setShowWarning(false)
+        // csapi()
+
+        if (skiplog === 'true') {
+            setloginSkip(true)
+        } else {
+            setShowWarning(true)
+        }
+
+
     }
+    const hlogout = async () => {
+        console.log('Logout');
+
+        await AsyncStorage.clear();
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'loginSceen' }],
+        });
+    };
+
     return (
         <View style={styles.mainView}>
             <ScrollView>
@@ -279,7 +320,7 @@ const TornamentBook = ({ navigation }) => {
 
                     {Object.keys(caldate).length !== 0 && startTime !== null && (
                         // <TouchableOpacity style={styles.btn} onPress={() => BookingPro()}>
-                        <TouchableOpacity style={styles.btn} onPress={() => setShowWarning(true)}>
+                        <TouchableOpacity style={styles.btn} onPress={() => closedi()}>
                             <Text style={styles.payment}>
                                 Book Now
                             </Text>
@@ -295,6 +336,8 @@ const TornamentBook = ({ navigation }) => {
                 </View>
             </ScrollView>
             <View style={styles.modalContainer}>
+                <ModalCom visible={loginSkip} onClose={() => setloginSkip(false)} content={"For Access the full functionality of the app, Please login/register with us."} title={"Login Account"} btn={"login"} btnonpress={() => hlogout()} />
+
                 <Modal
                     visible={showWarning}
                     transparent={true}
@@ -339,7 +382,7 @@ const TornamentBook = ({ navigation }) => {
                                 {
                                     isChecked &&
 
-                                    <TouchableOpacity style={{ alignSelf: 'center' }} onPress={() => closedi()} >
+                                    <TouchableOpacity style={{ alignSelf: 'center' }} onPress={() => csapi()} >
                                         <View style={{ backgroundColor: isChecked ? '#027850' : '#c0e8a1', paddingVertical: hp(1), borderRadius: 8 }}>
                                             <Text style={{ color: '#fff', padding: wp(2) }}>Confirm Booking</Text>
                                         </View>

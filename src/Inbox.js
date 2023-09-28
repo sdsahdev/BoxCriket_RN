@@ -27,6 +27,7 @@ import FlashMessage, {
 import { useIsFocused } from '@react-navigation/native'; // Import the hook
 import SearchBar from '../Components/SearchBar';
 import ProgressLoader from 'rn-progress-loader';
+import ModalCom from '../Components/ModalCom';
 
 
 
@@ -37,11 +38,34 @@ const Inbox = ({ navigation }) => {
     const [searchText, setSearchText] = useState('');
     const isFocused = useIsFocused(); // Get the screen's focused state
     const [isLoading, setIsLoading] = useState(false);
+    const [skiplog, setSkiplo] = useState('');
+    const [loginSkip, setloginSkip] = useState(false);
 
     useEffect(() => {
-        // Call the API when the component mounts
-        console.log('+++++++');
-        inboxapi();
+        console.log(isFocused, "====isfouse");
+        // Define an async function to perform asynchronous operations
+        const fetchData = async () => {
+            console.log('+++++++');
+            try {
+                // Use await with AsyncStorage
+                const skipLogin = await AsyncStorage.getItem('skiplogin');
+
+                // Check if skipLogin is undefined or null
+                if (skipLogin === 'true') {
+                    setloginSkip(true);
+                    setSkiplo('true');
+                } else {
+                    await inboxapi();
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+        if (isFocused === true) {
+
+            fetchData();
+        }
+        // Call the async function
     }, [isFocused]);
 
     const inboxapi = async () => {
@@ -162,6 +186,17 @@ const Inbox = ({ navigation }) => {
         setidata(filtered);
         setVisible(false)
     };
+
+    const hlogout = async () => {
+        console.log('Logout');
+
+        await AsyncStorage.clear();
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'loginSceen' }],
+        });
+    };
+
     return (
         <View style={{ position: 'relative' }}>
             <View style={{ position: 'relative' }}>
@@ -171,17 +206,20 @@ const Inbox = ({ navigation }) => {
 
                 <SearchBar searchText={searchText} onChangeSearchText={handleSerach} press={() => handlemodal()} />
                 <ScrollView >
+                    {console.log(skiplog, "====")}
+                    {skiplog !== 'true' ?
+                        <View style={{ marginRight: wp(9), width: '100%', marginBottom: hp(50) }}>
+                            <FlatList
+                                style={{ alignSelf: 'center', width: '95%' }}
+                                data={idata}
+                                showsVerticalScrollIndicator={false}
+                                keyExtractor={item => item.id}
+                                renderItem={renderItem}
+                            />
+                        </View> :
+                        <ModalCom visible={loginSkip} onClose={() => setloginSkip(false)} content={"For Access the full functionality of the app, Please login/register with us."} title={"Login Account"} btn={"login"} btnonpress={() => hlogout()} />
 
-                    <View style={{ marginRight: wp(9), width: '100%', marginBottom: hp(50) }}>
-                        <FlatList
-                            style={{ alignSelf: 'center', width: '95%' }}
-                            data={idata}
-                            showsVerticalScrollIndicator={false}
-                            keyExtractor={item => item.id}
-                            renderItem={renderItem}
-                        />
-                    </View>
-
+                    }
                 </ScrollView>
 
                 <Modal

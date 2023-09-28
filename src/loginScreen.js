@@ -205,6 +205,14 @@ const loginSceen = ({ navigation }) => {
   const handlePhn = (input) => {
     setPhoneNumber(input)
   }
+  const skipfun = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'BoxList' }],
+    });
+    AsyncStorage.setItem('skiplogin', 'true');
+
+  }
   return (
     <View style={styles.container}>
       <View>
@@ -221,8 +229,8 @@ const loginSceen = ({ navigation }) => {
         </View>
         <ChangePass name={"Password"} headerText={null} onChangeText={handlepass} eye={true} im={imagesClass.padlock} />
         <TouchableOpacity onPress={() => navigation.navigate('ForgotP')}>
-          <Text style={{ color: '#027850', textAlign: 'center', marginTop: hp(2), fontSize: wp(4) }}>
-            Forgot password
+          <Text style={{ color: '#027850', textAlign: 'right', marginTop: hp(1), fontSize: wp(4), paddingRight: wp(7) }}>
+            Forgot password?
           </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')}>
@@ -231,6 +239,14 @@ const loginSceen = ({ navigation }) => {
           </Text>
         </TouchableOpacity>
       </View>
+
+      <TouchableOpacity onPress={() => skipfun()
+      }>
+        <Text style={{ color: '#027850', textAlign: 'center', marginTop: hp(2), fontSize: wp(4) }}>
+          Skip Login
+        </Text>
+      </TouchableOpacity>
+
       <TouchableOpacity style={styles.bookbtn} onPress={() => handleSubmit()}>
         {/* <TouchableOpacity style={styles.bookbtn} onPress={() => navigation.navigate("BoxList")}> */}
         <Text style={styles.booktxt}>

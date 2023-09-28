@@ -25,7 +25,24 @@ import { Notificationutill } from './Notificationutill';
 const ProfileScreen = ({ navigation }) => {
     const [showWarning, setShowWarning] = useState(false);
     const [showclose, setshowclose] = useState(false);
+    const [loginSkip, setloginSkip] = useState(false);
+    const [skiplog, setSkiplo] = useState('');
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const skipLogin = await AsyncStorage.getItem('skiplogin');
+
+                if (skipLogin === 'true') {
+                    setSkiplo('true');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     const sendNotification = () => {
         const titles = 'Title 2';
@@ -155,6 +172,21 @@ const ProfileScreen = ({ navigation }) => {
             .then(result => console.log(result))
             .catch(error => console.log(error));
     };
+
+    const handledelete = () => {
+        if (skiplog === 'true') {
+            setloginSkip(true)
+        } else {
+            setshowclose(true)
+        }
+    }
+    const handleLogout = () => {
+        if (skiplog === 'true') {
+            setloginSkip(true)
+        } else {
+            setShowWarning(true)
+        }
+    }
     return (
         <View
             style={{
@@ -174,6 +206,7 @@ const ProfileScreen = ({ navigation }) => {
                     <Text style={{ color: '#000', fontSize: wp(5) }}>
                         123456789</Text>
                 </View> */}
+
                 <View style={{ marginTop: hp(3) }}>
                     {/* <Menu icon={imagesClass.pen} name={"Edit Profile"} onpress={() => hEdit()} /> */}
                     {/* <Menu icon={imagesClass.password} name={"Change Password"} onpress={() => hpassword()} /> */}
@@ -192,18 +225,19 @@ const ProfileScreen = ({ navigation }) => {
                     <Menu
                         icon={imagesClass.delete}
                         name={'Delete Account'}
-                        onpress={() => setshowclose(true)}
+                        onpress={() => handledelete()}
                     />
 
                     <Menu
                         icon={imagesClass.logout}
                         name={'Logout'}
-                        onpress={() => setShowWarning(true)}
+                        onpress={() => handleLogout()}
                     />
                 </View>
             </ScrollView>
             <ModalCom visible={showWarning} onClose={() => setShowWarning(false)} content={"Are you sure to Logout?"} title={"Logout"} btn={"Logout"} btnonpress={() => hlogout()} />
             <ModalCom visible={showclose} onClose={() => setshowclose(false)} content={"Are you sure to Delete You Account?"} title={"Delete Account"} btn={"Delete"} btnonpress={() => deleteApi()} />
+            <ModalCom visible={loginSkip} onClose={() => setloginSkip(false)} content={"For Access the full functionality of the app, Please login/register with us."} title={"Login Account"} btn={"login"} btnonpress={() => hlogout()} />
         </View>
     );
 };
