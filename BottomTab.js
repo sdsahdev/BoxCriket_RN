@@ -1,21 +1,16 @@
 import React, { useRef, useEffect } from 'react';
 import { View, TouchableOpacity, StyleSheet, Image, Text } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-
 import * as Animatable from 'react-native-animatable';
 import imagesClass from './asserts/imagepath';
 import BoxList from './src/BoxList';
-import DateTime from './src/DateTime';
-import loginSceen from './src/loginScreen';
-import Details from './src/Details';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import TimeComp from './Components/TimeComp';
 import Rules from './src/Rules';
 import Inbox from './src/Inbox';
 import ProfileScreen from './src/ProfileScreen';
-import About from './src/About';
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();

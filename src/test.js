@@ -5,10 +5,9 @@ const test = () => {
     return (
         <View>
             <Text>test</Text>
+            <Text>styles</Text>
         </View>
     )
 }
-
 export default test
-
 const styles = StyleSheet.create({})

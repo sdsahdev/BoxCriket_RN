@@ -23,6 +23,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Notificationutill } from '../src/Notificationutill';
 const Cancel = ({ route }) => {
     const { ids } = route.params;
+
     const Refunds = [
         {
             id: '1',
@@ -73,7 +74,6 @@ const Cancel = ({ route }) => {
         const fcmTokens = ['cssa9EVJ8UBkuhxM4Nwebc: APA91bEmfHtJbbTpkOdKVlSxcECkoSQT5pdzcANa_nLyT0zp6NDpLJTt0vXkol9mkVUqvKMIlqIY8qJihY - fdSit7QRCCQLlepmopW2TdvOefDI7tzhYuFhjUlrN_WjYuRa5ixEWcM_m', 'clEsWk9yQf-cED6WNtApGT:APA91bFAIQQ-YrRyj8TXU0Uw0vtJN0Z-RPVsFObc4-alPkHeLOk0ghXck9hZJtKArNMY9rlsyPsX6nPPtNqbMP-bFCps1j9QGeGGQGesy8DEe7HyFOkzFyeRuM-Yal9EiE_rB3v_Qrse', "fMjuTtQ0iUKjhhoiVlXoix:APA91bGEjMxDxCj9NhJDbM1PSKu8_p2jMIEJlkBxOS6ApgZmlI2JVAG7Hlv7PUQmqSWQr00KxqdhlJxVFWgFJp5tEYTgv4tYF5fY0DbDzwHWcR9uxpTpvZ7oIwu2MFslFzqBpB9WpAyC"];
         Notificationutill(titles, messages, fcm);
     };
-
     const canapi = async (id) => {
         const user_name = await AsyncStorage.getItem('user_name');
         console.log(id)
@@ -81,6 +81,7 @@ const Cancel = ({ route }) => {
             method: 'POST', // Assuming you want to use POST method
             body: JSON.stringify({
                 booking_id: id
+                // give me regign later for the compony target the find the fault and again and again waring from managemaent still we working and also for just talking with someone at sometime. and we not work with with type of enviromt and still we compete our work to Team leader ask me. 
             })
         })
             .then(response => response.json())

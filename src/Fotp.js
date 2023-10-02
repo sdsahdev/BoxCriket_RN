@@ -35,8 +35,8 @@ const Fotp = ({ navigation, route }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [randomOTP, setrandomOTP] = useState(0)
     const [otp, setOtp] = useState('');
-    const MAX_CODE = 4;
     const otpInputRefs = Array.from({ length: 4 }, () => useRef(null));
+    const MAX_CODE = 4;
 
     useEffect(() => {
         console.log('0000000');
