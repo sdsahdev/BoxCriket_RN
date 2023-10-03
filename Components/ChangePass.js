@@ -8,8 +8,14 @@ const ChangePass = ({ name, onChangeText, headerText, eye, called, im }) => {
     const [inputValue, setInputValue] = useState('');
 
     const handleTextChange = (text) => {
-        setInputValue(text.trim());
-        onChangeText(text.trim()); // Call the prop function to update the parent state
+        if (name === 'User Name') {
+            setInputValue(text);
+            onChangeText(text);
+        } else {
+            setInputValue(text.trim());
+            onChangeText(text.trim());
+        }
+
     };
 
     return (

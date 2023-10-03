@@ -201,7 +201,7 @@ Please enter this OTP to complete your registration process.`,
                 setdares(response.data.responseCode);
                 if (response.data.responseCode === '3001') {
                     showMessage({
-                        message: `message send successfully ${phone}`,
+                        message: `message send successfully ${phoneNumber}`,
                         type: 'Success',
                         backgroundColor: 'green', // background color
                         color: '#fff', // text color

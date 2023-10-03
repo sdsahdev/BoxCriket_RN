@@ -33,7 +33,6 @@ import ProgressLoader from 'rn-progress-loader';
 const RegisterScreen = ({ navigation }) => {
     FlashMessageManager.setDisabled(false);
     const [isLoading, setIsLoading] = useState(false);
-
     const [phoneNumber, setPhoneNumber] = useState('');
     const [email, setemail] = useState('');
     const [username, setusername] = useState('');

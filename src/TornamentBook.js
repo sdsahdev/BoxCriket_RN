@@ -117,21 +117,22 @@ const TornamentBook = ({ navigation }) => {
     const BookingPro = async (amounts) => {
         setIsLoading(true)
         const phn = await AsyncStorage.getItem('phn')
-
+        const famount = amounts / 2;
+        console.log(amounts, ' ' + famount);
         const keys = await AsyncStorage.getItem('rkey')
         var options = {
             description: `user number ${phn}`,
             image: 'https://i.imgur.com/3g7nmJC.jpg',
             currency: 'INR',
             key: keys,
-            amount: amounts * 100,
+            amount: (famount) * 100,
             name: 'Acme Corp',
 
             order_id: '',//Replace this with an order_id created using Orders API.
             prefill: {
-                email: 'gaurav.kumar@example.com',
-                contact: '9191919191',
-                name: 'Gaurav Kumar'
+                email: '',
+                contact: phn,
+                name: ''
             },
             theme: {
                 color: '#027850',
@@ -149,7 +150,7 @@ const TornamentBook = ({ navigation }) => {
                 color: "#fff", // text color
                 duration: 2000,
                 onHide: () => {
-                    bookm(data.razorpay_payment_id, amounts);
+                    bookm(data.razorpay_payment_id, famount);
                 }
             });
         }).catch((error) => {
@@ -172,7 +173,7 @@ const TornamentBook = ({ navigation }) => {
 
     const csapi = () => {
         setIsLoading(true)
-
+        setShowWarning(false)
         const apiUrl = 'https://boxclub.in/Joker/Admin/index.php?what=checkMultipleSlot';
 
         const requestData = {
@@ -219,6 +220,7 @@ const TornamentBook = ({ navigation }) => {
     }
 
     const bookm = async (paymentid, amounts) => {
+
         setIsLoading(true)
 
         const Token = await AsyncStorage.getItem('token');
@@ -311,7 +313,6 @@ const TornamentBook = ({ navigation }) => {
                 <View style={{ width: '100%' }}>
                     <TopHeader name={'Book Your Tournament'} back={true} navigation={navigation} />
                 </View>
-
                 <Text style={styles.datess}>select date is required</Text>
                 <View style={styles.thiView}>
                     <CalanderFile datesselect={handleDateSelect} />
@@ -328,6 +329,8 @@ const TornamentBook = ({ navigation }) => {
                     )}
                 </View>
                 <View style={styles.sendView}>
+                    <Text style={[styles.datess, { fontWeight: 'bold', fontSize: wp(4.5) }]}>Reserve Your Cricket Slot Today: 50% Payment Now, Remaining on the Field!</Text>
+
                     <SlotTime
                         onStartTimeChange={(e) => setStartTime(e)}
                         onEndTimeChange={(e) => setEndTime(e)}
@@ -337,7 +340,6 @@ const TornamentBook = ({ navigation }) => {
             </ScrollView>
             <View style={styles.modalContainer}>
                 <ModalCom visible={loginSkip} onClose={() => setloginSkip(false)} content={"For Access the full functionality of the app, Please login/register with us."} title={"Login Account"} btn={"login"} btnonpress={() => hlogout()} />
-
                 <Modal
                     visible={showWarning}
                     transparent={true}
@@ -367,6 +369,11 @@ const TornamentBook = ({ navigation }) => {
                                     <Text style={styles.modalText}>
                                         48 canceled before 48 hours will be refunded after deducting 20 percent.
                                     </Text>
+
+                                    <Text style={styles.modalText}>
+                                        Reserve Your Cricket Slot Today: 50% Payment Now, Remaining on the Field!
+                                    </Text>
+
                                 </View>
 
 
@@ -404,6 +411,7 @@ const TornamentBook = ({ navigation }) => {
         </View >
     );
 }
+
 export default TornamentBook;
 
 const styles = StyleSheet.create({
@@ -425,7 +433,7 @@ const styles = StyleSheet.create({
         color: 'red',
         flex: 1,
     },
-    datess: { alignSelf: 'center', color: '#f97272', marginVertical: hp(1) },
+    datess: { alignSelf: 'center', color: '#f97272', marginVertical: hp(1), textAlign: 'center', paddingHorizontal: wp(4), },
 
     sold: { color: '#000' },
     thiView: { marginHorizontal: wp(10), },

@@ -1,5 +1,3 @@
-
-
 import { StyleSheet, Text, View, ActivityIndicator, Modal, ScrollView, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import About from './About';
@@ -131,15 +129,15 @@ const DateTime = ({ navigation }) => {
   const BookingPro = async (amount) => {
     const keys = await AsyncStorage.getItem('rkey')
     const phn = await AsyncStorage.getItem('phn')
-
-    console.log(amount);
+    const famount = amount / 2;
+    console.log(famount);
     var options = {
 
       description: `user number ${phn}`,
       image: 'https://i.imgur.com/3g7nmJC.jpg',
       currency: 'INR',
       key: keys,
-      amount: amount * 100,
+      amount: famount * 100,
       name: 'Acme Corp',
 
       order_id: '',//Replace this with an order_id created using Orders API.
@@ -163,7 +161,7 @@ const DateTime = ({ navigation }) => {
         color: "#fff", // text color
         duration: 2000,
         onHide: () => {
-          bookm(data.razorpay_payment_id, amount);
+          bookm(data.razorpay_payment_id, famount);
         }
       });
     }).catch((error) => {
@@ -186,6 +184,7 @@ const DateTime = ({ navigation }) => {
   };
 
   const csapi = () => {
+    setShowWarning(false)
     setIsLoading(true)
     const apiUrl = 'https://boxclub.in/Joker/Admin/index.php?what=checkMultipleSlot';
 
@@ -346,7 +345,7 @@ const DateTime = ({ navigation }) => {
         <View style={{ width: '100%' }}>
           <TopHeader name={'Book Your Slot'} back={true} navigation={navigation} />
         </View>
-
+        {/* experine :  */}
         {/* {console.log(startTime, "==satrt===")}
         {console.log(endTime, "==end===")} */}
 
@@ -365,6 +364,7 @@ const DateTime = ({ navigation }) => {
 
         </View>
         <View style={styles.sendView}>
+          <Text style={[styles.datess, { fontWeight: 'bold', fontSize: wp(4.5) }]}>Reserve Your Cricket Slot Today: 50% Payment Now, Remaining on the Field!</Text>
 
           <SlotTime
             onStartTimeChange={(e) => setStartTime(e)}
@@ -393,6 +393,8 @@ const DateTime = ({ navigation }) => {
                   <Text style={styles.modalText}>
                     48 canceled before 48 hours will be refunded after deducting 20 percent.
                   </Text>
+                  <Text style={styles.modalText}>
+                    Reserve Your Cricket Slot Today: 50% Payment Now, Remaining on the Field!                  </Text>
                 </View>
 
                 <TouchableOpacity onPress={() => handleCheckboxChange()} style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'center', }}>
@@ -460,7 +462,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  datess: { alignSelf: 'center', color: '#f97272', marginVertical: hp(1) },
+  datess: { alignSelf: 'center', color: '#f97272', marginVertical: hp(1), textAlign: 'center', paddingHorizontal: wp(4), },
 
   sold: { color: '#000' },
   thiView: { marginHorizontal: wp(10), },
