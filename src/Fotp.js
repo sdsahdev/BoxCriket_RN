@@ -79,7 +79,7 @@ const Fotp = ({ navigation, route }) => {
         const apiKey = mkey; // Replace with your actual auth key
 
         const smsData = {
-            smsContent: `Your OTP for Box Critet Booking App registration is: *${randomOTP2}*. 
+            smsContent: `Your OTP for Box Critet Booking App  is: *${randomOTP2}*. 
 Please enter this OTP to complete your registration process.`,
             routeId: '21',
             mobileNumbers: phoneNumber,
@@ -100,7 +100,7 @@ Please enter this OTP to complete your registration process.`,
                 console.log('SMS sent successfully:', data.responseCode);
                 if (data.responseCode === '3001') {
                     showMessage({
-                        message: `message send successfully ${phone}`,
+                        message: `message send successfully ${phoneNumber}`,
                         type: "Success",
                         backgroundColor: "green", // background color
                         color: "#fff", // text color

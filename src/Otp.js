@@ -180,7 +180,7 @@ const Otp = ({ navigation, route }) => {
 
         console.log(phoneNumber);
         const requestBody = {
-            smsContent: `Your OTP for Box Critet Booking App registration is: *${randomOTP2}*. 
+            smsContent: `Your OTP for Box Critet Booking App is: *${randomOTP2}*. 
 Please enter this OTP to complete your registration process.`,
             routeId: '21',
             mobileNumbers: phoneNumber,
