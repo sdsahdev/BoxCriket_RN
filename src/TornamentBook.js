@@ -334,7 +334,7 @@ const TornamentBook = ({ navigation }) => {
                     <SlotTime
                         onStartTimeChange={(e) => setStartTime(e)}
                         onEndTimeChange={(e) => setEndTime(e)}
-                        tor={handletor}
+                        tor={true}
                         data={data} />
                 </View>
             </ScrollView>

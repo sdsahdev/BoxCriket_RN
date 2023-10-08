@@ -369,7 +369,7 @@ const DateTime = ({ navigation }) => {
           <SlotTime
             onStartTimeChange={(e) => setStartTime(e)}
             onEndTimeChange={(e) => setEndTime(e)}
-            tor={handletor}
+            tor={false}
             data={data} />
         </View>
       </ScrollView>
