@@ -115,7 +115,7 @@ const TornamentBook = ({ navigation }) => {
     };
 
     const BookingPro = async (amounts) => {
-        setIsLoading(true)
+
         const phn = await AsyncStorage.getItem('phn')
         const famount = amounts / 2;
         console.log(amounts, ' ' + famount);
@@ -285,6 +285,7 @@ const TornamentBook = ({ navigation }) => {
     const handleCheckboxChange = () => {
         setIsChecked(!isChecked);
     };
+
     const closedi = () => {
         // setShowWarning(false)
         // csapi()
@@ -297,6 +298,7 @@ const TornamentBook = ({ navigation }) => {
 
 
     }
+
     const hlogout = async () => {
         console.log('Logout');
 
@@ -318,7 +320,6 @@ const TornamentBook = ({ navigation }) => {
                     <CalanderFile datesselect={handleDateSelect} />
                 </View>
                 <View>
-
                     {Object.keys(caldate).length !== 0 && startTime !== null && (
                         // <TouchableOpacity style={styles.btn} onPress={() => BookingPro()}>
                         <TouchableOpacity style={styles.btn} onPress={() => closedi()}>
@@ -343,7 +344,7 @@ const TornamentBook = ({ navigation }) => {
                 <Modal
                     visible={showWarning}
                     transparent={true}
-                    animationType="slide">
+                    animationType="fade">
                     <TouchableWithoutFeedback onPress={() => setShowWarning(false)}>
 
                         <View style={styles.modalContent}>
@@ -379,8 +380,9 @@ const TornamentBook = ({ navigation }) => {
 
                                 <TouchableOpacity onPress={() => handleCheckboxChange()} style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'center', }}>
                                     <CheckBox
+                                        style={{ marginRight: 5 }}
                                         value={isChecked}
-                                        onValueChange={() => handleCheckboxChange()}
+                                    // onValueChange={() => handleCheckboxChange()}
                                     />
                                     <Text style={styles.modalText2}>
                                         I agree to above conditions</Text>
@@ -398,7 +400,7 @@ const TornamentBook = ({ navigation }) => {
                             </View>
 
                         </View>
-                    </TouchableWithoutFeedback >
+                    </TouchableWithoutFeedback>
 
                 </Modal>
             </View>
@@ -408,7 +410,7 @@ const TornamentBook = ({ navigation }) => {
                 isModal={true} isHUD={true}
                 hudColor={"#fff"}
                 color={"#027850"} />
-        </View >
+        </View>
     );
 }
 

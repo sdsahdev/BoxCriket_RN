@@ -380,7 +380,8 @@ const DateTime = ({ navigation }) => {
         <Modal
           visible={showWarning}
           transparent={true}
-          animationType="slide">
+
+          animationType="fade">
           <TouchableWithoutFeedback onPress={() => setShowWarning(false)}>
 
             <View style={styles.modalContent}>
@@ -399,8 +400,9 @@ const DateTime = ({ navigation }) => {
 
                 <TouchableOpacity onPress={() => handleCheckboxChange()} style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'center', }}>
                   <CheckBox
+                    style={{ marginRight: 5 }}
                     value={isChecked}
-                    onValueChange={() => handleCheckboxChange()}
+                  // onValueChange={() => handleCheckboxChange()}
                   />
                   <Text style={styles.modalText2}>
                     I agree to above conditions</Text>

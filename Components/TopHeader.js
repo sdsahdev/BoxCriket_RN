@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     },
     headetxt: {
         color: '#000',
-        fontSize: wp(7),
+        fontSize: wp(6),
         marginLeft: wp(4),
     },
     container: { width: '100%' },
