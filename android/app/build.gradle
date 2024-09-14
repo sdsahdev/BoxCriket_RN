@@ -96,15 +96,15 @@ def reactNativeArchitectures() {
 android {
     ndkVersion rootProject.ext.ndkVersion
 
-    compileSdkVersion 33
+    compileSdkVersion rootProject.ext.compileSdkVersion
 
     namespace "com.awesomeprojectJoker"
     defaultConfig {
         applicationId "com.awesomeprojectJoker"
-        minSdkVersion 25
-        targetSdkVersion 33
-        versionCode 6
-        versionName "0.6"
+      minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 10
+        versionName "1.1"
     }
 
     splits {
